@@ -206,6 +206,13 @@ export default function App() {
     setViewMode('event');
   };
 
+  const handleDeleteEvent = (eventId: string) => {
+    const updatedEvents = events.filter(event => event.id !== eventId);
+    setEvents(updatedEvents);
+    setSelectedEvent(null);
+    setViewMode('day');
+  };
+
   const handleBottomNavigation = (view: NavView) => {
     if (view === 'month') {
       setViewMode('month');
@@ -355,6 +362,7 @@ export default function App() {
           event={selectedEvent}
           onBack={handleCancelEditEvent}
           onSave={handleUpdateEvent}
+          onDelete={handleDeleteEvent}
         />
       ) : viewMode === 'addEvent' ? (
         <AddEventView

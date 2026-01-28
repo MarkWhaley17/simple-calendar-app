@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -18,9 +18,10 @@ interface EditEventViewProps {
     links: string[];
     isAllDay: boolean;
   }) => void;
+  onDelete: (eventId: string) => void;
 }
 
-const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave }) => {
+const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, onDelete }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -58,6 +59,24 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave }) 
       links: linkArray,
       isAllDay,
     });
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete Event',
+      'Are you sure you want to delete this event? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => onDelete(event.id),
+        },
+      ]
+    );
   };
 
   return (
@@ -207,6 +226,17 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave }) 
             numberOfLines={3}
           />
         </View>
+
+        {/* Delete Button */}
+        <View style={styles.deleteSection}>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={handleDelete}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.deleteButtonText}>Delete Event</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -321,6 +351,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  deleteSection: {
+    padding: 20,
+    paddingTop: 40,
+    paddingBottom: 60,
+  },
+  deleteButton: {
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#991B1B',
+  },
+  deleteButtonText: {
+    color: '#991B1B',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
 });
 
