@@ -37,7 +37,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
             </Text>
           </View>
         </View>
-        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel]}>Day</Text>
+        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel]}>Today</Text>
       </TouchableOpacity>
 
       {/* Month View */}

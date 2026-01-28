@@ -9,14 +9,15 @@ describe('BottomNav', () => {
     jest.clearAllMocks();
   });
 
-  it('should render all three navigation items', () => {
+  it('should render all navigation items', () => {
     const { getByText } = render(
       <BottomNav currentView="month" onNavigate={mockOnNavigate} todayDate={15} />
     );
 
     expect(getByText('Account')).toBeTruthy();
-    expect(getByText('Day')).toBeTruthy();
+    expect(getByText('Today')).toBeTruthy();
     expect(getByText('Month')).toBeTruthy();
+    expect(getByText('Events')).toBeTruthy();
   });
 
   it('should display today\'s date in day icon', () => {
@@ -36,12 +37,12 @@ describe('BottomNav', () => {
     expect(mockOnNavigate).toHaveBeenCalledWith('account');
   });
 
-  it('should call onNavigate with "day" when Day is pressed', () => {
+  it('should call onNavigate with "day" when Today is pressed', () => {
     const { getByText } = render(
       <BottomNav currentView="month" onNavigate={mockOnNavigate} todayDate={15} />
     );
 
-    fireEvent.press(getByText('Day'));
+    fireEvent.press(getByText('Today'));
     expect(mockOnNavigate).toHaveBeenCalledWith('day');
   });
 
