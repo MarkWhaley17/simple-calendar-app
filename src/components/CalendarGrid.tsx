@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 interface CalendarGridProps {
   currentDate: Date;
+  onDayPress?: (date: Date) => void;
 }
 
-const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate }) => {
+const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) => {
   const today = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -75,26 +76,41 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate }) => {
 
       {/* Calendar grid */}
       <View style={styles.calendarGrid}>
-        {calendarDays.map((dayData, index) => (
-          <View key={index} style={styles.dayCell}>
-            <View
-              style={[
-                styles.dayContent,
-                dayData.isToday && styles.todayContent,
-              ]}
+        {calendarDays.map((dayData, index) => {
+          const handlePress = () => {
+            if (dayData.isCurrentMonth && onDayPress) {
+              const selectedDate = new Date(currentYear, currentMonth, dayData.day);
+              onDayPress(selectedDate);
+            }
+          };
+
+          return (
+            <TouchableOpacity
+              key={index}
+              style={styles.dayCell}
+              onPress={handlePress}
+              activeOpacity={0.7}
+              disabled={!dayData.isCurrentMonth}
             >
-              <Text
+              <View
                 style={[
-                  styles.dayText,
-                  !dayData.isCurrentMonth && styles.otherMonthText,
-                  dayData.isToday && styles.todayText,
+                  styles.dayContent,
+                  dayData.isToday && styles.todayContent,
                 ]}
               >
-                {dayData.day}
-              </Text>
-            </View>
-          </View>
-        ))}
+                <Text
+                  style={[
+                    styles.dayText,
+                    !dayData.isCurrentMonth && styles.otherMonthText,
+                    dayData.isToday && styles.todayText,
+                  ]}
+                >
+                  {dayData.day}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
