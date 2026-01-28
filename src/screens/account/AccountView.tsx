@@ -40,7 +40,7 @@ const AccountView: React.FC = () => {
               <View style={styles.settingInfo}>
                 <Text style={styles.settingLabel}>Practice Day Reminders</Text>
                 <Text style={styles.settingDescription}>
-                  Get notified for Medicine Buddha Day, Protector Day, and Guru Rinpoche Day
+                  Get notified for regular practice and feast days
                 </Text>
               </View>
               <Switch
@@ -93,7 +93,7 @@ const AccountView: React.FC = () => {
             </View>
             <View style={[styles.aboutRow, styles.settingRowBorder]}>
               <Text style={styles.aboutLabel}>App Name</Text>
-              <Text style={styles.aboutValue}>Dharma Calendar</Text>
+              <Text style={styles.aboutValue}>Kalapa Calendar</Text>
             </View>
             <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]}>
               <Text style={styles.aboutLabel}>Privacy Policy</Text>
