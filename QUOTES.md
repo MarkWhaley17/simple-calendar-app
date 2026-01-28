@@ -1,123 +1,417 @@
 # Calendar Quotes
 
-A collection of inspiring quotes to display in the calendar app.
+---
+
+"Everything is naturally pure from the beginning." — Longchen Rabjam (Longchenpa)
 
 ---
 
-The best time to plant a tree was 20 years ago. The second best time is now.
+"In the expanse of awareness, there is nothing to correct." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Every day is a fresh start.
+"The nature of mind is empty, luminous, and free." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Time you enjoy wasting is not wasted time.
+"All phenomena arise as the display of awareness." — Longchen Rabjam (Longchenpa)
 
 ---
 
-The future depends on what you do today.
+"Rest in the uncontrived nature, beyond effort." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Make each day your masterpiece.
+"Since the ground is primordially pure, there is nothing to abandon." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Life is what happens when you're busy making other plans.
+"Awareness is self-arisen and self-liberated." — Longchen Rabjam (Longchenpa)
 
 ---
 
-The only way to do great work is to love what you do.
+"In rigpa, there is no duality of samsara and nirvana." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Don't count the days, make the days count.
+"Appearances and emptiness are inseparable." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Yesterday is history, tomorrow is a mystery, but today is a gift.
+"Leave mind in its natural state, without fabrication." — Longchen Rabjam (Longchenpa)
 
 ---
 
-Time flies over us, but leaves its shadow behind.
+"Do not follow the past. Do not anticipate the future." — Jigme Lingpa
 
 ---
 
-The two most powerful warriors are patience and time.
+"Remain in the freshness of unfabricated awareness." — Jigme Lingpa
 
 ---
 
-Lost time is never found again.
+"Thoughts liberate themselves as they arise." — Jigme Lingpa
 
 ---
 
-An investment in knowledge pays the best interest.
+"The nature of mind is primordially free." — Jigme Lingpa
 
 ---
 
-The secret of getting ahead is getting started.
+"Whatever arises is the ornament of awareness." — Jigme Lingpa
 
 ---
 
-Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.
+"Rest without grasping, in the natural flow." — Jigme Lingpa
 
 ---
 
-Time is the most valuable thing a man can spend.
+"Emptiness is not nothingness; it is openness." — Jigme Lingpa
 
 ---
 
-The bad news is time flies. The good news is you're the pilot.
+"Rigpa is present, needing no search." — Jigme Lingpa
 
 ---
 
-Time is what we want most, but what we use worst.
+"Let everything be as it is, in naturalness." — Jigme Lingpa
 
 ---
 
-The key is in not spending time, but in investing it.
+"Mind itself is the Buddha, if recognized." — Jigme Lingpa
 
 ---
 
-Your time is limited, don't waste it living someone else's life.
+"Rest in natural great peace, this exhausted mind." — Nyoshul Khenpo Rinpoche
 
 ---
 
-Time is a created thing. To say 'I don't have time' is to say 'I don't want to.'
+"Thoughts are like clouds; awareness is the sky." — Nyoshul Khenpo Rinpoche
 
 ---
 
-The trouble is, you think you have time.
+"Do not meditate, do not be distracted." — Nyoshul Khenpo Rinpoche
 
 ---
 
-They always say time changes things, but you actually have to change them yourself.
+"Simply remain in the state of rigpa." — Nyoshul Khenpo Rinpoche
 
 ---
 
-Time is the wisest counselor of all.
+"Nothing needs to be changed; only recognized." — Nyoshul Khenpo Rinpoche
 
 ---
 
-Time and tide wait for no man.
+"Everything is already complete in the nature of mind." — Nyoshul Khenpo Rinpoche
 
 ---
 
-We must use time creatively.
+"The essence of Dzogchen is simplicity." — Nyoshul Khenpo Rinpoche
 
 ---
 
-Better three hours too soon than a minute too late.
+"Awareness is naked, fresh, and free." — Nyoshul Khenpo Rinpoche
 
 ---
 
-Time stays long enough for anyone who will use it.
+"Do not seek elsewhere what is already within." — Nyoshul Khenpo Rinpoche
 
 ---
 
-The future starts today, not tomorrow.
+"Let go into the vastness of being." — Nyoshul Khenpo Rinpoche
 
 ---
 
-One day or day one. You decide.
+"Do not be distracted. This is the essence of the practice." — Patrul Rinpoche
+
+---
+
+"Mind, left as it is, is the Buddha." — Patrul Rinpoche
+
+---
+
+"The view is Longchenpa; the practice is Patrul." — Patrul Rinpoche
+
+---
+
+"Everything is mind; mind is empty." — Patrul Rinpoche
+
+---
+
+"Rest naturally, without altering anything." — Patrul Rinpoche
+
+---
+
+"Do not cling even to meditation." — Patrul Rinpoche
+
+---
+
+"Let thoughts arise and dissolve by themselves." — Patrul Rinpoche
+
+---
+
+"The root of practice is renunciation and devotion." — Patrul Rinpoche
+
+---
+
+"Awareness itself is the teacher." — Patrul Rinpoche
+
+---
+
+"Nothing is hidden from rigpa." — Patrul Rinpoche
+
+---
+
+"Do not look for the Buddha elsewhere; your own mind is the Buddha." — Dilgo Khyentse Rinpoche
+
+---
+
+"The essence of the teaching is to tame the mind." — Dilgo Khyentse Rinpoche
+
+---
+
+"Meditation is simply resting in awareness." — Dilgo Khyentse Rinpoche
+
+---
+
+"The nature of mind is always present, like the sky." — Dilgo Khyentse Rinpoche
+
+---
+
+"When you let go, everything opens." — Dilgo Khyentse Rinpoche
+
+---
+
+"Rigpa is not something to create, only to recognize." — Dilgo Khyentse Rinpoche
+
+---
+
+"In the true nature, there is nothing to improve." — Dilgo Khyentse Rinpoche
+
+---
+
+"Whatever arises is the play of emptiness and clarity." — Dilgo Khyentse Rinpoche
+
+---
+
+"Do not be caught by concepts; return to awareness." — Dudjom Rinpoche
+
+---
+
+"Everything is the display of rigpa." — Dudjom Rinpoche
+
+---
+
+"Primordial purity is the nature of all beings." — Dudjom Rinpoche
+
+---
+
+"Let go of what has passed, let go of what may come, let go of what is happening now." — Tilopa
+
+---
+
+"Do not think, do not meditate, do not analyze; rest in the natural state." — Tilopa
+
+---
+
+"Mind without grasping is Mahāmudrā." — Tilopa
+
+---
+
+"Appearances are mind, and mind is empty." — Tilopa
+
+---
+
+"Rest relaxed in the uncontrived." — Tilopa
+
+---
+
+"Cut through doubt with certainty in awareness." — Naropa
+
+---
+
+"Thoughts arise like waves and dissolve back into the ocean." — Naropa
+
+---
+
+"The nature of mind is clear light." — Naropa
+
+---
+
+"Do not seek the mind; rest in mind itself." — Naropa
+
+---
+
+"Without fixation, everything liberates." — Naropa
+
+---
+
+"The essence of Mahāmudrā is simplicity." — Saraha
+
+---
+
+"Mind has no form, yet it knows." — Saraha
+
+---
+
+"Freedom is not elsewhere; it is recognizing what is." — Saraha
+
+---
+
+"Let mind rest in its own place." — Maitripa
+
+---
+
+"Nonmeditation is the supreme meditation." — Maitripa
+
+---
+
+"Do not fabricate; the natural state is enough." — Maitripa
+
+---
+
+"The mind’s nature is empty, luminous, and aware." — Maitripa
+
+---
+
+"Do not alter awareness; simply know it." — Maitripa
+
+---
+
+"Mind itself, uncontrived, is the Buddha." — Gampopa
+
+---
+
+"The root of meditation is devotion to the guru." — Gampopa
+
+---
+
+"Through knowing mind, all is known." — Gampopa
+
+---
+
+"Let mind settle naturally, without grasping." — Gampopa
+
+---
+
+"All phenomena are the mind’s display." — Gampopa
+
+---
+
+"The ordinary mind is the path." — Gampopa
+
+---
+
+"In the simplicity of mind, there is liberation." — Gampopa
+
+---
+
+"Do not chase thoughts; let them vanish by themselves." — Dakpo Tashi Namgyal
+
+---
+
+"Awareness is empty, yet cognizant." — Dakpo Tashi Namgyal
+
+---
+
+"Meditation is resting without distraction." — Dakpo Tashi Namgyal
+
+---
+
+"The essence is to recognize mind’s nature." — Dakpo Tashi Namgyal
+
+---
+
+"Clinging is the root of samsara." — Dakpo Tashi Namgyal
+
+---
+
+"Nothing needs to be removed; nothing needs to be added." — The 9th Karmapa, Wangchuk Dorje
+
+---
+
+"Recognize your own mind, and you will be free." — The 9th Karmapa, Wangchuk Dorje
+
+---
+
+"Mind’s nature is beyond coming and going." — The 9th Karmapa, Wangchuk Dorje
+
+---
+
+"Rest evenly, without acceptance or rejection." — The 9th Karmapa, Wangchuk Dorje
+
+---
+
+"Mahāmudrā is not made; it is discovered." — The 9th Karmapa, Wangchuk Dorje
+
+---
+
+"The nature of mind is clarity inseparable from emptiness." — The 16th Karmapa, Rangjung Rigpe Dorje
+
+---
+
+"Nothing is more important than knowing your own mind." — The 16th Karmapa, Rangjung Rigpe Dorje
+
+---
+
+"Let mind rest as it is, like a mountain." — The 16th Karmapa, Rangjung Rigpe Dorje
+
+---
+
+"Compassion and emptiness are inseparable." — The 17th Karmapa, Ogyen Trinley Dorje
+
+---
+
+"Meditation is familiarity with the mind’s nature." — The 17th Karmapa, Ogyen Trinley Dorje
+
+---
+
+"Awareness is present before thought." — The 17th Karmapa, Ogyen Trinley Dorje
+
+---
+
+"In resting naturally, wisdom dawns." — Milarepa
+
+---
+
+"My religion is to live and die without regret." — Milarepa
+
+---
+
+"In the sky of mind, clouds of thought dissolve." — Milarepa
+
+---
+
+"Without attachment, there is no fear." — Milarepa
+
+---
+
+"Do not look outside; look within." — Milarepa
+
+---
+
+"The songs of realization arise from simplicity." — Milarepa
+
+---
+
+"Devotion is the gateway to Mahāmudrā." — Jamgön Kongtrül Lodrö Thayé
+
+---
+
+"The mind’s nature is the union of clarity and emptiness." — Jamgön Kongtrül Lodrö Thayé
+
+---
+
+"Rest in awareness, free from effort." — Jamgön Kongtrül Lodrö Thayé
+
+---
+
+"Mahāmudrā is the direct path of seeing mind itself." — Jamgön Kongtrül Lodrö Thayé
+
+---
+
+
+
+
+
+
