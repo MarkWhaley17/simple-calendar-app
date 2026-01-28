@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { MONTH_NAMES } from '../../constants/dates';
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -12,12 +13,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   onPreviousMonth,
   onNextMonth,
 }) => {
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const monthName = monthNames[currentDate.getMonth()];
+  const monthName = MONTH_NAMES[currentDate.getMonth()];
   const year = currentDate.getFullYear();
 
   return (
@@ -53,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#2563EB', // Blue header
   },
   navButton: {
     width: 44,
@@ -61,12 +57,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 22,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F59E0B', // Gold buttons
   },
   navButtonText: {
     fontSize: 32,
     fontWeight: '300',
-    color: '#333',
+    color: '#fff',
     marginTop: -4,
   },
   dateContainer: {
@@ -75,12 +71,12 @@ const styles = StyleSheet.create({
   monthText: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#333',
+    color: '#fff', // White text on blue
   },
   yearText: {
     fontSize: 16,
     fontWeight: '400',
-    color: '#666',
+    color: '#DBEAFE', // Light blue text
     marginTop: 2,
   },
 });

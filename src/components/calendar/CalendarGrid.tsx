@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { CalendarEvent } from '../../types';
+import { WEEK_DAY_ABBR } from '../../constants/dates';
 
 interface CalendarGridProps {
   currentDate: Date;
   onDayPress?: (date: Date) => void;
+  events?: CalendarEvent[];
 }
 
-const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) => {
+const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [] }) => {
   const today = new Date();
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth();
@@ -20,22 +23,33 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) 
   // Get the number of days in the previous month
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-  // Days of the week
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // Helper function to check if a date has events
+  const hasEvents = (year: number, month: number, day: number) => {
+    return events.some(event => {
+      const eventDate = event.fromDate || event.date || new Date();
+      return eventDate.getFullYear() === year &&
+             eventDate.getMonth() === month &&
+             eventDate.getDate() === day;
+    });
+  };
 
   // Generate calendar days
   const calendarDays: Array<{
     day: number;
     isCurrentMonth: boolean;
     isToday: boolean;
+    hasEvents: boolean;
   }> = [];
 
   // Add previous month's days
+  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   for (let i = firstDayOfMonth - 1; i >= 0; i--) {
     calendarDays.push({
       day: daysInPrevMonth - i,
       isCurrentMonth: false,
       isToday: false,
+      hasEvents: hasEvents(prevYear, prevMonth, daysInPrevMonth - i),
     });
   }
 
@@ -50,16 +64,20 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) 
       day,
       isCurrentMonth: true,
       isToday,
+      hasEvents: hasEvents(currentYear, currentMonth, day),
     });
   }
 
   // Add next month's days to complete the grid
   const remainingDays = 42 - calendarDays.length; // 6 rows × 7 days
+  const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+  const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
   for (let day = 1; day <= remainingDays; day++) {
     calendarDays.push({
       day,
       isCurrentMonth: false,
       isToday: false,
+      hasEvents: hasEvents(nextYear, nextMonth, day),
     });
   }
 
@@ -67,7 +85,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) 
     <View style={styles.container}>
       {/* Week day headers */}
       <View style={styles.weekDaysRow}>
-        {weekDays.map((day) => (
+        {WEEK_DAY_ABBR.map((day) => (
           <View key={day} style={styles.weekDayCell}>
             <Text style={styles.weekDayText}>{day}</Text>
           </View>
@@ -107,6 +125,9 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) 
                 >
                   {dayData.day}
                 </Text>
+                {dayData.hasEvents && (
+                  <View style={styles.eventIndicator} />
+                )}
               </View>
             </TouchableOpacity>
           );
@@ -117,19 +138,18 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress }) 
 };
 
 const screenWidth = Dimensions.get('window').width;
-const cellSize = screenWidth / 7;
+const cellSize = (screenWidth - 8) / 7; // Account for borders: 1 left + 7 right = 8px total
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingHorizontal: 8,
     paddingBottom: 20,
   },
   weekDaysRow: {
     flexDirection: 'row',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#BFDBFE', // Light blue border
   },
   weekDayCell: {
     width: cellSize,
@@ -138,17 +158,23 @@ const styles = StyleSheet.create({
   weekDayText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: '#1E40AF', // Dark blue text
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#BFDBFE', // Light blue grid lines
   },
   dayCell: {
     width: cellSize,
     height: cellSize,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#BFDBFE', // Light blue grid lines
   },
   dayContent: {
     width: cellSize - 8,
@@ -158,19 +184,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   todayContent: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#F59E0B', // Gold for today
   },
   dayText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: '#1E3A8A', // Dark blue text
   },
   otherMonthText: {
-    color: '#ccc',
+    color: '#BFDBFE', // Light blue for other months
   },
   todayText: {
     color: '#fff',
     fontWeight: '700',
+  },
+  eventIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#F59E0B', // Gold dot for events
+    position: 'absolute',
+    bottom: 4,
   },
 });
 
