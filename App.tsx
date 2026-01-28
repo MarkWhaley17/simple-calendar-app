@@ -8,6 +8,7 @@ import { EventView, AddEventView, EditEventView, EventsListView } from './src/sc
 import { AccountView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
+import { getPreAddedEvents } from './src/utils/preAddedEvents';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -30,19 +31,8 @@ export default function App() {
     return () => clearInterval(quoteInterval);
   }, []);
 
-  // Sample events
-  const [events, setEvents] = useState<CalendarEvent[]>([
-    {
-      id: '1',
-      title: 'Losar - Year of the Fire Horse',
-      fromDate: new Date(2026, 1, 18), // February 18, 2026
-      fromTime: '9:00 AM',
-      description: 'Losar, the Tibetan New Year, will be celebrated on February 18, 2026, marking the start of the 2153rd year—the Year of the Fire Horse. This 15-day festival involves cleaning homes, offering prayers, hanging prayer flags, and sharing traditional food like guthuk. Major celebrations typically span from February 18-20, 2026.',
-      // Legacy fields
-      date: new Date(2026, 1, 18),
-      startTime: '9:00 AM',
-    },
-  ]);
+  // Events state - initialized with pre-added events from EVENTS.md
+  const [events, setEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
 
   const handlePreviousMonth = () => {
     // Animate the transition - slide right and fade out
