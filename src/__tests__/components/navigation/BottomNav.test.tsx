@@ -68,7 +68,7 @@ describe('BottomNav', () => {
     rerender(
       <BottomNav currentView="day" onNavigate={mockOnNavigate} todayDate={15} />
     );
-    const dayLabel = getByText('Day');
+    const dayLabel = getByText('Today');
     expect(dayLabel).toBeTruthy();
 
     // Test account active

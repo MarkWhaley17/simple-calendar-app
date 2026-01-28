@@ -82,6 +82,10 @@ export default function App() {
   };
 
   const handleDayPress = (date: Date) => {
+    // If the clicked day is from a different month, update the current month
+    if (date.getMonth() !== currentDate.getMonth() || date.getFullYear() !== currentDate.getFullYear()) {
+      setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
+    }
     setSelectedDate(date);
     setViewMode('day');
   };

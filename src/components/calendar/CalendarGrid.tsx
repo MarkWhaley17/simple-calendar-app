@@ -36,6 +36,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   // Generate calendar days
   const calendarDays: Array<{
     day: number;
+    month: number;
+    year: number;
     isCurrentMonth: boolean;
     isToday: boolean;
     hasEvents: boolean;
@@ -47,6 +49,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   for (let i = firstDayOfMonth - 1; i >= 0; i--) {
     calendarDays.push({
       day: daysInPrevMonth - i,
+      month: prevMonth,
+      year: prevYear,
       isCurrentMonth: false,
       isToday: false,
       hasEvents: hasEvents(prevYear, prevMonth, daysInPrevMonth - i),
@@ -62,6 +66,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
 
     calendarDays.push({
       day,
+      month: currentMonth,
+      year: currentYear,
       isCurrentMonth: true,
       isToday,
       hasEvents: hasEvents(currentYear, currentMonth, day),
@@ -75,6 +81,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   for (let day = 1; day <= remainingDays; day++) {
     calendarDays.push({
       day,
+      month: nextMonth,
+      year: nextYear,
       isCurrentMonth: false,
       isToday: false,
       hasEvents: hasEvents(nextYear, nextMonth, day),
@@ -96,8 +104,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
       <View style={styles.calendarGrid}>
         {calendarDays.map((dayData, index) => {
           const handlePress = () => {
-            if (dayData.isCurrentMonth && onDayPress) {
-              const selectedDate = new Date(currentYear, currentMonth, dayData.day);
+            if (onDayPress) {
+              const selectedDate = new Date(dayData.year, dayData.month, dayData.day);
               onDayPress(selectedDate);
             }
           };
@@ -108,7 +116,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
               style={styles.dayCell}
               onPress={handlePress}
               activeOpacity={0.7}
-              disabled={!dayData.isCurrentMonth}
             >
               <View
                 style={[
