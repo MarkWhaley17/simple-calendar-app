@@ -74,8 +74,8 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
     });
   }
 
-  // Add next month's days to complete the grid
-  const remainingDays = 42 - calendarDays.length; // 6 rows × 7 days
+  // Add next month's days to complete the last row only
+  const remainingDays = (7 - (calendarDays.length % 7)) % 7; // Days needed to complete the week
   const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
   const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
   for (let day = 1; day <= remainingDays; day++) {
