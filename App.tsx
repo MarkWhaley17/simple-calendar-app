@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView } from 'react-native';
 import CalendarHeader from './src/components/CalendarHeader';
+import CalendarGrid from './src/components/CalendarGrid';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -24,14 +25,15 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <CalendarHeader
           currentDate={currentDate}
           onPreviousMonth={handlePreviousMonth}
           onNextMonth={handleNextMonth}
         />
+        <CalendarGrid currentDate={currentDate} />
         <StatusBar style="auto" />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
