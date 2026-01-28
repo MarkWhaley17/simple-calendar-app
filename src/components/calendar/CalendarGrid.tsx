@@ -150,68 +150,85 @@ const cellSize = (screenWidth - 8) / 7; // Account for borders: 1 left + 7 right
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingBottom: 20,
+    paddingBottom: 24,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
   weekDaysRow: {
     flexDirection: 'row',
-    paddingVertical: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 4,
     borderBottomWidth: 1,
-    borderBottomColor: '#BFDBFE', // Light blue border
+    borderBottomColor: 'rgba(37, 99, 235, 0.1)', // Softer blue border
   },
   weekDayCell: {
     width: cellSize,
     alignItems: 'center',
   },
   weekDayText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1E40AF', // Dark blue text
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#1E40AF',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderColor: '#BFDBFE', // Light blue grid lines
+    paddingHorizontal: 4,
+    paddingTop: 8,
   },
   dayCell: {
     width: cellSize,
-    height: cellSize,
+    height: cellSize + 4,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#BFDBFE', // Light blue grid lines
+    padding: 2,
   },
   dayContent: {
-    width: cellSize - 8,
+    width: cellSize - 12,
     height: cellSize - 8,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   todayContent: {
-    backgroundColor: '#F59E0B', // Gold for today
+    backgroundColor: '#F59E0B',
+    shadowColor: '#F59E0B',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   dayText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#1E3A8A', // Dark blue text
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#1E3A8A',
+    lineHeight: 24,
   },
   otherMonthText: {
-    color: '#BFDBFE', // Light blue for other months
+    color: '#94A3B8',
+    fontWeight: '400',
   },
   todayText: {
     color: '#fff',
     fontWeight: '700',
   },
   eventIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#F59E0B', // Gold dot for events
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: '#991B1B',
     position: 'absolute',
-    bottom: 4,
+    bottom: 6,
+    shadowColor: '#991B1B',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
   },
 });
 

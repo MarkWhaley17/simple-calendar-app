@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Text } from 'react-native';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated } from 'react-native';
 import { CalendarHeader, CalendarGrid } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -21,15 +21,30 @@ export default function App() {
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
+  const quoteOpacity = useRef(new Animated.Value(1)).current;
 
-  // Change quote every 5 minutes
+  // Change quote every 5 minutes with fade transition
   useEffect(() => {
     const quoteInterval = setInterval(() => {
-      setCurrentQuote(getRandomQuote());
+      // Fade out
+      Animated.timing(quoteOpacity, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }).start(() => {
+        // Change quote
+        setCurrentQuote(getRandomQuote());
+        // Fade in
+        Animated.timing(quoteOpacity, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }).start();
+      });
     }, 5 * 60 * 1000); // 5 minutes in milliseconds
 
     return () => clearInterval(quoteInterval);
-  }, []);
+  }, [quoteOpacity]);
 
   // Events state - initialized with pre-added events from EVENTS.md
   const [events, setEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
@@ -386,7 +401,9 @@ export default function App() {
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={events} />
                   <View style={styles.quoteWrapper}>
                     <View style={styles.quoteContainer}>
-                      <Text style={styles.quoteText}>{currentQuote}</Text>
+                      <Animated.Text style={[styles.quoteText, { opacity: quoteOpacity }]}>
+                        {currentQuote}
+                      </Animated.Text>
                     </View>
                   </View>
                   <StatusBar style="auto" />
@@ -425,21 +442,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
   quoteContainer: {
     backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#F59E0B', // Gold accent
+    paddingVertical: 24,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    borderLeftWidth: 3,
+    borderLeftColor: '#991B1B', // Maroon accent
     width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
   },
   quoteText: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: '#1E3A8A', // Dark blue text
+    fontSize: 16,
+    lineHeight: 26,
+    color: '#1E3A8A',
     fontStyle: 'italic',
     textAlign: 'center',
+    letterSpacing: 0.2,
   },
 });

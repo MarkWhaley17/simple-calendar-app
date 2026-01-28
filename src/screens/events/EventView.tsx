@@ -77,15 +77,18 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF', // Light blue background
+    backgroundColor: '#EFF6FF',
   },
   header: {
-    backgroundColor: '#2563EB', // Blue header
-    paddingTop: 16,
-    paddingBottom: 20,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1E40AF', // Darker blue border
+    backgroundColor: '#2563EB',
+    paddingTop: 20,
+    paddingBottom: 24,
+    paddingHorizontal: 20,
+    shadowColor: '#1E40AF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   headerTop: {
     flexDirection: 'row',
@@ -98,8 +101,9 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 18,
-    color: '#F59E0B', // Gold back button
-    fontWeight: '500',
+    color: '#F59E0B',
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   editButton: {
     paddingVertical: 8,
@@ -107,46 +111,58 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     fontSize: 18,
-    color: '#F59E0B', // Gold edit button
-    fontWeight: '600',
+    color: '#F59E0B',
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   eventInfo: {
-    marginTop: 8,
+    marginTop: 12,
   },
   eventTitle: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '700',
-    color: '#fff', // White text on blue
+    color: '#fff',
+    letterSpacing: 0.3,
   },
   eventDate: {
     fontSize: 16,
-    color: '#DBEAFE', // Light blue text
-    marginTop: 4,
+    color: '#DBEAFE',
+    marginTop: 6,
+    letterSpacing: 0.3,
   },
   content: {
     flex: 1,
   },
   section: {
     backgroundColor: '#fff',
-    padding: 20,
+    padding: 24,
     marginTop: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.03,
+    shadowRadius: 2,
+    elevation: 1,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1E40AF', // Dark blue
-    marginBottom: 12,
+    fontSize: 19,
+    fontWeight: '700',
+    color: '#1E40AF',
+    marginBottom: 14,
+    letterSpacing: 0.3,
   },
   descriptionText: {
     fontSize: 16,
-    lineHeight: 24,
-    color: '#1E3A8A', // Dark blue text
+    lineHeight: 26,
+    color: '#1E3A8A',
+    letterSpacing: 0.2,
   },
   linkText: {
     fontSize: 16,
-    lineHeight: 24,
-    color: '#2563EB', // Blue link color
-    marginBottom: 8,
+    lineHeight: 26,
+    color: '#2563EB',
+    marginBottom: 10,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
 });
 

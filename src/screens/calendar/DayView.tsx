@@ -98,15 +98,18 @@ const DayView: React.FC<DayViewProps> = ({ selectedDate, onBack, events = [], on
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF', // Light blue background
+    backgroundColor: '#EFF6FF',
   },
   header: {
-    backgroundColor: '#2563EB', // Blue header
-    paddingTop: 16,
-    paddingBottom: 20,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1E40AF', // Darker blue border
+    backgroundColor: '#2563EB',
+    paddingTop: 20,
+    paddingBottom: 24,
+    paddingHorizontal: 20,
+    shadowColor: '#1E40AF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -115,45 +118,56 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 18,
-    color: '#F59E0B', // Gold back button
-    fontWeight: '500',
+    color: '#F59E0B',
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   dateInfo: {
-    marginTop: 8,
+    marginTop: 12,
   },
   dayName: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '700',
-    color: '#fff', // White text on blue
+    color: '#fff',
+    letterSpacing: 0.3,
   },
   fullDate: {
     fontSize: 16,
-    color: '#DBEAFE', // Light blue text
-    marginTop: 4,
+    color: '#DBEAFE',
+    marginTop: 6,
+    letterSpacing: 0.3,
   },
   eventsContainer: {
     flex: 1,
   },
   eventsList: {
-    padding: 16,
+    padding: 20,
   },
   eventCard: {
-    backgroundColor: '#F59E0B', // Gold background
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
+    backgroundColor: '#fff',
+    padding: 18,
+    borderRadius: 16,
+    marginBottom: 14,
+    borderLeftWidth: 4,
+    borderLeftColor: '#991B1B',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 3,
   },
   eventTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
-    marginBottom: 4,
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1E3A8A',
+    marginBottom: 6,
+    letterSpacing: 0.2,
   },
   eventTime: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#fff',
-    opacity: 0.9,
+    fontWeight: '600',
+    color: '#991B1B',
+    letterSpacing: 0.2,
   },
   emptyState: {
     flex: 1,
@@ -163,20 +177,28 @@ const styles = StyleSheet.create({
   },
   emptyStateText: {
     fontSize: 16,
+    lineHeight: 24,
     color: '#60A5FA',
     fontStyle: 'italic',
+    letterSpacing: 0.2,
   },
   addButton: {
-    backgroundColor: '#F59E0B', // Gold button
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: '#F59E0B',
+    margin: 20,
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: 'center',
+    shadowColor: '#F59E0B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   addButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 0.4,
   },
 });
 
