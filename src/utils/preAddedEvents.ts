@@ -7,9 +7,19 @@ import { CalendarEvent } from '../types';
 // Format: Title, Date (YYYY-MM-DD), Description
 const eventData = [
   {
-    title: "Losar - Year of the Fire Horse",
-    date: "2026-02-18",
-    description: "Losar, the Tibetan New Year, will be celebrated on February 18, 2026, marking the start of the 2153rd year—the Year of the Fire Horse. This 15-day festival involves cleaning homes, offering prayers, hanging prayer flags, and sharing traditional food like guthuk. Major celebrations typically span from February 18-20, 2026.",
+    title: "Medicine Buddha Day",
+    date: "2026-01-06",
+    description: "Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.",
+  },
+  {
+    title: "Protector Day",
+    date: "2026-01-07",
+    description: "Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.",
+  },
+  {
+    title: "Guru Rinpoche Day",
+    date: "2026-01-08",
+    description: "Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.",
   },
 ];
 
