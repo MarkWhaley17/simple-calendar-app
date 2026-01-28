@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated, Text } from 'react-native';
 import { CalendarHeader, CalendarGrid } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
 import { AccountView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView } from './src/types';
+import { getRandomQuote } from './src/utils/quotes';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -14,10 +15,20 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [previousView, setPreviousView] = useState<ViewMode | null>(null);
+  const [currentQuote, setCurrentQuote] = useState<string>(getRandomQuote());
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
+
+  // Change quote every 5 minutes
+  useEffect(() => {
+    const quoteInterval = setInterval(() => {
+      setCurrentQuote(getRandomQuote());
+    }, 5 * 60 * 1000); // 5 minutes in milliseconds
+
+    return () => clearInterval(quoteInterval);
+  }, []);
 
   // Sample events
   const [events, setEvents] = useState<CalendarEvent[]>([
@@ -383,6 +394,9 @@ export default function App() {
                     onNextMonth={handleNextMonth}
                   />
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={events} />
+                  <View style={styles.quoteContainer}>
+                    <Text style={styles.quoteText}>{currentQuote}</Text>
+                  </View>
                   <StatusBar style="auto" />
                 </ScrollView>
               </Animated.View>
@@ -414,5 +428,21 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  quoteContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    marginHorizontal: 16,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: '#F59E0B', // Gold accent
+  },
+  quoteText: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: '#1E3A8A', // Dark blue text
+    fontStyle: 'italic',
   },
 });
