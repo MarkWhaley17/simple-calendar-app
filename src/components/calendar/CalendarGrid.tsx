@@ -145,7 +145,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
 };
 
 const screenWidth = Dimensions.get('window').width;
-const cellSize = (screenWidth - 8) / 7; // Account for borders: 1 left + 7 right = 8px total
+const cellSize = (screenWidth - 16) / 7; // Account for horizontal padding (8px on each side)
 
 const styles = StyleSheet.create({
   container: {
@@ -157,11 +157,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 12,
     elevation: 4,
+    overflow: 'hidden',
   },
   weekDaysRow: {
     flexDirection: 'row',
     paddingVertical: 16,
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(37, 99, 235, 0.1)', // Softer blue border
   },
@@ -179,19 +180,19 @@ const styles = StyleSheet.create({
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 4,
+    paddingHorizontal: 8,
     paddingTop: 8,
   },
   dayCell: {
     width: cellSize,
-    height: cellSize + 4,
+    height: cellSize,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 2,
   },
   dayContent: {
-    width: cellSize - 12,
-    height: cellSize - 8,
+    width: cellSize - 10,
+    height: cellSize - 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 12,
