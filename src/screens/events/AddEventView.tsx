@@ -99,7 +99,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="Add description"
+            placeholder="Add description or practice details"
             placeholderTextColor="#BFDBFE"
             value={description}
             onChangeText={setDescription}
