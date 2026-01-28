@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated, Text } from 'react-native';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Text } from 'react-native';
 import { CalendarHeader, CalendarGrid } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -387,18 +387,20 @@ export default function App() {
                   },
                 ]}
               >
-                <ScrollView style={styles.content}>
+                <View style={styles.content}>
                   <CalendarHeader
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
                   />
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={events} />
-                  <View style={styles.quoteContainer}>
-                    <Text style={styles.quoteText}>{currentQuote}</Text>
+                  <View style={styles.quoteWrapper}>
+                    <View style={styles.quoteContainer}>
+                      <Text style={styles.quoteText}>{currentQuote}</Text>
+                    </View>
                   </View>
                   <StatusBar style="auto" />
-                </ScrollView>
+                </View>
               </Animated.View>
             </View>
           )}
@@ -429,20 +431,25 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+  quoteWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
   quoteContainer: {
     backgroundColor: '#fff',
     padding: 20,
-    marginHorizontal: 16,
-    marginTop: 20,
-    marginBottom: 20,
     borderRadius: 12,
     borderLeftWidth: 4,
     borderLeftColor: '#F59E0B', // Gold accent
+    width: '100%',
   },
   quoteText: {
     fontSize: 15,
     lineHeight: 22,
     color: '#1E3A8A', // Dark blue text
     fontStyle: 'italic',
+    textAlign: 'center',
   },
 });
