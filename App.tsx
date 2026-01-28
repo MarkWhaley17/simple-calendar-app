@@ -4,7 +4,7 @@ import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated } fr
 import { CalendarHeader, CalendarGrid } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
-import { EventView, AddEventView, EditEventView } from './src/screens/events';
+import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
 import { AccountView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView } from './src/types';
 
@@ -13,6 +13,7 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [previousView, setPreviousView] = useState<ViewMode | null>(null);
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
@@ -91,13 +92,19 @@ export default function App() {
   };
 
   const handleEventPress = (event: CalendarEvent) => {
+    setPreviousView(viewMode);
     setSelectedEvent(event);
     setViewMode('event');
   };
 
   const handleBackToDay = () => {
-    setViewMode('day');
+    if (previousView === 'eventsList') {
+      setViewMode('eventsList');
+    } else {
+      setViewMode('day');
+    }
     setSelectedEvent(null);
+    setPreviousView(null);
   };
 
   const handleAddEvent = () => {
@@ -188,6 +195,9 @@ export default function App() {
     } else if (view === 'day') {
       setViewMode('day');
       setSelectedDate(new Date()); // Set to today
+      setSelectedEvent(null);
+    } else if (view === 'events') {
+      setViewMode('eventsList');
       setSelectedEvent(null);
     } else if (view === 'account') {
       setViewMode('account');
@@ -310,12 +320,13 @@ export default function App() {
   // Determine which nav item is active
   const getCurrentNavView = (): NavView => {
     if (viewMode === 'account') return 'account';
+    if (viewMode === 'eventsList') return 'events';
     if (viewMode === 'day' || viewMode === 'event' || viewMode === 'addEvent' || viewMode === 'editEvent') return 'day';
     return 'month';
   };
 
   // Check if we should show bottom nav (hide on event detail screens)
-  const shouldShowBottomNav = viewMode === 'month' || viewMode === 'day' || viewMode === 'account';
+  const shouldShowBottomNav = viewMode === 'month' || viewMode === 'day' || viewMode === 'account' || viewMode === 'eventsList';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -337,6 +348,11 @@ export default function App() {
         <>
           {viewMode === 'account' ? (
             <AccountView />
+          ) : viewMode === 'eventsList' ? (
+            <EventsListView
+              events={events}
+              onEventPress={handleEventPress}
+            />
           ) : viewMode === 'day' && selectedDate ? (
             <DayView
               selectedDate={selectedDate}

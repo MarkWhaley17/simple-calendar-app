@@ -14,5 +14,5 @@ export interface CalendarEvent {
   endTime?: string;
 }
 
-export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account';
-export type NavView = 'month' | 'day' | 'account';
+export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList';
+export type NavView = 'month' | 'day' | 'events' | 'account';

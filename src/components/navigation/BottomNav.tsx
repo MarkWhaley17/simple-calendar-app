@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface BottomNavProps {
-  currentView: 'month' | 'day' | 'account';
-  onNavigate: (view: 'month' | 'day' | 'account') => void;
+  currentView: 'month' | 'day' | 'events' | 'account';
+  onNavigate: (view: 'month' | 'day' | 'events' | 'account') => void;
   todayDate?: number;
 }
 
@@ -67,6 +67,22 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         </View>
         <Text style={[styles.navLabel, currentView === 'month' && styles.activeNavLabel]}>Month</Text>
       </TouchableOpacity>
+
+      {/* Events List */}
+      <TouchableOpacity
+        style={[styles.navItem, currentView === 'events' && styles.activeNavItem]}
+        onPress={() => onNavigate('events')}
+        activeOpacity={0.7}
+      >
+        <View style={styles.iconContainer}>
+          <View style={[styles.eventsIcon, currentView === 'events' && styles.activeIcon]}>
+            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
+            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
+            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
+          </View>
+        </View>
+        <Text style={[styles.navLabel, currentView === 'events' && styles.activeNavLabel]}>Events</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -122,6 +138,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#1E40AF',
+  },
+  eventsIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: '#DBEAFE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  eventBar: {
+    width: 20,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: '#1E40AF',
+    marginVertical: 1.5,
+  },
+  activeEventBar: {
+    backgroundColor: '#fff',
   },
   monthIcon: {
     width: 32,
