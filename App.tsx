@@ -23,6 +23,7 @@ export default function App() {
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
   const quoteOpacity = useRef(new Animated.Value(1)).current;
+  const dayViewTranslateY = useRef(new Animated.Value(0)).current;
 
   // Change quote every 5 minutes with fade transition
   useEffect(() => {
@@ -125,12 +126,22 @@ export default function App() {
       setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
     }
     setSelectedDate(date);
+
+    // Animate day view sliding up from bottom
+    dayViewTranslateY.setValue(600); // Start off-screen at bottom
     setViewMode('day');
+    Animated.spring(dayViewTranslateY, {
+      toValue: 0,
+      useNativeDriver: true,
+      tension: 65,
+      friction: 10,
+    }).start();
   };
 
   const handleBackToMonth = () => {
     setViewMode('month');
     setSelectedDate(null);
+    dayViewTranslateY.setValue(0); // Reset for next animation
   };
 
   const handleEventPress = (event: CalendarEvent) => {
@@ -270,9 +281,17 @@ export default function App() {
       setSelectedDate(null);
       setSelectedEvent(null);
     } else if (view === 'day') {
+      // Animate day view sliding up from bottom
+      dayViewTranslateY.setValue(600); // Start off-screen at bottom
       setViewMode('day');
       setSelectedDate(new Date()); // Set to today
       setSelectedEvent(null);
+      Animated.spring(dayViewTranslateY, {
+        toValue: 0,
+        useNativeDriver: true,
+        tension: 65,
+        friction: 10,
+      }).start();
     } else if (view === 'events') {
       setViewMode('eventsList');
       setSelectedEvent(null);
@@ -432,13 +451,22 @@ export default function App() {
               onEventPress={handleEventPress}
             />
           ) : viewMode === 'day' && selectedDate ? (
-            <DayView
-              selectedDate={selectedDate}
-              onBack={handleBackToMonth}
-              events={events}
-              onEventPress={handleEventPress}
-              onAddEvent={handleAddEvent}
-            />
+            <Animated.View
+              style={[
+                { flex: 1 },
+                {
+                  transform: [{ translateY: dayViewTranslateY }],
+                },
+              ]}
+            >
+              <DayView
+                selectedDate={selectedDate}
+                onBack={handleBackToMonth}
+                events={events}
+                onEventPress={handleEventPress}
+                onAddEvent={handleAddEvent}
+              />
+            </Animated.View>
           ) : (
             <View style={styles.monthViewContainer} {...panResponder.panHandlers}>
               <Animated.View
