@@ -72,6 +72,23 @@ export default function App() {
     loadUserEvents();
   }, []);
 
+  // Animate day view when entering
+  useEffect(() => {
+    if (viewMode === 'day' && selectedDate) {
+      const screenHeight = Dimensions.get('window').height;
+      dayViewTranslateY.setValue(screenHeight);
+
+      Animated.timing(dayViewTranslateY, {
+        toValue: 0,
+        duration: 800,
+        useNativeDriver: true,
+      }).start();
+    } else if (viewMode !== 'day') {
+      // Reset when leaving day view
+      dayViewTranslateY.setValue(0);
+    }
+  }, [viewMode, selectedDate, dayViewTranslateY]);
+
   const handlePreviousMonth = () => {
     // Animate the transition - slide right and fade out
     Animated.parallel([
@@ -126,24 +143,12 @@ export default function App() {
       setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
     }
     setSelectedDate(date);
-
-    // Animate day view sliding up from bottom
-    const screenHeight = Dimensions.get('window').height;
-    dayViewTranslateY.setValue(screenHeight); // Start completely off-screen at bottom
     setViewMode('day');
-
-    // Slow animation for visibility
-    Animated.timing(dayViewTranslateY, {
-      toValue: 0,
-      duration: 800,
-      useNativeDriver: true,
-    }).start();
   };
 
   const handleBackToMonth = () => {
     setViewMode('month');
     setSelectedDate(null);
-    dayViewTranslateY.setValue(0); // Reset for next animation
   };
 
   const handleEventPress = (event: CalendarEvent) => {
@@ -283,19 +288,9 @@ export default function App() {
       setSelectedDate(null);
       setSelectedEvent(null);
     } else if (view === 'day') {
-      // Animate day view sliding up from bottom
-      const screenHeight = Dimensions.get('window').height;
-      dayViewTranslateY.setValue(screenHeight); // Start completely off-screen at bottom
       setViewMode('day');
       setSelectedDate(new Date()); // Set to today
       setSelectedEvent(null);
-
-      // Slow animation for visibility
-      Animated.timing(dayViewTranslateY, {
-        toValue: 0,
-        duration: 800,
-        useNativeDriver: true,
-      }).start();
     } else if (view === 'events') {
       setViewMode('eventsList');
       setSelectedEvent(null);
