@@ -132,10 +132,10 @@ export default function App() {
     dayViewTranslateY.setValue(screenHeight); // Start completely off-screen at bottom
     setViewMode('day');
 
-    // Use timing for smoother, more visible animation
+    // Slow animation for visibility
     Animated.timing(dayViewTranslateY, {
       toValue: 0,
-      duration: 350,
+      duration: 800,
       useNativeDriver: true,
     }).start();
   };
@@ -290,10 +290,10 @@ export default function App() {
       setSelectedDate(new Date()); // Set to today
       setSelectedEvent(null);
 
-      // Use timing for smoother, more visible animation
+      // Slow animation for visibility
       Animated.timing(dayViewTranslateY, {
         toValue: 0,
-        duration: 350,
+        duration: 800,
         useNativeDriver: true,
       }).start();
     } else if (view === 'events') {
