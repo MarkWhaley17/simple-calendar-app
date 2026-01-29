@@ -630,6 +630,7 @@ export default function App() {
           onSave={handleUpdateEvent}
           onDelete={handleDeleteEvent}
           deleteMode={editScope === 'single' ? 'skip' : 'delete'}
+          showRecurringNotice={editScope !== 'single'}
         />
       ) : viewMode === 'addEvent' ? (
         <AddEventView

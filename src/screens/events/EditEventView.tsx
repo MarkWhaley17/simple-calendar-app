@@ -23,9 +23,17 @@ interface EditEventViewProps {
   }) => void;
   onDelete: (eventId: string) => void;
   deleteMode?: 'delete' | 'skip';
+  showRecurringNotice?: boolean;
 }
 
-const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, onDelete, deleteMode = 'delete' }) => {
+const EditEventView: React.FC<EditEventViewProps> = ({
+  event,
+  onBack,
+  onSave,
+  onDelete,
+  deleteMode = 'delete',
+  showRecurringNotice = true,
+}) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -117,7 +125,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
       {/* Form */}
       <ScrollView style={styles.form}>
         {/* Recurring Event Notice */}
-        {event.recurrence && event.recurrence.frequency !== 'none' && (
+        {showRecurringNotice && event.recurrence && event.recurrence.frequency !== 'none' && (
           <View style={styles.noticeSection}>
             <Text style={styles.noticeText}>
               Editing this recurring event will update all future occurrences.
