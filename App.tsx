@@ -80,7 +80,7 @@ export default function App() {
 
       Animated.timing(dayViewTranslateY, {
         toValue: 0,
-        duration: 450,
+        duration: 300,
         useNativeDriver: true,
       }).start();
     } else if (viewMode !== 'day') {
