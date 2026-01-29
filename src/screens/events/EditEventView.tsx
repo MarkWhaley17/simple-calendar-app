@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { CalendarEvent } from '../../types';
+import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
+import RecurrencePicker from '../../components/common/RecurrencePicker';
+import { getRecurrenceLabel } from '../../utils/recurrence';
 
 interface EditEventViewProps {
   event: CalendarEvent;
@@ -17,6 +19,7 @@ interface EditEventViewProps {
     toTime: string;
     links: string[];
     isAllDay: boolean;
+    recurrence?: RecurrenceRule;
   }) => void;
   onDelete: (eventId: string) => void;
 }
@@ -30,9 +33,13 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
   const [toTime, setToTime] = useState(event.toTime || event.endTime || '10:00 AM');
   const [links, setLinks] = useState((event.links || []).join('\n'));
   const [isAllDay, setIsAllDay] = useState(event.isAllDay || false);
+  const [recurrence, setRecurrence] = useState<RecurrenceRule>(
+    event.recurrence || { frequency: 'none', interval: 1 }
+  );
 
   const [showFromDatePicker, setShowFromDatePicker] = useState(false);
   const [showToDatePicker, setShowToDatePicker] = useState(false);
+  const [showRecurrencePicker, setShowRecurrencePicker] = useState(false);
 
   const formatDate = (date: Date) => {
     return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
@@ -58,6 +65,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
       toTime: isAllDay ? '11:59 PM' : toTime,
       links: linkArray,
       isAllDay,
+      recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
     });
   };
 
@@ -104,6 +112,15 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
 
       {/* Form */}
       <ScrollView style={styles.form}>
+        {/* Recurring Event Notice */}
+        {event.recurrence && event.recurrence.frequency !== 'none' && (
+          <View style={styles.noticeSection}>
+            <Text style={styles.noticeText}>
+              Editing this recurring event will update all future occurrences.
+            </Text>
+          </View>
+        )}
+
         {/* Title */}
         <View style={styles.section}>
           <Text style={styles.label}>Title *</Text>
@@ -213,6 +230,18 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
           )}
         </View>
 
+        {/* Recurrence */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Repeat</Text>
+          <TouchableOpacity
+            style={styles.dateTimeInput}
+            onPress={() => setShowRecurrencePicker(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Links */}
         <View style={styles.section}>
           <Text style={styles.label}>Links</Text>
@@ -238,6 +267,14 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Recurrence Picker Modal */}
+      <RecurrencePicker
+        visible={showRecurrencePicker}
+        recurrence={recurrence}
+        onClose={() => setShowRecurrencePicker(false)}
+        onSave={setRecurrence}
+      />
     </View>
   );
 };
@@ -351,6 +388,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  noticeSection: {
+    backgroundColor: '#FEF3C7',
+    padding: 16,
+    marginTop: 1,
+    borderLeftWidth: 4,
+    borderLeftColor: '#F59E0B',
+  },
+  noticeText: {
+    fontSize: 14,
+    color: '#92400E',
+    fontWeight: '600',
+    letterSpacing: 0.2,
+    lineHeight: 20,
   },
   deleteSection: {
     padding: 20,

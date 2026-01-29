@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions } from 'react-native';
-import { CalendarHeader, CalendarGrid } from './src/components/calendar';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert } from 'react-native';
+import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
@@ -10,6 +10,7 @@ import { CalendarEvent, ViewMode, NavView } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
+import { expandRecurringEvents } from './src/utils/recurrence';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -18,6 +19,7 @@ export default function App() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [previousView, setPreviousView] = useState<ViewMode | null>(null);
   const [currentQuote, setCurrentQuote] = useState<string>(getRandomQuote());
+  const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
@@ -49,7 +51,11 @@ export default function App() {
   }, [quoteOpacity]);
 
   // Events state - initialized with pre-added events from EVENTS.md
-  const [events, setEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
+  // This stores master events (including recurring event definitions)
+  const [masterEvents, setMasterEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
+
+  // Expanded events include all recurring instances for display
+  const events = expandRecurringEvents(masterEvents);
 
   // Load user events from storage on mount and merge with pre-added events
   useEffect(() => {
@@ -62,7 +68,7 @@ export default function App() {
         // Pre-added events have IDs starting with 'pre-', so we can filter them out from stored events
         const userEvents = storedEvents.filter(event => !event.id.startsWith('pre-'));
 
-        setEvents([...preAddedEvents, ...userEvents]);
+        setMasterEvents([...preAddedEvents, ...userEvents]);
       } catch (error) {
         console.error('Failed to load events from storage:', error);
         // If loading fails, keep the pre-added events
@@ -180,6 +186,7 @@ export default function App() {
     toTime: string;
     links: string[];
     isAllDay: boolean;
+    recurrence?: import('./src/types').RecurrenceRule;
   }) => {
     const newEvent: CalendarEvent = {
       id: Date.now().toString(),
@@ -191,13 +198,15 @@ export default function App() {
       toTime: eventData.toTime,
       links: eventData.links,
       isAllDay: eventData.isAllDay,
+      recurrence: eventData.recurrence,
+      recurrenceId: eventData.recurrence ? Date.now().toString() : undefined,
       // Legacy fields for compatibility
       date: eventData.fromDate,
       startTime: eventData.fromTime,
     };
 
-    const updatedEvents = [...events, newEvent];
-    setEvents(updatedEvents);
+    const updatedEvents = [...masterEvents, newEvent];
+    setMasterEvents(updatedEvents);
 
     // Save only user events (not pre-added events) to storage
     try {
@@ -215,7 +224,25 @@ export default function App() {
   };
 
   const handleEditEvent = () => {
-    setViewMode('editEvent');
+    // Check if this is a recurring event instance
+    if (selectedEvent && selectedEvent.isRecurringInstance && selectedEvent.originalEventId) {
+      Alert.alert(
+        'Edit Recurring Event',
+        'This is a recurring event. What would you like to edit?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'All Future Events',
+            onPress: () => setViewMode('editEvent'),
+          },
+        ]
+      );
+    } else {
+      setViewMode('editEvent');
+    }
   };
 
   const handleUpdateEvent = async (eventData: {
@@ -228,27 +255,38 @@ export default function App() {
     toTime: string;
     links: string[];
     isAllDay: boolean;
+    recurrence?: import('./src/types').RecurrenceRule;
   }) => {
-    const updatedEvents = events.map(event =>
-      event.id === eventData.id
+    // Find the event being edited
+    const eventToEdit = selectedEvent;
+
+    // If this is a recurring instance, update the master event instead
+    const targetId = eventToEdit?.isRecurringInstance && eventToEdit.originalEventId
+      ? eventToEdit.originalEventId
+      : eventData.id;
+
+    const updatedEvents = masterEvents.map(event =>
+      event.id === targetId
         ? {
             ...event,
             title: eventData.title,
             description: eventData.description,
-            fromDate: eventData.fromDate,
+            fromDate: eventToEdit?.isRecurringInstance ? event.fromDate : eventData.fromDate,
             fromTime: eventData.fromTime,
-            toDate: eventData.toDate,
+            toDate: eventToEdit?.isRecurringInstance ? event.toDate : eventData.toDate,
             toTime: eventData.toTime,
             links: eventData.links,
             isAllDay: eventData.isAllDay,
+            recurrence: eventData.recurrence,
+            recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
             // Update legacy fields
-            date: eventData.fromDate,
+            date: eventToEdit?.isRecurringInstance ? event.date : eventData.fromDate,
             startTime: eventData.fromTime,
           }
         : event
     );
 
-    setEvents(updatedEvents);
+    setMasterEvents(updatedEvents);
 
     // Save only user events (not pre-added events) to storage
     try {
@@ -266,8 +304,15 @@ export default function App() {
   };
 
   const handleDeleteEvent = async (eventId: string) => {
-    const updatedEvents = events.filter(event => event.id !== eventId);
-    setEvents(updatedEvents);
+    const eventToDelete = selectedEvent;
+
+    // Determine which event to actually delete from masterEvents
+    const targetId = eventToDelete?.isRecurringInstance && eventToDelete.originalEventId
+      ? eventToDelete.originalEventId
+      : eventId;
+
+    const updatedEvents = masterEvents.filter(event => event.id !== targetId);
+    setMasterEvents(updatedEvents);
 
     // Save only user events (not pre-added events) to storage
     try {
@@ -279,6 +324,14 @@ export default function App() {
 
     setSelectedEvent(null);
     setViewMode('day');
+  };
+
+  const handleOpenMonthYearPicker = () => {
+    setShowMonthYearPicker(true);
+  };
+
+  const handleSelectMonthYear = (date: Date) => {
+    setCurrentDate(date);
   };
 
   const handleBottomNavigation = (view: NavView) => {
@@ -423,11 +476,23 @@ export default function App() {
   // Check if we should show bottom nav (hide on event detail screens)
   const shouldShowBottomNav = viewMode === 'month' || viewMode === 'day' || viewMode === 'account' || viewMode === 'eventsList';
 
+  // Get the master event for editing if the selected event is a recurring instance
+  const getEditableEvent = () => {
+    if (!selectedEvent) return null;
+
+    if (selectedEvent.isRecurringInstance && selectedEvent.originalEventId) {
+      // Find and return the master event
+      return masterEvents.find(e => e.id === selectedEvent.originalEventId) || selectedEvent;
+    }
+
+    return selectedEvent;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {viewMode === 'editEvent' && selectedEvent ? (
         <EditEventView
-          event={selectedEvent}
+          event={getEditableEvent()!}
           onBack={handleCancelEditEvent}
           onSave={handleUpdateEvent}
           onDelete={handleDeleteEvent}
@@ -482,6 +547,7 @@ export default function App() {
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
+                    onDatePress={handleOpenMonthYearPicker}
                   />
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={events} />
                   <View style={styles.quoteWrapper}>
@@ -505,6 +571,12 @@ export default function App() {
           )}
         </>
       )}
+      <MonthYearPicker
+        visible={showMonthYearPicker}
+        currentDate={currentDate}
+        onClose={() => setShowMonthYearPicker(false)}
+        onSelect={handleSelectMonthYear}
+      />
     </SafeAreaView>
   );
 }

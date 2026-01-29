@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MONTH_NAMES } from '../../constants/dates';
+import { RecurrenceRule } from '../../types';
+import RecurrencePicker from '../../components/common/RecurrencePicker';
+import { getRecurrenceLabel } from '../../utils/recurrence';
 
 interface AddEventViewProps {
   onBack: () => void;
@@ -14,6 +17,7 @@ interface AddEventViewProps {
     toTime: string;
     links: string[];
     isAllDay: boolean;
+    recurrence?: RecurrenceRule;
   }) => void;
   initialDate?: Date;
 }
@@ -27,9 +31,11 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
   const [toTime, setToTime] = useState('10:00 AM');
   const [links, setLinks] = useState('');
   const [isAllDay, setIsAllDay] = useState(false);
+  const [recurrence, setRecurrence] = useState<RecurrenceRule>({ frequency: 'none', interval: 1 });
 
   const [showFromDatePicker, setShowFromDatePicker] = useState(false);
   const [showToDatePicker, setShowToDatePicker] = useState(false);
+  const [showRecurrencePicker, setShowRecurrencePicker] = useState(false);
 
   const formatDate = (date: Date) => {
     return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
@@ -54,6 +60,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
       toTime: isAllDay ? '11:59 PM' : toTime,
       links: linkArray,
       isAllDay,
+      recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
     });
   };
 
@@ -191,6 +198,18 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
           )}
         </View>
 
+        {/* Recurrence */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Repeat</Text>
+          <TouchableOpacity
+            style={styles.dateTimeInput}
+            onPress={() => setShowRecurrencePicker(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Links */}
         <View style={styles.section}>
           <Text style={styles.label}>Links</Text>
@@ -205,6 +224,14 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
           />
         </View>
       </ScrollView>
+
+      {/* Recurrence Picker Modal */}
+      <RecurrencePicker
+        visible={showRecurrencePicker}
+        recurrence={recurrence}
+        onClose={() => setShowRecurrencePicker(false)}
+        onSave={setRecurrence}
+      />
     </View>
   );
 };

@@ -6,12 +6,14 @@ interface CalendarHeaderProps {
   currentDate: Date;
   onPreviousMonth: () => void;
   onNextMonth: () => void;
+  onDatePress?: () => void;
 }
 
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   currentDate,
   onPreviousMonth,
   onNextMonth,
+  onDatePress,
 }) => {
   const monthName = MONTH_NAMES[currentDate.getMonth()];
   const year = currentDate.getFullYear();
@@ -26,10 +28,15 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         <Text style={styles.navButtonText}>‹</Text>
       </TouchableOpacity>
 
-      <View style={styles.dateContainer}>
+      <TouchableOpacity
+        style={styles.dateContainer}
+        onPress={onDatePress}
+        activeOpacity={0.7}
+        disabled={!onDatePress}
+      >
         <Text style={styles.monthText}>{monthName}</Text>
-        <Text style={styles.yearText}>{year}</Text>
-      </View>
+        <Text style={styles.yearText}>{year} ▼</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.navButton}
