@@ -40,17 +40,20 @@ const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence
       presentationStyle="overFullScreen"
     >
       <View style={styles.overlay}>
-        <TouchableOpacity
-          style={styles.overlayTouchable}
-          activeOpacity={1}
-          onPress={onClose}
-        />
-        <View style={styles.container} pointerEvents="box-none">
+        <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Repeat</Text>
+            <TouchableOpacity
+              onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel="Close repeat picker"
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>×</Text>
+            </TouchableOpacity>
           </View>
 
-          <ScrollView style={styles.content}>
+          <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
             <View style={styles.section}>
               {options.map((option, index) => (
                 <TouchableOpacity
@@ -88,19 +91,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  overlayTouchable: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
   container: {
     backgroundColor: '#fff',
     borderRadius: 20,
     width: '90%',
     maxWidth: 400,
-    maxHeight: '60%',
+    maxHeight: '70%',
+    minHeight: 260,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
@@ -114,6 +111,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 20,
@@ -121,8 +119,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     letterSpacing: 0.3,
   },
+  closeButton: {
+    position: 'absolute',
+    right: 12,
+    top: 12,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 26,
+    lineHeight: 28,
+    fontWeight: '700',
+  },
   content: {
-    flex: 1,
+    flexGrow: 0,
+  },
+  contentContainer: {
+    paddingBottom: 12,
   },
   section: {
     padding: 20,
