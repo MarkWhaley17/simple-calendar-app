@@ -9,6 +9,7 @@ import { AccountView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
+import { saveEvents, loadEvents } from './src/utils/storage';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -48,6 +49,27 @@ export default function App() {
 
   // Events state - initialized with pre-added events from EVENTS.md
   const [events, setEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
+
+  // Load user events from storage on mount and merge with pre-added events
+  useEffect(() => {
+    const loadUserEvents = async () => {
+      try {
+        const storedEvents = await loadEvents();
+        const preAddedEvents = getPreAddedEvents();
+
+        // Merge stored events with pre-added events
+        // Pre-added events have IDs starting with 'pre-', so we can filter them out from stored events
+        const userEvents = storedEvents.filter(event => !event.id.startsWith('pre-'));
+
+        setEvents([...preAddedEvents, ...userEvents]);
+      } catch (error) {
+        console.error('Failed to load events from storage:', error);
+        // If loading fails, keep the pre-added events
+      }
+    };
+
+    loadUserEvents();
+  }, []);
 
   const handlePreviousMonth = () => {
     // Animate the transition - slide right and fade out
@@ -131,7 +153,7 @@ export default function App() {
     setViewMode('addEvent');
   };
 
-  const handleSaveEvent = (eventData: {
+  const handleSaveEvent = async (eventData: {
     title: string;
     description: string;
     fromDate: Date;
@@ -156,7 +178,17 @@ export default function App() {
       startTime: eventData.fromTime,
     };
 
-    setEvents([...events, newEvent]);
+    const updatedEvents = [...events, newEvent];
+    setEvents(updatedEvents);
+
+    // Save only user events (not pre-added events) to storage
+    try {
+      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      await saveEvents(userEvents);
+    } catch (error) {
+      console.error('Failed to save event to storage:', error);
+    }
+
     setViewMode('day');
   };
 
@@ -168,7 +200,7 @@ export default function App() {
     setViewMode('editEvent');
   };
 
-  const handleUpdateEvent = (eventData: {
+  const handleUpdateEvent = async (eventData: {
     id: string;
     title: string;
     description: string;
@@ -199,6 +231,15 @@ export default function App() {
     );
 
     setEvents(updatedEvents);
+
+    // Save only user events (not pre-added events) to storage
+    try {
+      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      await saveEvents(userEvents);
+    } catch (error) {
+      console.error('Failed to update event in storage:', error);
+    }
+
     setViewMode('event');
   };
 
@@ -206,9 +247,18 @@ export default function App() {
     setViewMode('event');
   };
 
-  const handleDeleteEvent = (eventId: string) => {
+  const handleDeleteEvent = async (eventId: string) => {
     const updatedEvents = events.filter(event => event.id !== eventId);
     setEvents(updatedEvents);
+
+    // Save only user events (not pre-added events) to storage
+    try {
+      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      await saveEvents(userEvents);
+    } catch (error) {
+      console.error('Failed to delete event from storage:', error);
+    }
+
     setSelectedEvent(null);
     setViewMode('day');
   };
