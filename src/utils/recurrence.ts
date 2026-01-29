@@ -1,4 +1,5 @@
 import { CalendarEvent, RecurrenceRule } from '../types';
+import { toDateKey } from './dateHelpers';
 
 /**
  * Generate recurring event instances from a master event
@@ -18,6 +19,8 @@ export const generateRecurringInstances = (
 
   const instances: CalendarEvent[] = [];
   const recurrence = masterEvent.recurrence;
+  const exceptions = recurrence.exceptions || [];
+  const overrides = recurrence.overrides || {};
   let currentDate = new Date(masterEvent.fromDate);
   let instanceCount = 0;
   const maxInstances = recurrence.count || 365; // safety limit
@@ -30,8 +33,17 @@ export const generateRecurringInstances = (
 
   while (currentDate <= recurrenceEndDate && currentDate <= endDate && instanceCount < maxInstances) {
     // Check if we should create an instance for this date
+    const occurrenceKey = toDateKey(currentDate);
+    if (exceptions.includes(occurrenceKey)) {
+      currentDate = getNextOccurrence(currentDate, recurrence);
+      continue;
+    }
+
     if (currentDate >= startDate && shouldCreateInstance(currentDate, recurrence, masterEvent.fromDate)) {
-      instances.push(createInstance(masterEvent, currentDate, instanceCount));
+      const baseInstance = createInstance(masterEvent, currentDate, instanceCount);
+      const override = overrides[occurrenceKey];
+      const instance = override ? applyOverride(baseInstance, override) : baseInstance;
+      instances.push(instance);
       instanceCount++;
 
       // Stop if we've reached the count limit
@@ -120,6 +132,25 @@ const createInstance = (
     isRecurringInstance: true,
     originalEventId: masterEvent.id,
     recurrenceId: masterEvent.recurrenceId || masterEvent.id,
+  };
+};
+
+const applyOverride = (
+  instance: CalendarEvent,
+  override: Partial<CalendarEvent>
+): CalendarEvent => {
+  const {
+    id,
+    recurrence,
+    recurrenceId,
+    isRecurringInstance,
+    originalEventId,
+    ...safeOverride
+  } = override;
+
+  return {
+    ...instance,
+    ...safeOverride,
   };
 };
 

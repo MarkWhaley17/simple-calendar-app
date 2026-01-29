@@ -6,6 +6,8 @@ export interface RecurrenceRule {
   endDate?: Date; // when to stop repeating
   daysOfWeek?: number[]; // for weekly: [0,1,2,3,4,5,6] where 0=Sunday
   count?: number; // alternative to endDate: repeat N times
+  exceptions?: string[]; // date keys (YYYY-MM-DD) to skip
+  overrides?: Record<string, Partial<CalendarEvent>>; // date key -> override fields
 }
 
 export interface CalendarEvent {

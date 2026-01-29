@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -22,9 +22,10 @@ interface EditEventViewProps {
     recurrence?: RecurrenceRule;
   }) => void;
   onDelete: (eventId: string) => void;
+  deleteMode?: 'delete' | 'skip';
 }
 
-const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, onDelete }) => {
+const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, onDelete, deleteMode = 'delete' }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -70,17 +71,20 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
   };
 
   const handleDelete = () => {
+    const isSkip = deleteMode === 'skip';
     Alert.alert(
-      'Delete Event',
-      'Are you sure you want to delete this event? This action cannot be undone.',
+      isSkip ? 'Skip Occurrence' : 'Delete Event',
+      isSkip
+        ? 'Skip this single occurrence? This does not affect future events.'
+        : 'Are you sure you want to delete this event? This action cannot be undone.',
       [
         {
           text: 'Cancel',
           style: 'cancel',
         },
         {
-          text: 'Delete',
-          style: 'destructive',
+          text: isSkip ? 'Skip' : 'Delete',
+          style: isSkip ? 'default' : 'destructive',
           onPress: () => onDelete(event.id),
         },
       ]
@@ -154,8 +158,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
             <Switch
               value={isAllDay}
               onValueChange={setIsAllDay}
-              trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
-              thumbColor={isAllDay ? '#fff' : '#f4f3f4'}
+              trackColor={{ false: '#BFDBFE', true: '#FEE2E2' }}
+              thumbColor={isAllDay ? '#991B1B' : '#f4f3f4'}
             />
           </View>
         </View>
@@ -233,13 +237,18 @@ const EditEventView: React.FC<EditEventViewProps> = ({ event, onBack, onSave, on
         {/* Recurrence */}
         <View style={styles.section}>
           <Text style={styles.label}>Repeat</Text>
-          <TouchableOpacity
-            style={styles.dateTimeInput}
-            onPress={() => setShowRecurrencePicker(true)}
-            activeOpacity={0.7}
+          <Pressable
+            style={({ pressed }) => [
+              styles.dateTimeInput,
+              pressed && { opacity: 0.7 }
+            ]}
+            onPress={() => {
+              console.log('Repeat button pressed');
+              setShowRecurrencePicker(true);
+            }}
           >
             <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Links */}

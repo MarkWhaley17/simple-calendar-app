@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MONTH_NAMES } from '../../constants/dates';
 import { RecurrenceRule } from '../../types';
@@ -122,8 +122,8 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
             <Switch
               value={isAllDay}
               onValueChange={setIsAllDay}
-              trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
-              thumbColor={isAllDay ? '#fff' : '#f4f3f4'}
+              trackColor={{ false: '#BFDBFE', true: '#FEE2E2' }}
+              thumbColor={isAllDay ? '#991B1B' : '#f4f3f4'}
             />
           </View>
         </View>
@@ -201,13 +201,18 @@ const AddEventView: React.FC<AddEventViewProps> = ({ onBack, onSave, initialDate
         {/* Recurrence */}
         <View style={styles.section}>
           <Text style={styles.label}>Repeat</Text>
-          <TouchableOpacity
-            style={styles.dateTimeInput}
-            onPress={() => setShowRecurrencePicker(true)}
-            activeOpacity={0.7}
+          <Pressable
+            style={({ pressed }) => [
+              styles.dateTimeInput,
+              pressed && { opacity: 0.7 }
+            ]}
+            onPress={() => {
+              console.log('Repeat button pressed');
+              setShowRecurrencePicker(true);
+            }}
           >
             <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Links */}

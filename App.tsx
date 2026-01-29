@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert } from 'react-native';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
 import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -11,6 +11,7 @@ import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
 import { expandRecurringEvents } from './src/utils/recurrence';
+import { toDateKey } from './src/utils/dateHelpers';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,6 +21,8 @@ export default function App() {
   const [previousView, setPreviousView] = useState<ViewMode | null>(null);
   const [currentQuote, setCurrentQuote] = useState<string>(getRandomQuote());
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
+  const [editScope, setEditScope] = useState<'single' | 'all' | null>(null);
+  const [editOccurrenceKey, setEditOccurrenceKey] = useState<string | null>(null);
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
@@ -160,6 +163,8 @@ export default function App() {
   const handleEventPress = (event: CalendarEvent) => {
     setPreviousView(viewMode);
     setSelectedEvent(event);
+    setEditScope(null);
+    setEditOccurrenceKey(null);
     setViewMode('event');
   };
 
@@ -226,6 +231,23 @@ export default function App() {
   const handleEditEvent = () => {
     // Check if this is a recurring event instance
     if (selectedEvent && selectedEvent.isRecurringInstance && selectedEvent.originalEventId) {
+      if (Platform.OS === 'web') {
+        const confirmFn = (globalThis as any).confirm;
+        if (typeof confirmFn === 'function') {
+          const editSingle = confirmFn('Edit this occurrence?\nOK = This occurrence\nCancel = All future');
+          if (editSingle) {
+            setEditScope('single');
+            setEditOccurrenceKey(toDateKey(selectedEvent.fromDate || selectedEvent.date || new Date()));
+          } else {
+            setEditScope('all');
+          }
+        } else {
+          setEditScope('all');
+        }
+        setViewMode('editEvent');
+        return;
+      }
+
       Alert.alert(
         'Edit Recurring Event',
         'This is a recurring event. What would you like to edit?',
@@ -235,12 +257,24 @@ export default function App() {
             style: 'cancel',
           },
           {
+            text: 'This Occurrence',
+            onPress: () => {
+              setEditScope('single');
+              setEditOccurrenceKey(toDateKey(selectedEvent.fromDate || selectedEvent.date || new Date()));
+              setViewMode('editEvent');
+            },
+          },
+          {
             text: 'All Future Events',
-            onPress: () => setViewMode('editEvent'),
+            onPress: () => {
+              setEditScope('all');
+              setViewMode('editEvent');
+            },
           },
         ]
       );
     } else {
+      setEditScope('all');
       setViewMode('editEvent');
     }
   };
@@ -257,36 +291,104 @@ export default function App() {
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
   }) => {
-    // Find the event being edited
     const eventToEdit = selectedEvent;
 
-    // If this is a recurring instance, update the master event instead
-    const targetId = eventToEdit?.isRecurringInstance && eventToEdit.originalEventId
-      ? eventToEdit.originalEventId
-      : eventData.id;
+    let updatedEvents = masterEvents;
+    let nextSelectedEvent: CalendarEvent | null = eventToEdit;
 
-    const updatedEvents = masterEvents.map(event =>
-      event.id === targetId
-        ? {
-            ...event,
+    if (editScope === 'single' && eventToEdit?.isRecurringInstance && eventToEdit.originalEventId) {
+      const occurrenceKey = editOccurrenceKey || toDateKey(eventToEdit.fromDate || eventToEdit.date || new Date());
+
+      updatedEvents = masterEvents.map(event => {
+        if (event.id !== eventToEdit.originalEventId) return event;
+
+        const existingRecurrence = event.recurrence || { frequency: 'none', interval: 1 };
+        const overrides = {
+          ...(existingRecurrence.overrides || {}),
+          [occurrenceKey]: {
             title: eventData.title,
             description: eventData.description,
-            fromDate: eventToEdit?.isRecurringInstance ? event.fromDate : eventData.fromDate,
+            fromDate: eventData.fromDate,
             fromTime: eventData.fromTime,
-            toDate: eventToEdit?.isRecurringInstance ? event.toDate : eventData.toDate,
+            toDate: eventData.toDate,
+            toTime: eventData.toTime,
+            links: eventData.links,
+            isAllDay: eventData.isAllDay,
+            date: eventData.fromDate,
+            startTime: eventData.fromTime,
+          },
+        };
+
+        return {
+          ...event,
+          recurrence: {
+            ...existingRecurrence,
+            overrides,
+          },
+        };
+      });
+
+      nextSelectedEvent = {
+        ...eventToEdit,
+        title: eventData.title,
+        description: eventData.description,
+        fromDate: eventData.fromDate,
+        fromTime: eventData.fromTime,
+        toDate: eventData.toDate,
+        toTime: eventData.toTime,
+        links: eventData.links,
+        isAllDay: eventData.isAllDay,
+        recurrence: eventToEdit.recurrence,
+        date: eventData.fromDate,
+        startTime: eventData.fromTime,
+      };
+    } else {
+      const targetId = eventToEdit?.isRecurringInstance && eventToEdit.originalEventId
+        ? eventToEdit.originalEventId
+        : eventData.id;
+
+      updatedEvents = masterEvents.map(event =>
+        event.id === targetId
+          ? {
+              ...event,
+              title: eventData.title,
+              description: eventData.description,
+              fromDate: eventToEdit?.isRecurringInstance ? event.fromDate : eventData.fromDate,
+              fromTime: eventData.fromTime,
+              toDate: eventToEdit?.isRecurringInstance ? event.toDate : eventData.toDate,
+              toTime: eventData.toTime,
+              links: eventData.links,
+              isAllDay: eventData.isAllDay,
+              recurrence: eventData.recurrence,
+              recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
+              // Update legacy fields
+              date: eventToEdit?.isRecurringInstance ? event.date : eventData.fromDate,
+              startTime: eventData.fromTime,
+            }
+          : event
+      );
+
+      const shouldKeepInstanceDate = eventToEdit?.isRecurringInstance;
+      nextSelectedEvent = eventToEdit
+        ? {
+            ...eventToEdit,
+            title: eventData.title,
+            description: eventData.description,
+            fromDate: shouldKeepInstanceDate ? eventToEdit.fromDate : eventData.fromDate,
+            fromTime: eventData.fromTime,
+            toDate: shouldKeepInstanceDate ? eventToEdit.toDate : eventData.toDate,
             toTime: eventData.toTime,
             links: eventData.links,
             isAllDay: eventData.isAllDay,
             recurrence: eventData.recurrence,
-            recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
-            // Update legacy fields
-            date: eventToEdit?.isRecurringInstance ? event.date : eventData.fromDate,
+            date: shouldKeepInstanceDate ? eventToEdit.date : eventData.fromDate,
             startTime: eventData.fromTime,
           }
-        : event
-    );
+        : eventToEdit;
+    }
 
     setMasterEvents(updatedEvents);
+    setSelectedEvent(nextSelectedEvent);
 
     // Save only user events (not pre-added events) to storage
     try {
@@ -296,22 +398,51 @@ export default function App() {
       console.error('Failed to update event in storage:', error);
     }
 
+    setEditScope(null);
+    setEditOccurrenceKey(null);
     setViewMode('event');
   };
 
   const handleCancelEditEvent = () => {
+    setEditScope(null);
+    setEditOccurrenceKey(null);
     setViewMode('event');
   };
 
   const handleDeleteEvent = async (eventId: string) => {
     const eventToDelete = selectedEvent;
 
-    // Determine which event to actually delete from masterEvents
-    const targetId = eventToDelete?.isRecurringInstance && eventToDelete.originalEventId
-      ? eventToDelete.originalEventId
-      : eventId;
+    let updatedEvents = masterEvents;
 
-    const updatedEvents = masterEvents.filter(event => event.id !== targetId);
+    if (editScope === 'single' && eventToDelete?.isRecurringInstance && eventToDelete.originalEventId) {
+      const occurrenceKey = editOccurrenceKey || toDateKey(eventToDelete.fromDate || eventToDelete.date || new Date());
+
+      updatedEvents = masterEvents.map(event => {
+        if (event.id !== eventToDelete.originalEventId) return event;
+
+        const existingRecurrence = event.recurrence || { frequency: 'none', interval: 1 };
+        const exceptions = new Set(existingRecurrence.exceptions || []);
+        exceptions.add(occurrenceKey);
+
+        const overrides = { ...(existingRecurrence.overrides || {}) };
+        delete overrides[occurrenceKey];
+
+        return {
+          ...event,
+          recurrence: {
+            ...existingRecurrence,
+            exceptions: Array.from(exceptions),
+            overrides,
+          },
+        };
+      });
+    } else {
+      const targetId = eventToDelete?.isRecurringInstance && eventToDelete.originalEventId
+        ? eventToDelete.originalEventId
+        : eventId;
+
+      updatedEvents = masterEvents.filter(event => event.id !== targetId);
+    }
     setMasterEvents(updatedEvents);
 
     // Save only user events (not pre-added events) to storage
@@ -323,6 +454,8 @@ export default function App() {
     }
 
     setSelectedEvent(null);
+    setEditScope(null);
+    setEditOccurrenceKey(null);
     setViewMode('day');
   };
 
@@ -492,10 +625,11 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       {viewMode === 'editEvent' && selectedEvent ? (
         <EditEventView
-          event={getEditableEvent()!}
+          event={editScope === 'single' ? selectedEvent : getEditableEvent()!}
           onBack={handleCancelEditEvent}
           onSave={handleUpdateEvent}
           onDelete={handleDeleteEvent}
+          deleteMode={editScope === 'single' ? 'skip' : 'delete'}
         />
       ) : viewMode === 'addEvent' ? (
         <AddEventView

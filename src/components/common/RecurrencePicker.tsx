@@ -39,16 +39,13 @@ const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence
       onRequestClose={onClose}
       presentationStyle="overFullScreen"
     >
-      <TouchableOpacity
-        style={styles.overlay}
-        activeOpacity={1}
-        onPress={onClose}
-      >
+      <View style={styles.overlay}>
         <TouchableOpacity
-          style={styles.container}
+          style={styles.overlayTouchable}
           activeOpacity={1}
-          onPress={(e) => e.stopPropagation()}
-        >
+          onPress={onClose}
+        />
+        <View style={styles.container} pointerEvents="box-none">
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Repeat</Text>
           </View>
@@ -77,8 +74,8 @@ const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence
               ))}
             </View>
           </ScrollView>
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </View>
+      </View>
     </Modal>
   );
 };
@@ -90,6 +87,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  overlayTouchable: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   container: {
     backgroundColor: '#fff',
