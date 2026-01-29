@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 
@@ -17,6 +17,19 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
   const monthName = MONTH_NAMES[eventDate.getMonth()];
   const dayNumber = eventDate.getDate();
   const year = eventDate.getFullYear();
+
+  const handleLinkPress = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert('Error', `Unable to open this link: ${url}`);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to open link');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -63,9 +76,15 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Links</Text>
             {event.links.map((link, index) => (
-              <Text key={index} style={styles.linkText}>
-                {link}
-              </Text>
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleLinkPress(link)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.linkText}>
+                  {link}
+                </Text>
+              </TouchableOpacity>
             ))}
           </View>
         )}
@@ -161,8 +180,9 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     color: '#2563EB',
     marginBottom: 10,
-    fontWeight: '500',
+    fontWeight: '600',
     letterSpacing: 0.2,
+    textDecorationLine: 'underline',
   },
 });
 
