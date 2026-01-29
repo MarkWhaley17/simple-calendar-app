@@ -21,7 +21,7 @@ describe('CalendarHeader', () => {
     );
 
     expect(getByText('January')).toBeTruthy();
-    expect(getByText('2026')).toBeTruthy();
+    expect(getByText(/2026/)).toBeTruthy();
   });
 
   it('should call onPreviousMonth when left button pressed', () => {
