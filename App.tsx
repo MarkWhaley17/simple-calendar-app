@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated } from 'react-native';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions } from 'react-native';
 import { CalendarHeader, CalendarGrid } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -128,13 +128,15 @@ export default function App() {
     setSelectedDate(date);
 
     // Animate day view sliding up from bottom
-    dayViewTranslateY.setValue(600); // Start off-screen at bottom
+    const screenHeight = Dimensions.get('window').height;
+    dayViewTranslateY.setValue(screenHeight); // Start completely off-screen at bottom
     setViewMode('day');
-    Animated.spring(dayViewTranslateY, {
+
+    // Use timing for smoother, more visible animation
+    Animated.timing(dayViewTranslateY, {
       toValue: 0,
+      duration: 350,
       useNativeDriver: true,
-      tension: 65,
-      friction: 10,
     }).start();
   };
 
@@ -282,15 +284,17 @@ export default function App() {
       setSelectedEvent(null);
     } else if (view === 'day') {
       // Animate day view sliding up from bottom
-      dayViewTranslateY.setValue(600); // Start off-screen at bottom
+      const screenHeight = Dimensions.get('window').height;
+      dayViewTranslateY.setValue(screenHeight); // Start completely off-screen at bottom
       setViewMode('day');
       setSelectedDate(new Date()); // Set to today
       setSelectedEvent(null);
-      Animated.spring(dayViewTranslateY, {
+
+      // Use timing for smoother, more visible animation
+      Animated.timing(dayViewTranslateY, {
         toValue: 0,
+        duration: 350,
         useNativeDriver: true,
-        tension: 65,
-        friction: 10,
       }).start();
     } else if (view === 'events') {
       setViewMode('eventsList');
