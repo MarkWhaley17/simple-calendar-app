@@ -124,6 +124,10 @@ export const getReminderTriggerDateForTest = (
   event: CalendarEvent,
   settings: NotificationSettings
 ): Date | null => {
+  if (event.reminderEnabled === false) {
+    return null;
+  }
+
   const date = event.fromDate || event.date;
   if (!date) return null;
 

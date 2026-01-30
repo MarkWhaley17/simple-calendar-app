@@ -18,6 +18,7 @@ interface AddEventViewProps {
     links: string[];
     isAllDay: boolean;
     recurrence?: RecurrenceRule;
+    reminderEnabled?: boolean;
     reminderMinutesBefore?: number;
     reminderHoursBefore?: number;
   }) => void;
@@ -42,9 +43,11 @@ const AddEventView: React.FC<AddEventViewProps> = ({
   const [links, setLinks] = useState('');
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrence, setRecurrence] = useState<RecurrenceRule>({ frequency: 'none', interval: 1 });
+  const [reminderEnabled, setReminderEnabled] = useState(true);
   const [useDefaultReminder, setUseDefaultReminder] = useState(true);
   const [reminderMinutesInput, setReminderMinutesInput] = useState(`${defaultEventReminderMinutes}`);
   const [reminderHoursInput, setReminderHoursInput] = useState(`${defaultAllDayReminderHours}`);
+  const [reminderError, setReminderError] = useState<string | null>(null);
 
   const [showFromDatePicker, setShowFromDatePicker] = useState(false);
   const [showToDatePicker, setShowToDatePicker] = useState(false);
@@ -62,9 +65,38 @@ const AddEventView: React.FC<AddEventViewProps> = ({
     return parsed;
   };
 
+  const validateReminder = (): boolean => {
+    if (!reminderEnabled || useDefaultReminder) {
+      setReminderError(null);
+      return true;
+    }
+
+    const min = isAllDay ? 1 : 1;
+    const max = isAllDay ? 168 : 1440;
+    const rawValue = isAllDay ? reminderHoursInput : reminderMinutesInput;
+    const parsed = Number.parseInt(rawValue, 10);
+
+    if (Number.isNaN(parsed)) {
+      setReminderError('Enter a number');
+      return false;
+    }
+
+    if (parsed < min || parsed > max) {
+      setReminderError(`Use ${min}-${max}`);
+      return false;
+    }
+
+    setReminderError(null);
+    return true;
+  };
+
   const handleSave = () => {
     if (!title.trim()) {
       return; // Could add validation UI here
+    }
+
+    if (!validateReminder()) {
+      return;
     }
 
     const linkArray = links
@@ -82,10 +114,11 @@ const AddEventView: React.FC<AddEventViewProps> = ({
       links: linkArray,
       isAllDay,
       recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
-      reminderMinutesBefore: useDefaultReminder || isAllDay
+      reminderEnabled,
+      reminderMinutesBefore: !reminderEnabled || useDefaultReminder || isAllDay
         ? undefined
         : parsePositiveInt(reminderMinutesInput, defaultEventReminderMinutes),
-      reminderHoursBefore: useDefaultReminder || !isAllDay
+      reminderHoursBefore: !reminderEnabled || useDefaultReminder || !isAllDay
         ? undefined
         : parsePositiveInt(reminderHoursInput, defaultAllDayReminderHours),
     });
@@ -245,26 +278,52 @@ const AddEventView: React.FC<AddEventViewProps> = ({
         {/* Reminder */}
         <View style={styles.section}>
           <View style={styles.toggleRow}>
-            <Text style={styles.label}>Use Default Reminder</Text>
+            <Text style={styles.label}>Enable Reminder</Text>
             <Switch
-              value={useDefaultReminder}
-              onValueChange={setUseDefaultReminder}
+              value={reminderEnabled}
+              onValueChange={(value) => {
+                setReminderEnabled(value);
+                if (!value) {
+                  setReminderError(null);
+                }
+              }}
               trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
               thumbColor="#fff"
             />
           </View>
-          {!useDefaultReminder && (
-            <View style={styles.reminderInputRow}>
-              <Text style={styles.reminderLabel}>
-                {isAllDay ? 'Hours before' : 'Minutes before'}
-              </Text>
-              <TextInput
-                style={[styles.input, styles.reminderInput]}
-                keyboardType="number-pad"
-                value={isAllDay ? reminderHoursInput : reminderMinutesInput}
-                onChangeText={isAllDay ? setReminderHoursInput : setReminderMinutesInput}
-              />
-            </View>
+          {reminderEnabled && (
+            <>
+              <View style={[styles.toggleRow, styles.subToggleRow]}>
+                <Text style={styles.label}>Use Default Reminder</Text>
+                <Switch
+                  value={useDefaultReminder}
+                  onValueChange={(value) => {
+                    setUseDefaultReminder(value);
+                    if (value) {
+                      setReminderError(null);
+                    }
+                  }}
+                  trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
+                  thumbColor="#fff"
+                />
+              </View>
+              {!useDefaultReminder && (
+                <View style={styles.reminderInputRow}>
+                  <Text style={styles.reminderLabel}>
+                    {isAllDay ? 'Hours before' : 'Minutes before'}
+                  </Text>
+                  <TextInput
+                    style={[styles.input, styles.reminderInput]}
+                    keyboardType="number-pad"
+                    value={isAllDay ? reminderHoursInput : reminderMinutesInput}
+                    onChangeText={isAllDay ? setReminderHoursInput : setReminderMinutesInput}
+                  />
+                </View>
+              )}
+              {reminderError && (
+                <Text style={styles.inputError}>{reminderError}</Text>
+              )}
+            </>
           )}
         </View>
 
@@ -404,6 +463,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  subToggleRow: {
+    marginTop: 12,
+  },
   reminderInputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -419,6 +481,13 @@ const styles = StyleSheet.create({
   reminderInput: {
     width: 90,
     textAlign: 'center',
+  },
+  inputError: {
+    marginTop: 8,
+    color: '#B91C1C',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
 });
 

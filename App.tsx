@@ -220,6 +220,7 @@ export default function App() {
     links: string[];
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
+    reminderEnabled?: boolean;
     reminderMinutesBefore?: number;
     reminderHoursBefore?: number;
   }) => {
@@ -235,6 +236,7 @@ export default function App() {
       isAllDay: eventData.isAllDay,
       recurrence: eventData.recurrence,
       recurrenceId: eventData.recurrence ? Date.now().toString() : undefined,
+      reminderEnabled: eventData.reminderEnabled,
       reminderMinutesBefore: eventData.reminderMinutesBefore,
       reminderHoursBefore: eventData.reminderHoursBefore,
       // Legacy fields for compatibility
@@ -322,6 +324,7 @@ export default function App() {
     links: string[];
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
+    reminderEnabled?: boolean;
     reminderMinutesBefore?: number;
     reminderHoursBefore?: number;
   }) => {
@@ -348,6 +351,7 @@ export default function App() {
             toTime: eventData.toTime,
             links: eventData.links,
             isAllDay: eventData.isAllDay,
+            reminderEnabled: eventData.reminderEnabled,
             reminderMinutesBefore: eventData.reminderMinutesBefore,
             reminderHoursBefore: eventData.reminderHoursBefore,
             date: eventData.fromDate,
@@ -374,6 +378,7 @@ export default function App() {
         toTime: eventData.toTime,
         links: eventData.links,
         isAllDay: eventData.isAllDay,
+        reminderEnabled: eventData.reminderEnabled,
         reminderMinutesBefore: eventData.reminderMinutesBefore,
         reminderHoursBefore: eventData.reminderHoursBefore,
         recurrence: eventToEdit.recurrence,
@@ -399,6 +404,7 @@ export default function App() {
               isAllDay: eventData.isAllDay,
               recurrence: eventData.recurrence,
               recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
+              reminderEnabled: eventData.reminderEnabled,
               reminderMinutesBefore: eventData.reminderMinutesBefore,
               reminderHoursBefore: eventData.reminderHoursBefore,
               // Update legacy fields
@@ -421,6 +427,7 @@ export default function App() {
             links: eventData.links,
             isAllDay: eventData.isAllDay,
             recurrence: eventData.recurrence,
+            reminderEnabled: eventData.reminderEnabled,
             reminderMinutesBefore: eventData.reminderMinutesBefore,
             reminderHoursBefore: eventData.reminderHoursBefore,
             date: shouldKeepInstanceDate ? eventToEdit.date : eventData.fromDate,

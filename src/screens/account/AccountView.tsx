@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { NotificationSettings } from '../../types';
 
@@ -13,6 +13,18 @@ const AccountView: React.FC<AccountViewProps> = ({
   onUpdateNotificationSettings,
   settingsReady = true,
 }) => {
+  const [eventMinutesInput, setEventMinutesInput] = useState(`${notificationSettings.eventReminderMinutes}`);
+  const [allDayHoursInput, setAllDayHoursInput] = useState(`${notificationSettings.allDayReminderHours}`);
+  const [eventMinutesError, setEventMinutesError] = useState<string | null>(null);
+  const [allDayHoursError, setAllDayHoursError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setEventMinutesInput(`${notificationSettings.eventReminderMinutes}`);
+    setAllDayHoursInput(`${notificationSettings.allDayReminderHours}`);
+    setEventMinutesError(null);
+    setAllDayHoursError(null);
+  }, [notificationSettings.eventReminderMinutes, notificationSettings.allDayReminderHours]);
+
   const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
     onUpdateNotificationSettings({
       ...notificationSettings,
@@ -20,15 +32,42 @@ const AccountView: React.FC<AccountViewProps> = ({
     });
   };
 
-  const updateNumberSetting = (key: 'eventReminderMinutes' | 'allDayReminderHours', value: string) => {
+  const updateNumberSetting = (
+    key: 'eventReminderMinutes' | 'allDayReminderHours',
+    value: string,
+    min: number,
+    max: number
+  ) => {
     const parsed = Number.parseInt(value, 10);
     if (Number.isNaN(parsed)) {
+      const message = 'Enter a number';
+      if (key === 'eventReminderMinutes') {
+        setEventMinutesError(message);
+      } else {
+        setAllDayHoursError(message);
+      }
       return;
+    }
+
+    if (parsed < min || parsed > max) {
+      const message = `Use ${min}-${max}`;
+      if (key === 'eventReminderMinutes') {
+        setEventMinutesError(message);
+      } else {
+        setAllDayHoursError(message);
+      }
+      return;
+    }
+
+    if (key === 'eventReminderMinutes') {
+      setEventMinutesError(null);
+    } else {
+      setAllDayHoursError(null);
     }
 
     onUpdateNotificationSettings({
       ...notificationSettings,
-      [key]: Math.max(parsed, 0),
+      [key]: parsed,
     });
   };
 
@@ -119,11 +158,19 @@ const AccountView: React.FC<AccountViewProps> = ({
               <TextInput
                 style={styles.numberInput}
                 keyboardType="number-pad"
-                value={`${notificationSettings.eventReminderMinutes}`}
-                onChangeText={(value) => updateNumberSetting('eventReminderMinutes', value)}
+                value={eventMinutesInput}
+                onChangeText={(value) => {
+                  setEventMinutesInput(value);
+                  if (settingsReady) {
+                    updateNumberSetting('eventReminderMinutes', value, 1, 1440);
+                  }
+                }}
                 editable={settingsReady}
               />
             </View>
+            {eventMinutesError && (
+              <Text style={styles.inputError}>{eventMinutesError}</Text>
+            )}
 
             <View style={[styles.settingRow, styles.settingRowBorder]}>
               <View style={styles.settingInfo}>
@@ -135,11 +182,19 @@ const AccountView: React.FC<AccountViewProps> = ({
               <TextInput
                 style={styles.numberInput}
                 keyboardType="number-pad"
-                value={`${notificationSettings.allDayReminderHours}`}
-                onChangeText={(value) => updateNumberSetting('allDayReminderHours', value)}
+                value={allDayHoursInput}
+                onChangeText={(value) => {
+                  setAllDayHoursInput(value);
+                  if (settingsReady) {
+                    updateNumberSetting('allDayReminderHours', value, 1, 168);
+                  }
+                }}
                 editable={settingsReady}
               />
             </View>
+            {allDayHoursError && (
+              <Text style={styles.inputError}>{allDayHoursError}</Text>
+            )}
           </View>
         </View>
 
@@ -303,6 +358,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
+  },
+  inputError: {
+    marginTop: 4,
+    marginBottom: 8,
+    color: '#B91C1C',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   settingLabel: {
     fontSize: 16,

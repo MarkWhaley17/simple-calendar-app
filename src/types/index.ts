@@ -20,6 +20,7 @@ export interface CalendarEvent {
   toTime?: string;
   links?: string[];
   isAllDay?: boolean;
+  reminderEnabled?: boolean;
   reminderMinutesBefore?: number; // for timed events
   reminderHoursBefore?: number; // for all-day events
   recurrence?: RecurrenceRule;
