@@ -6,12 +6,14 @@ import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
 import { AccountView } from './src/screens/account';
-import { CalendarEvent, ViewMode, NavView } from './src/types';
+import { CalendarEvent, ViewMode, NavView, NotificationSettings } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
 import { expandRecurringEvents } from './src/utils/recurrence';
 import { toDateKey } from './src/utils/dateHelpers';
+import { loadNotificationSettings, saveNotificationSettings, defaultNotificationSettings } from './src/utils/settings';
+import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,6 +25,8 @@ export default function App() {
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
   const [editScope, setEditScope] = useState<'single' | 'all' | null>(null);
   const [editOccurrenceKey, setEditOccurrenceKey] = useState<string | null>(null);
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(defaultNotificationSettings);
+  const [settingsReady, setSettingsReady] = useState(false);
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
@@ -53,6 +57,12 @@ export default function App() {
     return () => clearInterval(quoteInterval);
   }, [quoteOpacity]);
 
+  useEffect(() => {
+    initializeNotifications().catch(error => {
+      console.error('Failed to initialize notifications:', error);
+    });
+  }, []);
+
   // Events state - initialized with pre-added events from EVENTS.md
   // This stores master events (including recurring event definitions)
   const [masterEvents, setMasterEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
@@ -80,6 +90,24 @@ export default function App() {
 
     loadUserEvents();
   }, []);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      const storedSettings = await loadNotificationSettings();
+      setNotificationSettings(storedSettings);
+      setSettingsReady(true);
+    };
+
+    loadSettings();
+  }, []);
+
+  useEffect(() => {
+    if (!settingsReady) return;
+
+    scheduleNotifications(events, notificationSettings).catch(error => {
+      console.error('Failed to schedule notifications:', error);
+    });
+  }, [settingsReady, events, notificationSettings]);
 
   // Animate day view when entering
   useEffect(() => {
@@ -459,6 +487,15 @@ export default function App() {
     setViewMode('day');
   };
 
+  const handleUpdateNotificationSettings = async (nextSettings: NotificationSettings) => {
+    setNotificationSettings(nextSettings);
+    try {
+      await saveNotificationSettings(nextSettings);
+    } catch (error) {
+      console.error('Failed to save notification settings:', error);
+    }
+  };
+
   const handleOpenMonthYearPicker = () => {
     setShowMonthYearPicker(true);
   };
@@ -643,7 +680,11 @@ export default function App() {
       ) : (
         <>
           {viewMode === 'account' ? (
-            <AccountView />
+            <AccountView
+              notificationSettings={notificationSettings}
+              onUpdateNotificationSettings={handleUpdateNotificationSettings}
+              settingsReady={settingsReady}
+            />
           ) : viewMode === 'eventsList' ? (
             <EventsListView
               events={events}

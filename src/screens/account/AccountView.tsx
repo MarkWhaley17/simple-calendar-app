@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import { NotificationSettings } from '../../types';
 
-const AccountView: React.FC = () => {
-  // Notification settings state
-  const [practiceDayReminders, setPracticeDayReminders] = useState(true);
-  const [eventReminders, setEventReminders] = useState(true);
-  const [dailyQuoteNotifications, setDailyQuoteNotifications] = useState(false);
+interface AccountViewProps {
+  notificationSettings: NotificationSettings;
+  onUpdateNotificationSettings: (settings: NotificationSettings) => void;
+  settingsReady?: boolean;
+}
+
+const AccountView: React.FC<AccountViewProps> = ({
+  notificationSettings,
+  onUpdateNotificationSettings,
+  settingsReady = true,
+}) => {
+  const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
+    onUpdateNotificationSettings({
+      ...notificationSettings,
+      [key]: value,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -44,10 +57,11 @@ const AccountView: React.FC = () => {
                 </Text>
               </View>
               <Switch
-                value={practiceDayReminders}
-                onValueChange={setPracticeDayReminders}
+                value={notificationSettings.practiceDayReminders}
+                onValueChange={(value) => updateSetting('practiceDayReminders', value)}
                 trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
                 thumbColor="#fff"
+                disabled={!settingsReady}
               />
             </View>
 
@@ -59,10 +73,11 @@ const AccountView: React.FC = () => {
                 </Text>
               </View>
               <Switch
-                value={eventReminders}
-                onValueChange={setEventReminders}
+                value={notificationSettings.eventReminders}
+                onValueChange={(value) => updateSetting('eventReminders', value)}
                 trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
                 thumbColor="#fff"
+                disabled={!settingsReady}
               />
             </View>
 
@@ -74,10 +89,11 @@ const AccountView: React.FC = () => {
                 </Text>
               </View>
               <Switch
-                value={dailyQuoteNotifications}
-                onValueChange={setDailyQuoteNotifications}
+                value={notificationSettings.dailyQuoteNotifications}
+                onValueChange={(value) => updateSetting('dailyQuoteNotifications', value)}
                 trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
                 thumbColor="#fff"
+                disabled={!settingsReady}
               />
             </View>
           </View>

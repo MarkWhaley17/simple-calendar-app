@@ -30,5 +30,11 @@ export interface CalendarEvent {
   endTime?: string;
 }
 
+export interface NotificationSettings {
+  practiceDayReminders: boolean;
+  eventReminders: boolean;
+  dailyQuoteNotifications: boolean;
+}
+
 export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList';
 export type NavView = 'month' | 'day' | 'events' | 'account';
