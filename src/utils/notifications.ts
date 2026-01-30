@@ -95,19 +95,28 @@ const scheduleEventReminder = async (
   const triggerDate = getReminderTriggerDateForTest(event, settings);
   if (!triggerDate) return;
 
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: event.title || 'Upcoming event',
-      body: event.isAllDay ? 'All day event' : 'Starting soon',
-      sound: true,
-      channelId: Platform.OS === 'android' ? 'default' : undefined,
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DATE,
-      date: triggerDate,
-      channelId: Platform.OS === 'android' ? 'default' : undefined,
-    },
-  });
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: event.title || 'Upcoming event',
+        body: event.isAllDay ? 'All day event' : 'Starting soon',
+        sound: true,
+        channelId: Platform.OS === 'android' ? 'default' : undefined,
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: triggerDate,
+        channelId: Platform.OS === 'android' ? 'default' : undefined,
+      },
+    });
+  } catch (error) {
+    console.error('Failed to schedule event reminder', {
+      eventId: event.id,
+      title: event.title,
+      triggerDate: triggerDate.toISOString(),
+      error,
+    });
+  }
 };
 
 const scheduleDailyQuoteReminder = async (): Promise<void> => {
