@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
 
@@ -32,73 +32,98 @@ const DayView: React.FC<DayViewProps> = ({ selectedDate, onBack, events = [], on
     return 0;
   });
 
+
+  // Map image filenames to static require calls
+  const imageMap: Record<string, any> = {
+    'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
+    'protector-day.jpg': require('../../../assets/protector-day.jpg'),
+    'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
+    // Add more mappings as you add images
+  };
+
+  const eventWithImage = sortedEvents.find(e => e.image && imageMap[e.image]);
+  const backgroundSource = eventWithImage && eventWithImage.image && imageMap[eventWithImage.image]
+    ? imageMap[eventWithImage.image]
+    : require('../../../assets/day-bg.jpg');
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={onBack}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.backButtonText}>‹ Back</Text>
-        </TouchableOpacity>
+    <ImageBackground
+      source={backgroundSource}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={onBack}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.backButtonText}>‹ Back</Text>
+          </TouchableOpacity>
 
-        <View style={styles.dateInfo}>
-          <Text style={styles.dayName}>{dayName}</Text>
-          <Text style={styles.fullDate}>
-            {monthName} {dayNumber}, {year}
-          </Text>
+          <View style={styles.dateInfo}>
+            <Text style={styles.dayName}>{dayName}</Text>
+            <Text style={styles.fullDate}>
+              {monthName} {dayNumber}, {year}
+            </Text>
+          </View>
         </View>
+
+        {/* Events list */}
+        <ScrollView style={styles.eventsContainer}>
+          {sortedEvents.length > 0 ? (
+            <View style={styles.eventsList}>
+              {sortedEvents.map((event) => {
+                const eventTime = event.isAllDay
+                  ? 'All Day'
+                  : (event.fromTime || event.startTime || '');
+
+                return (
+                  <TouchableOpacity
+                    key={event.id}
+                    style={styles.eventCard}
+                    onPress={() => onEventPress && onEventPress(event)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    {eventTime && (
+                      <Text style={styles.eventTime}>{eventTime}</Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>No events for this day</Text>
+            </View>
+          )}
+        </ScrollView>
+
+        {/* Add event button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          activeOpacity={0.8}
+          onPress={onAddEvent}
+        >
+          <Text style={styles.addButtonText}>+ Add Event</Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Events list */}
-      <ScrollView style={styles.eventsContainer}>
-        {sortedEvents.length > 0 ? (
-          <View style={styles.eventsList}>
-            {sortedEvents.map((event) => {
-              const eventTime = event.isAllDay
-                ? 'All Day'
-                : (event.fromTime || event.startTime || '');
-
-              return (
-                <TouchableOpacity
-                  key={event.id}
-                  style={styles.eventCard}
-                  onPress={() => onEventPress && onEventPress(event)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.eventTitle}>{event.title}</Text>
-                  {eventTime && (
-                    <Text style={styles.eventTime}>{eventTime}</Text>
-                  )}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>No events for this day</Text>
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Add event button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        activeOpacity={0.8}
-        onPress={onAddEvent}
-      >
-        <Text style={styles.addButtonText}>+ Add Event</Text>
-      </TouchableOpacity>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: 'rgba(255,255,255,0.18)', // further reduced overlay for maximum image visibility
   },
   header: {
     backgroundColor: '#2563EB',

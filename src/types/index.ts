@@ -27,6 +27,7 @@ export interface CalendarEvent {
   recurrenceId?: string; // groups recurring event instances together
   isRecurringInstance?: boolean; // true if this is a generated instance
   originalEventId?: string; // reference to the master event for instances
+  image?: string; // optional background image filename for this event
   // Legacy fields for backward compatibility
   date?: Date;
   startTime?: string;
