@@ -20,10 +20,14 @@ interface EditEventViewProps {
     links: string[];
     isAllDay: boolean;
     recurrence?: RecurrenceRule;
+    reminderMinutesBefore?: number;
+    reminderHoursBefore?: number;
   }) => void;
   onDelete: (eventId: string) => void;
   deleteMode?: 'delete' | 'skip';
   showRecurringNotice?: boolean;
+  defaultEventReminderMinutes: number;
+  defaultAllDayReminderHours: number;
 }
 
 const EditEventView: React.FC<EditEventViewProps> = ({
@@ -33,6 +37,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   onDelete,
   deleteMode = 'delete',
   showRecurringNotice = true,
+  defaultEventReminderMinutes,
+  defaultAllDayReminderHours,
 }) => {
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
@@ -45,6 +51,15 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   const [recurrence, setRecurrence] = useState<RecurrenceRule>(
     event.recurrence || { frequency: 'none', interval: 1 }
   );
+  const [useDefaultReminder, setUseDefaultReminder] = useState(
+    event.reminderMinutesBefore === undefined && event.reminderHoursBefore === undefined
+  );
+  const [reminderMinutesInput, setReminderMinutesInput] = useState(
+    `${event.reminderMinutesBefore ?? defaultEventReminderMinutes}`
+  );
+  const [reminderHoursInput, setReminderHoursInput] = useState(
+    `${event.reminderHoursBefore ?? defaultAllDayReminderHours}`
+  );
 
   const [showFromDatePicker, setShowFromDatePicker] = useState(false);
   const [showToDatePicker, setShowToDatePicker] = useState(false);
@@ -52,6 +67,14 @@ const EditEventView: React.FC<EditEventViewProps> = ({
 
   const formatDate = (date: Date) => {
     return `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  };
+
+  const parsePositiveInt = (value: string, fallback: number): number => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed) || parsed < 0) {
+      return fallback;
+    }
+    return parsed;
   };
 
   const handleSave = () => {
@@ -75,6 +98,12 @@ const EditEventView: React.FC<EditEventViewProps> = ({
       links: linkArray,
       isAllDay,
       recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
+      reminderMinutesBefore: useDefaultReminder || isAllDay
+        ? undefined
+        : parsePositiveInt(reminderMinutesInput, defaultEventReminderMinutes),
+      reminderHoursBefore: useDefaultReminder || !isAllDay
+        ? undefined
+        : parsePositiveInt(reminderHoursInput, defaultAllDayReminderHours),
     });
   };
 
@@ -259,6 +288,32 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           </Pressable>
         </View>
 
+        {/* Reminder */}
+        <View style={styles.section}>
+          <View style={styles.toggleRow}>
+            <Text style={styles.label}>Use Default Reminder</Text>
+            <Switch
+              value={useDefaultReminder}
+              onValueChange={setUseDefaultReminder}
+              trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
+              thumbColor="#fff"
+            />
+          </View>
+          {!useDefaultReminder && (
+            <View style={styles.reminderInputRow}>
+              <Text style={styles.reminderLabel}>
+                {isAllDay ? 'Hours before' : 'Minutes before'}
+              </Text>
+              <TextInput
+                style={[styles.input, styles.reminderInput]}
+                keyboardType="number-pad"
+                value={isAllDay ? reminderHoursInput : reminderMinutesInput}
+                onChangeText={isAllDay ? setReminderHoursInput : setReminderMinutesInput}
+              />
+            </View>
+          )}
+        </View>
+
         {/* Links */}
         <View style={styles.section}>
           <Text style={styles.label}>Links</Text>
@@ -405,6 +460,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  reminderInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 12,
+  },
+  reminderLabel: {
+    fontSize: 15,
+    color: '#1E3A8A',
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  reminderInput: {
+    width: 90,
+    textAlign: 'center',
   },
   noticeSection: {
     backgroundColor: '#FEF3C7',

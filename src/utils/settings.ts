@@ -7,6 +7,8 @@ export const defaultNotificationSettings: NotificationSettings = {
   practiceDayReminders: true,
   eventReminders: true,
   dailyQuoteNotifications: false,
+  eventReminderMinutes: 15,
+  allDayReminderHours: 12,
 };
 
 export const loadNotificationSettings = async (): Promise<NotificationSettings> => {

@@ -3,8 +3,6 @@ import { Platform } from 'react-native';
 import { CalendarEvent, NotificationSettings } from '../types';
 import { getRandomQuote } from './quotes';
 
-const DEFAULT_EVENT_REMINDER_MINUTES = 15;
-const ALL_DAY_REMINDER_LEAD_HOURS = 12;
 const DAILY_QUOTE_HOUR = 8;
 const UPCOMING_WINDOW_DAYS = 90;
 
@@ -70,12 +68,12 @@ export const scheduleNotifications = async (
 
   if (settings.practiceDayReminders) {
     const practiceEvents = upcomingEvents.filter(event => event.id.startsWith('pre-'));
-    await Promise.all(practiceEvents.map(scheduleEventReminder));
+    await Promise.all(practiceEvents.map(event => scheduleEventReminder(event, settings)));
   }
 
   if (settings.eventReminders) {
     const userEvents = upcomingEvents.filter(event => !event.id.startsWith('pre-'));
-    await Promise.all(userEvents.map(scheduleEventReminder));
+    await Promise.all(userEvents.map(event => scheduleEventReminder(event, settings)));
   }
 
   if (settings.dailyQuoteNotifications) {
@@ -90,8 +88,11 @@ const getUpcomingWindow = (): { start: Date; end: Date } => {
   return { start, end };
 };
 
-const scheduleEventReminder = async (event: CalendarEvent): Promise<void> => {
-  const triggerDate = getReminderTriggerDate(event);
+const scheduleEventReminder = async (
+  event: CalendarEvent,
+  settings: NotificationSettings
+): Promise<void> => {
+  const triggerDate = getReminderTriggerDateForTest(event, settings);
   if (!triggerDate) return;
 
   await Notifications.scheduleNotificationAsync({
@@ -119,7 +120,10 @@ const scheduleDailyQuoteReminder = async (): Promise<void> => {
   });
 };
 
-const getReminderTriggerDate = (event: CalendarEvent): Date | null => {
+export const getReminderTriggerDateForTest = (
+  event: CalendarEvent,
+  settings: NotificationSettings
+): Date | null => {
   const date = event.fromDate || event.date;
   if (!date) return null;
 
@@ -131,11 +135,27 @@ const getReminderTriggerDate = (event: CalendarEvent): Date | null => {
   if (!eventDateTime) return null;
 
   const leadMs = event.isAllDay
-    ? ALL_DAY_REMINDER_LEAD_HOURS * 60 * 60 * 1000
-    : DEFAULT_EVENT_REMINDER_MINUTES * 60 * 1000;
+    ? getAllDayLeadMs(event, settings)
+    : getTimedLeadMs(event, settings);
   const triggerDate = new Date(eventDateTime.getTime() - leadMs);
   if (triggerDate <= new Date()) return null;
   return triggerDate;
+};
+
+const getTimedLeadMs = (
+  event: CalendarEvent,
+  settings: NotificationSettings
+): number => {
+  const minutes = event.reminderMinutesBefore ?? settings.eventReminderMinutes;
+  return Math.max(minutes, 0) * 60 * 1000;
+};
+
+const getAllDayLeadMs = (
+  event: CalendarEvent,
+  settings: NotificationSettings
+): number => {
+  const hours = event.reminderHoursBefore ?? settings.allDayReminderHours;
+  return Math.max(hours, 0) * 60 * 60 * 1000;
 };
 
 const applyTimeToDate = (baseDate: Date, timeString: string): Date | null => {

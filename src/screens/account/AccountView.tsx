@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { NotificationSettings } from '../../types';
 
 interface AccountViewProps {
@@ -17,6 +17,18 @@ const AccountView: React.FC<AccountViewProps> = ({
     onUpdateNotificationSettings({
       ...notificationSettings,
       [key]: value,
+    });
+  };
+
+  const updateNumberSetting = (key: 'eventReminderMinutes' | 'allDayReminderHours', value: string) => {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isNaN(parsed)) {
+      return;
+    }
+
+    onUpdateNotificationSettings({
+      ...notificationSettings,
+      [key]: Math.max(parsed, 0),
     });
   };
 
@@ -94,6 +106,38 @@ const AccountView: React.FC<AccountViewProps> = ({
                 trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
                 thumbColor="#fff"
                 disabled={!settingsReady}
+              />
+            </View>
+
+            <View style={[styles.settingRow, styles.settingRowBorder]}>
+              <View style={styles.settingInfo}>
+                <Text style={styles.settingLabel}>Event Reminder Lead Time</Text>
+                <Text style={styles.settingDescription}>
+                  Minutes before a timed event (default)
+                </Text>
+              </View>
+              <TextInput
+                style={styles.numberInput}
+                keyboardType="number-pad"
+                value={`${notificationSettings.eventReminderMinutes}`}
+                onChangeText={(value) => updateNumberSetting('eventReminderMinutes', value)}
+                editable={settingsReady}
+              />
+            </View>
+
+            <View style={[styles.settingRow, styles.settingRowBorder]}>
+              <View style={styles.settingInfo}>
+                <Text style={styles.settingLabel}>All-Day Reminder Lead Time</Text>
+                <Text style={styles.settingDescription}>
+                  Hours before the day starts (default)
+                </Text>
+              </View>
+              <TextInput
+                style={styles.numberInput}
+                keyboardType="number-pad"
+                value={`${notificationSettings.allDayReminderHours}`}
+                onChangeText={(value) => updateNumberSetting('allDayReminderHours', value)}
+                editable={settingsReady}
               />
             </View>
           </View>
@@ -246,6 +290,19 @@ const styles = StyleSheet.create({
   settingInfo: {
     flex: 1,
     marginRight: 20,
+  },
+  numberInput: {
+    minWidth: 64,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(37, 99, 235, 0.2)',
+    borderRadius: 10,
+    backgroundColor: '#EFF6FF',
+    color: '#1E3A8A',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
   },
   settingLabel: {
     fontSize: 16,

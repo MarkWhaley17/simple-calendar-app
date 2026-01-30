@@ -20,6 +20,8 @@ export interface CalendarEvent {
   toTime?: string;
   links?: string[];
   isAllDay?: boolean;
+  reminderMinutesBefore?: number; // for timed events
+  reminderHoursBefore?: number; // for all-day events
   recurrence?: RecurrenceRule;
   recurrenceId?: string; // groups recurring event instances together
   isRecurringInstance?: boolean; // true if this is a generated instance
@@ -34,6 +36,8 @@ export interface NotificationSettings {
   practiceDayReminders: boolean;
   eventReminders: boolean;
   dailyQuoteNotifications: boolean;
+  eventReminderMinutes: number;
+  allDayReminderHours: number;
 }
 
 export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList';

@@ -220,6 +220,8 @@ export default function App() {
     links: string[];
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
+    reminderMinutesBefore?: number;
+    reminderHoursBefore?: number;
   }) => {
     const newEvent: CalendarEvent = {
       id: Date.now().toString(),
@@ -233,6 +235,8 @@ export default function App() {
       isAllDay: eventData.isAllDay,
       recurrence: eventData.recurrence,
       recurrenceId: eventData.recurrence ? Date.now().toString() : undefined,
+      reminderMinutesBefore: eventData.reminderMinutesBefore,
+      reminderHoursBefore: eventData.reminderHoursBefore,
       // Legacy fields for compatibility
       date: eventData.fromDate,
       startTime: eventData.fromTime,
@@ -318,6 +322,8 @@ export default function App() {
     links: string[];
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
+    reminderMinutesBefore?: number;
+    reminderHoursBefore?: number;
   }) => {
     const eventToEdit = selectedEvent;
 
@@ -342,6 +348,8 @@ export default function App() {
             toTime: eventData.toTime,
             links: eventData.links,
             isAllDay: eventData.isAllDay,
+            reminderMinutesBefore: eventData.reminderMinutesBefore,
+            reminderHoursBefore: eventData.reminderHoursBefore,
             date: eventData.fromDate,
             startTime: eventData.fromTime,
           },
@@ -366,6 +374,8 @@ export default function App() {
         toTime: eventData.toTime,
         links: eventData.links,
         isAllDay: eventData.isAllDay,
+        reminderMinutesBefore: eventData.reminderMinutesBefore,
+        reminderHoursBefore: eventData.reminderHoursBefore,
         recurrence: eventToEdit.recurrence,
         date: eventData.fromDate,
         startTime: eventData.fromTime,
@@ -389,6 +399,8 @@ export default function App() {
               isAllDay: eventData.isAllDay,
               recurrence: eventData.recurrence,
               recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
+              reminderMinutesBefore: eventData.reminderMinutesBefore,
+              reminderHoursBefore: eventData.reminderHoursBefore,
               // Update legacy fields
               date: eventToEdit?.isRecurringInstance ? event.date : eventData.fromDate,
               startTime: eventData.fromTime,
@@ -409,6 +421,8 @@ export default function App() {
             links: eventData.links,
             isAllDay: eventData.isAllDay,
             recurrence: eventData.recurrence,
+            reminderMinutesBefore: eventData.reminderMinutesBefore,
+            reminderHoursBefore: eventData.reminderHoursBefore,
             date: shouldKeepInstanceDate ? eventToEdit.date : eventData.fromDate,
             startTime: eventData.fromTime,
           }
@@ -668,12 +682,16 @@ export default function App() {
           onDelete={handleDeleteEvent}
           deleteMode={editScope === 'single' ? 'skip' : 'delete'}
           showRecurringNotice={editScope !== 'single'}
+          defaultEventReminderMinutes={notificationSettings.eventReminderMinutes}
+          defaultAllDayReminderHours={notificationSettings.allDayReminderHours}
         />
       ) : viewMode === 'addEvent' ? (
         <AddEventView
           onBack={handleCancelAddEvent}
           onSave={handleSaveEvent}
           initialDate={selectedDate || new Date()}
+          defaultEventReminderMinutes={notificationSettings.eventReminderMinutes}
+          defaultAllDayReminderHours={notificationSettings.allDayReminderHours}
         />
       ) : viewMode === 'event' && selectedEvent ? (
         <EventView event={selectedEvent} onBack={handleBackToDay} onEdit={handleEditEvent} />
