@@ -23,4 +23,16 @@ describe('DayView', () => {
     expect(getByTestId('day-view-header-image')).toBeTruthy();
     expect(getByTestId('day-view-events-background')).toBeTruthy();
   });
+
+  it('uses a lighter opacity for the event list background', () => {
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 1, 10)}
+        onBack={jest.fn()}
+        events={[]}
+      />
+    );
+
+    expect(getByTestId('day-view-events-background')).toHaveStyle({ opacity: 0.25 });
+  });
 });

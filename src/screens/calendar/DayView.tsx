@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
 
@@ -86,12 +86,13 @@ const DayView: React.FC<DayViewProps> = ({
       </ImageBackground>
 
       {/* Events list */}
-      <ImageBackground
-        source={eventsBackground}
-        style={styles.eventsBackground}
-        resizeMode="repeat"
-        testID="day-view-events-background"
-      >
+      <View style={styles.eventsBackground}>
+        <Image
+          source={eventsBackground}
+          style={styles.eventsPatternImage}
+          resizeMode="repeat"
+          testID="day-view-events-background"
+        />
         <ScrollView style={styles.eventsContainer}>
           {sortedEvents.length > 0 ? (
             <View style={styles.eventsList}>
@@ -121,7 +122,7 @@ const DayView: React.FC<DayViewProps> = ({
             </View>
           )}
         </ScrollView>
-      </ImageBackground>
+      </View>
 
       {/* Add event button */}
       <TouchableOpacity
@@ -185,6 +186,11 @@ const styles = StyleSheet.create({
   },
   eventsBackground: {
     flex: 1,
+    position: 'relative',
+  },
+  eventsPatternImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
   },
   eventsList: {
     padding: 20,
