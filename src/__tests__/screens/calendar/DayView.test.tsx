@@ -4,7 +4,7 @@ import DayView from '../../../screens/calendar/DayView';
 import { CalendarEvent } from '../../../types';
 
 describe('DayView', () => {
-  it('renders the header image background', () => {
+  it('renders the header image and event list background pattern', () => {
     const event: CalendarEvent = {
       id: 'event-1',
       title: 'Test Event',
@@ -21,5 +21,6 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-view-header-image')).toBeTruthy();
+    expect(getByTestId('day-view-events-background')).toBeTruthy();
   });
 });

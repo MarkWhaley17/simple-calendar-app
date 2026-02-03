@@ -44,7 +44,6 @@ const DayView: React.FC<DayViewProps> = ({
     return 0;
   });
 
-
   // Map image filenames to static require calls
   const imageMap: Record<string, any> = {
     'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
@@ -54,15 +53,16 @@ const DayView: React.FC<DayViewProps> = ({
   };
 
   const eventWithImage = sortedEvents.find(e => e.image && imageMap[e.image]);
-  const backgroundSource = eventWithImage && eventWithImage.image && imageMap[eventWithImage.image]
+  const headerBackground = eventWithImage && eventWithImage.image && imageMap[eventWithImage.image]
     ? imageMap[eventWithImage.image]
     : require('../../../assets/day-bg.jpg');
+  const eventsBackground = require('../../../assets/day-view-pattern.png');
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <ImageBackground
-        source={backgroundSource}
+        source={headerBackground}
         style={styles.headerBackground}
         resizeMode="cover"
         testID="day-view-header-image"
@@ -86,35 +86,42 @@ const DayView: React.FC<DayViewProps> = ({
       </ImageBackground>
 
       {/* Events list */}
-      <ScrollView style={styles.eventsContainer}>
-        {sortedEvents.length > 0 ? (
-          <View style={styles.eventsList}>
-            {sortedEvents.map((event) => {
-              const eventTime = event.isAllDay
-                ? 'All Day'
-                : (event.fromTime || event.startTime || '');
+      <ImageBackground
+        source={eventsBackground}
+        style={styles.eventsBackground}
+        resizeMode="repeat"
+        testID="day-view-events-background"
+      >
+        <ScrollView style={styles.eventsContainer}>
+          {sortedEvents.length > 0 ? (
+            <View style={styles.eventsList}>
+              {sortedEvents.map((event) => {
+                const eventTime = event.isAllDay
+                  ? 'All Day'
+                  : (event.fromTime || event.startTime || '');
 
-              return (
-                <TouchableOpacity
-                  key={event.id}
-                  style={styles.eventCard}
-                  onPress={() => onEventPress && onEventPress(event)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.eventTitle}>{event.title}</Text>
-                  {eventTime && (
-                    <Text style={styles.eventTime}>{eventTime}</Text>
-                  )}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyStateText}>No events for this day</Text>
-          </View>
-        )}
-      </ScrollView>
+                return (
+                  <TouchableOpacity
+                    key={event.id}
+                    style={styles.eventCard}
+                    onPress={() => onEventPress && onEventPress(event)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    {eventTime && (
+                      <Text style={styles.eventTime}>{eventTime}</Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>No events for this day</Text>
+            </View>
+          )}
+        </ScrollView>
+      </ImageBackground>
 
       {/* Add event button */}
       <TouchableOpacity
@@ -174,6 +181,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
   },
   eventsContainer: {
+    flex: 1,
+  },
+  eventsBackground: {
     flex: 1,
   },
   eventsList: {
