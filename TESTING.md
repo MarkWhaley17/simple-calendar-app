@@ -2,6 +2,46 @@
 
 This document outlines the testing strategy and guidelines for the calendar app.
 
+## Test-Driven Development (TDD) Workflow
+
+This project uses strict TDD. Write tests **before** implementing or changing production code.
+
+### Required Workflow
+
+1. **Write the failing test first**
+   - Add/extend tests that describe the desired behavior.
+   - Use a clear test name that describes the behavior and expected outcome.
+   - Run `npm test` and confirm the new test fails for the right reason.
+
+2. **Implement the smallest change to pass**
+   - Add only the code needed to satisfy the test.
+   - Avoid refactors or unrelated changes in the same commit.
+
+3. **Refactor with safety**
+   - Clean up implementation while keeping tests green.
+   - Re-run `npm test` before finishing the task.
+
+4. **Document behavior when needed**
+   - If the feature changes behavior or expectations, update this file or other docs.
+
+### TDD Definition of Done
+
+- A test exists that captures the new behavior or bug fix.
+- The test fails before the implementation is added.
+- The test passes after the implementation.
+- Existing tests remain green (`npm test`).
+- No unrelated code changes are mixed in.
+
+### TDD Commit Guidance
+
+When possible, keep commits in this order:
+
+1. **Add tests** (red)
+2. **Implement fix/feature** (green)
+3. **Refactor** (optional)
+
+If a single commit is required, include the test and the implementation together, but the test must be written first during development.
+
 ## Testing Stack
 
 - **Jest**: Test runner (v30.2.0)
