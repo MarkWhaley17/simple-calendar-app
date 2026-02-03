@@ -26,11 +26,63 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   // Helper function to check if a date has events
   const hasEvents = (year: number, month: number, day: number) => {
     return events.some(event => {
-      const eventDate = event.fromDate || event.date || new Date();
-      return eventDate.getFullYear() === year &&
-             eventDate.getMonth() === month &&
-             eventDate.getDate() === day;
+      const start = event.fromDate || event.date;
+      if (!start) return false;
+      const end = event.toDate || start;
+      const checkDate = new Date(year, month, day);
+      const checkDateOnly = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+      const startDateOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endDateOnly = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+      return checkDateOnly >= startDateOnly && checkDateOnly <= endDateOnly && startDateOnly <= endDateOnly;
     });
+  };
+
+  const hasNonMultiDayEvents = (year: number, month: number, day: number) => {
+    return events.some(event => {
+      const start = event.fromDate || event.date;
+      if (!start) return false;
+      const end = event.toDate || start;
+      const checkDate = new Date(year, month, day);
+      const checkDateOnly = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+      const startDateOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endDateOnly = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+      const isMultiDay = startDateOnly < endDateOnly;
+      const spansDay = checkDateOnly >= startDateOnly && checkDateOnly <= endDateOnly;
+      return spansDay && !isMultiDay;
+    });
+  };
+  // Helper to get multi-day event status for a day
+  const getMultiDayEventType = (year: number, month: number, day: number) => {
+    for (const event of events) {
+      const start = event.fromDate || event.date;
+      if (!start) continue;
+      const end = event.toDate;
+      if (!end) continue;
+      const checkDate = new Date(year, month, day);
+      const checkDateOnly = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+      const startDateOnly = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endDateOnly = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+      if (checkDateOnly >= startDateOnly && checkDateOnly <= endDateOnly && startDateOnly < endDateOnly) {
+        if (
+          checkDateOnly.getFullYear() === startDateOnly.getFullYear() &&
+          checkDateOnly.getMonth() === startDateOnly.getMonth() &&
+          checkDateOnly.getDate() === startDateOnly.getDate()
+        ) {
+          return 'start';
+        } else if (
+          checkDateOnly.getFullYear() === endDateOnly.getFullYear() &&
+          checkDateOnly.getMonth() === endDateOnly.getMonth() &&
+          checkDateOnly.getDate() === endDateOnly.getDate()
+        ) {
+          return 'end';
+        } else {
+          return 'middle';
+        }
+      }
+    }
+    return null;
   };
 
   // Generate calendar days
@@ -103,6 +155,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
       {/* Calendar grid */}
       <View style={styles.calendarGrid}>
         {calendarDays.map((dayData, index) => {
+          const dayKey = `${dayData.year}-${dayData.month}-${dayData.day}`;
           const handlePress = () => {
             if (onDayPress) {
               const selectedDate = new Date(dayData.year, dayData.month, dayData.day);
@@ -132,8 +185,31 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
                 >
                   {dayData.day}
                 </Text>
-                {dayData.hasEvents && (
-                  <View style={styles.eventIndicator} />
+                {/* Multi-day event gold line with rounded ends */}
+                {(() => {
+                  const type = getMultiDayEventType(dayData.year, dayData.month, dayData.day);
+                  if (!type) return null;
+                  if (type === 'start') {
+                    return (
+                      <View
+                        style={[styles.multiDayLine, styles.multiDayLineStart]}
+                        testID={`multi-day-line-${dayKey}`}
+                      />
+                    );
+                  } else if (type === 'end') {
+                    return (
+                      <View
+                        style={[styles.multiDayLine, styles.multiDayLineEnd]}
+                        testID={`multi-day-line-${dayKey}`}
+                      />
+                    );
+                  } else {
+                    return <View style={styles.multiDayLine} testID={`multi-day-line-${dayKey}`} />;
+                  }
+                })()}
+                {/* Single-day event indicator */}
+                {hasNonMultiDayEvents(dayData.year, dayData.month, dayData.day) && (
+                  <View style={styles.eventIndicator} testID={`event-indicator-${dayKey}`} />
                 )}
               </View>
             </TouchableOpacity>
@@ -220,16 +296,38 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   eventIndicator: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
     backgroundColor: '#991B1B',
     position: 'absolute',
-    bottom: 6,
+    bottom: 2,
+    zIndex: 2,
     shadowColor: '#991B1B',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.4,
     shadowRadius: 2,
+  },
+  multiDayLine: {
+    position: 'absolute',
+    bottom: 8,
+    height: 2,
+    width: cellSize,
+    left: -5,
+    backgroundColor: '#F59E0B',
+    zIndex: 1,
+  },
+  multiDayLineStart: {
+    borderTopLeftRadius: 6,
+    borderBottomLeftRadius: 6,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  multiDayLineEnd: {
+    borderTopRightRadius: 6,
+    borderBottomRightRadius: 6,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
   },
 });
 

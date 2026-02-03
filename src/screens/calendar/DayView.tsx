@@ -17,12 +17,16 @@ const DayView: React.FC<DayViewProps> = ({ selectedDate, onBack, events = [], on
   const dayNumber = selectedDate.getDate();
   const year = selectedDate.getFullYear();
 
-  // Filter events for the selected date
+  // Filter events for the selected date, including multi-day events
   const dayEvents = events.filter(event => {
-    const eventDate = event.fromDate || event.date || new Date();
-    return eventDate.getFullYear() === year &&
-           eventDate.getMonth() === selectedDate.getMonth() &&
-           eventDate.getDate() === dayNumber;
+    const start = event.fromDate || event.date || new Date();
+    const end = event.toDate || start;
+    // Check if selectedDate is within the event's date range (inclusive)
+    return (
+      selectedDate >= start &&
+      selectedDate <= end &&
+      start <= end // sanity check
+    );
   });
 
   // Sort events: all-day first, then by time
