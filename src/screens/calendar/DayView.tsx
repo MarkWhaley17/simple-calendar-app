@@ -59,14 +59,15 @@ const DayView: React.FC<DayViewProps> = ({
     : require('../../../assets/day-bg.jpg');
 
   return (
-    <ImageBackground
-      source={backgroundSource}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
+    <View style={styles.container}>
+      {/* Header */}
+      <ImageBackground
+        source={backgroundSource}
+        style={styles.headerBackground}
+        resizeMode="cover"
+        testID="day-view-header-image"
+      >
+        <View style={styles.headerOverlay}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={onBack}
@@ -82,63 +83,61 @@ const DayView: React.FC<DayViewProps> = ({
             </Text>
           </View>
         </View>
+      </ImageBackground>
 
-        {/* Events list */}
-        <ScrollView style={styles.eventsContainer}>
-          {sortedEvents.length > 0 ? (
-            <View style={styles.eventsList}>
-              {sortedEvents.map((event) => {
-                const eventTime = event.isAllDay
-                  ? 'All Day'
-                  : (event.fromTime || event.startTime || '');
+      {/* Events list */}
+      <ScrollView style={styles.eventsContainer}>
+        {sortedEvents.length > 0 ? (
+          <View style={styles.eventsList}>
+            {sortedEvents.map((event) => {
+              const eventTime = event.isAllDay
+                ? 'All Day'
+                : (event.fromTime || event.startTime || '');
 
-                return (
-                  <TouchableOpacity
-                    key={event.id}
-                    style={styles.eventCard}
-                    onPress={() => onEventPress && onEventPress(event)}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.eventTitle}>{event.title}</Text>
-                    {eventTime && (
-                      <Text style={styles.eventTime}>{eventTime}</Text>
-                    )}
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          ) : (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>No events for this day</Text>
-            </View>
-          )}
-        </ScrollView>
+              return (
+                <TouchableOpacity
+                  key={event.id}
+                  style={styles.eventCard}
+                  onPress={() => onEventPress && onEventPress(event)}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.eventTitle}>{event.title}</Text>
+                  {eventTime && (
+                    <Text style={styles.eventTime}>{eventTime}</Text>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyStateText}>No events for this day</Text>
+          </View>
+        )}
+      </ScrollView>
 
-        {/* Add event button */}
-        <TouchableOpacity
-          style={styles.addButton}
-          activeOpacity={0.8}
-          onPress={onAddEvent}
-        >
-          <Text style={styles.addButtonText}>+ Add Event</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+      {/* Add event button */}
+      <TouchableOpacity
+        style={styles.addButton}
+        activeOpacity={0.8}
+        onPress={onAddEvent}
+      >
+        <Text style={styles.addButtonText}>+ Add Event</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
   container: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.18)', // further reduced overlay for maximum image visibility
+    backgroundColor: '#EFF6FF',
   },
-  header: {
-    backgroundColor: '#2563EB',
+  headerBackground: {
+    width: '100%',
+  },
+  headerOverlay: {
+    backgroundColor: 'rgba(37, 99, 235, 0.55)',
     paddingTop: 20,
     paddingBottom: 24,
     paddingHorizontal: 20,
