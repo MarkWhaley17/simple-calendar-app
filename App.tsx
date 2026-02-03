@@ -27,12 +27,73 @@ export default function App() {
   const [editOccurrenceKey, setEditOccurrenceKey] = useState<string | null>(null);
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(defaultNotificationSettings);
   const [settingsReady, setSettingsReady] = useState(false);
+  const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
+  const previousViewModeRef = useRef<ViewMode | null>(null);
+  const selectedDateRef = useRef<Date | null>(null);
 
   // Animation values for page turning effect
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
   const quoteOpacity = useRef(new Animated.Value(1)).current;
   const dayViewTranslateY = useRef(new Animated.Value(0)).current;
+  const dayViewTranslateX = useRef(new Animated.Value(0)).current;
+  const dayViewPanResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => false,
+      onStartShouldSetPanResponderCapture: () => false,
+      onMoveShouldSetPanResponder: (_evt, gestureState) => {
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 12;
+      },
+      onMoveShouldSetPanResponderCapture: (_evt, gestureState) => {
+        return Math.abs(gestureState.dx) > Math.abs(gestureState.dy) && Math.abs(gestureState.dx) > 12;
+      },
+      onPanResponderTerminationRequest: () => false,
+      onShouldBlockNativeResponder: () => true,
+      onPanResponderMove: (_evt, gestureState) => {
+        dayViewTranslateX.setValue(gestureState.dx);
+      },
+      onPanResponderRelease: (_evt, gestureState) => {
+        const threshold = 60;
+        if (gestureState.dx > threshold) {
+          Animated.timing(dayViewTranslateX, {
+            toValue: 300,
+            duration: 150,
+            useNativeDriver: true,
+          }).start(() => {
+            dayViewTranslateX.setValue(0);
+            const currentDate = selectedDateRef.current;
+            if (currentDate) {
+              const next = new Date(currentDate);
+              next.setDate(next.getDate() - 1);
+              setSkipDayViewEnterAnimation(true);
+              setSelectedDate(next);
+            }
+          });
+        } else if (gestureState.dx < -threshold) {
+          Animated.timing(dayViewTranslateX, {
+            toValue: -300,
+            duration: 150,
+            useNativeDriver: true,
+          }).start(() => {
+            dayViewTranslateX.setValue(0);
+            const currentDate = selectedDateRef.current;
+            if (currentDate) {
+              const next = new Date(currentDate);
+              next.setDate(next.getDate() + 1);
+              setSkipDayViewEnterAnimation(true);
+              setSelectedDate(next);
+            }
+          });
+        } else {
+          Animated.spring(dayViewTranslateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            friction: 6,
+          }).start();
+        }
+      },
+    })
+  ).current;
 
   // Change quote every 5 minutes with fade transition
   useEffect(() => {
@@ -109,9 +170,22 @@ export default function App() {
     });
   }, [settingsReady, events, notificationSettings]);
 
+  useEffect(() => {
+    selectedDateRef.current = selectedDate;
+  }, [selectedDate]);
+
   // Animate day view when entering
   useEffect(() => {
     if (viewMode === 'day' && selectedDate) {
+      const previousViewMode = previousViewModeRef.current;
+      const shouldAnimateFromBottom = previousViewMode !== 'day';
+
+      if (skipDayViewEnterAnimation || !shouldAnimateFromBottom) {
+        dayViewTranslateY.setValue(0);
+        setSkipDayViewEnterAnimation(false);
+        return;
+      }
+
       const screenHeight = Dimensions.get('window').height;
       dayViewTranslateY.setValue(screenHeight);
 
@@ -123,8 +197,11 @@ export default function App() {
     } else if (viewMode !== 'day') {
       // Reset when leaving day view
       dayViewTranslateY.setValue(0);
+      dayViewTranslateX.setValue(0);
     }
-  }, [viewMode, selectedDate, dayViewTranslateY]);
+
+    previousViewModeRef.current = viewMode;
+  }, [viewMode, selectedDate, dayViewTranslateY, skipDayViewEnterAnimation]);
 
   const handlePreviousMonth = () => {
     // Animate the transition - slide right and fade out
@@ -720,9 +797,10 @@ export default function App() {
               style={[
                 { flex: 1 },
                 {
-                  transform: [{ translateY: dayViewTranslateY }],
+                  transform: [{ translateY: dayViewTranslateY }, { translateX: dayViewTranslateX }],
                 },
               ]}
+              {...dayViewPanResponder.panHandlers}
             >
               <DayView
                 selectedDate={selectedDate}

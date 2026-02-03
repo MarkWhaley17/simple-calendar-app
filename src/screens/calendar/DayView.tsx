@@ -9,13 +9,21 @@ interface DayViewProps {
   events?: CalendarEvent[];
   onEventPress?: (event: CalendarEvent) => void;
   onAddEvent?: () => void;
+  onChangeDate?: (date: Date) => void;
 }
 
-const DayView: React.FC<DayViewProps> = ({ selectedDate, onBack, events = [], onEventPress, onAddEvent }) => {
+const DayView: React.FC<DayViewProps> = ({
+  selectedDate,
+  onBack,
+  events = [],
+  onEventPress,
+  onAddEvent,
+}) => {
   const dayName = DAY_NAMES[selectedDate.getDay()];
   const monthName = MONTH_NAMES[selectedDate.getMonth()];
   const dayNumber = selectedDate.getDate();
   const year = selectedDate.getFullYear();
+  // Swipe handling is managed by the parent view.
 
   // Filter events for the selected date, including multi-day events
   const dayEvents = events.filter(event => {
