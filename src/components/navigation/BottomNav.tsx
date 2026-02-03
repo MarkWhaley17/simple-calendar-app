@@ -24,22 +24,6 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         <Text style={[styles.navLabel, currentView === 'account' && styles.activeNavLabel]}>Account</Text>
       </TouchableOpacity>
 
-      {/* Day View */}
-      <TouchableOpacity
-        style={[styles.navItem, currentView === 'day' && styles.activeNavItem]}
-        onPress={() => onNavigate('day')}
-        activeOpacity={0.7}
-      >
-        <View style={styles.iconContainer}>
-          <View style={[styles.dayIcon, currentView === 'day' && styles.activeIcon]}>
-            <Text style={[styles.dayIconText, currentView === 'day' && styles.activeIconText]}>
-              {todayDate}
-            </Text>
-          </View>
-        </View>
-        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel]}>Today</Text>
-      </TouchableOpacity>
-
       {/* Month View */}
       <TouchableOpacity
         style={[styles.navItem, currentView === 'month' && styles.activeNavItem]}
@@ -66,6 +50,22 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
           </View>
         </View>
         <Text style={[styles.navLabel, currentView === 'month' && styles.activeNavLabel]}>Month</Text>
+      </TouchableOpacity>
+
+      {/* Day View */}
+      <TouchableOpacity
+        style={[styles.navItem, currentView === 'day' && styles.activeNavItem]}
+        onPress={() => onNavigate('day')}
+        activeOpacity={0.7}
+      >
+        <View style={styles.iconContainer}>
+          <View style={[styles.dayIcon, currentView === 'day' && styles.activeIcon]}>
+            <Text style={[styles.dayIconText, currentView === 'day' && styles.activeIconText]}>
+              {todayDate}
+            </Text>
+          </View>
+        </View>
+        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel]}>Today</Text>
       </TouchableOpacity>
 
       {/* Events List */}
