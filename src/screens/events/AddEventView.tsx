@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Pressable, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MONTH_NAMES } from '../../constants/dates';
 import { RecurrenceRule } from '../../types';
@@ -92,7 +92,8 @@ const AddEventView: React.FC<AddEventViewProps> = ({
 
   const handleSave = () => {
     if (!title.trim()) {
-      return; // Could add validation UI here
+      Alert.alert('Missing title', 'Please enter a title for the event.');
+      return;
     }
 
     if (!validateReminder()) {
