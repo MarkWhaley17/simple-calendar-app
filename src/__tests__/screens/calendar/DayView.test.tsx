@@ -33,6 +33,32 @@ describe('DayView', () => {
       />
     );
 
-    expect(getByTestId('day-view-events-background')).toHaveStyle({ opacity: 0.25 });
+    const background = getByTestId('day-view-events-background');
+    expect(background).toHaveStyle({ opacity: 0.25 });
+  });
+
+  it('uses a non-repeating background pattern', () => {
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 1, 10)}
+        onBack={jest.fn()}
+        events={[]}
+      />
+    );
+
+    expect(getByTestId('day-view-events-background').props.resizeMode).toBe('cover');
+  });
+
+  it('centers the background pattern', () => {
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 1, 10)}
+        onBack={jest.fn()}
+        events={[]}
+      />
+    );
+
+    const background = getByTestId('day-view-events-background');
+    expect(background).toHaveStyle({ transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }] });
   });
 });

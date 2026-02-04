@@ -90,7 +90,7 @@ const DayView: React.FC<DayViewProps> = ({
         <Image
           source={eventsBackground}
           style={styles.eventsPatternImage}
-          resizeMode="repeat"
+          resizeMode="cover"
           testID="day-view-events-background"
         />
         <ScrollView style={styles.eventsContainer}>
@@ -186,11 +186,12 @@ const styles = StyleSheet.create({
   },
   eventsBackground: {
     flex: 1,
-    position: 'relative',
+    overflow: 'hidden',
   },
   eventsPatternImage: {
     ...StyleSheet.absoluteFillObject,
     opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   eventsList: {
     padding: 20,
