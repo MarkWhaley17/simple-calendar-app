@@ -37,3 +37,157 @@ Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambha
 
 ---
 
+
+Title: Vajrayana Series Weekend 1
+Date: 2026-04-04 to 2026-04-05
+Description: Vajrayana Series Weekend 1.
+
+---
+
+
+Title: Mahayana Series Weekend 2
+Date: 2026-04-25 to 2026-04-26
+Description: Mahayana Series Weekend 2.
+
+---
+
+
+Title: Vajrayana Series Weekend 2
+Date: 2026-05-16 to 2026-05-17
+Description: Vajrayana Series Weekend 2.
+
+---
+
+
+Title: Mahayana Online Retreat
+Date: 2026-05-27 to 2026-05-31
+Description: Mahayana Online Retreat.
+
+---
+
+
+Title: Vajrayana Series Weekend 3
+Date: 2026-06-13 to 2026-06-14
+Description: Vajrayana Series Weekend 3. Amitayus intensive, 2 full teaching days.
+
+---
+
+
+Title: Mahayana Series Weekend 3
+Date: 2026-06-20 to 2026-06-21
+Description: Mahayana Series Weekend 3.
+
+---
+
+
+Title: In-Person Events Vermont
+Date: 2026-07-10 to 2026-07-19
+Description: In-person events in Vermont.
+
+---
+
+
+Title: Mahayana Retreat
+Date: 2026-07-10 to 2026-07-12
+Description: Mahayana Retreat, Vermont.
+
+---
+
+
+Title: Vajrayana Retreat 1
+Date: 2026-07-13 to 2026-07-15
+Description: Vajrayana Retreat 1, Vermont.
+
+---
+
+
+Title: Vajrayana Retreat 2
+Date: 2026-07-17 to 2026-07-19
+Description: Vajrayana Retreat 2, Vermont.
+
+---
+
+
+Title: In-Person Events Switzerland
+Date: 2026-08-11 to 2026-08-22
+Description: In-person events in Switzerland.
+
+---
+
+
+Title: Mahayana Retreat
+Date: 2026-08-11 to 2026-08-16
+Description: Mahayana Retreat, Switzerland.
+
+---
+
+
+Title: Vajrayana Retreat
+Date: 2026-08-16 to 2026-08-22
+Description: Vajrayana Retreat, Switzerland.
+
+---
+
+
+Title: Vajrayana Series Weekend 4
+Date: 2026-09-12 to 2026-09-13
+Description: Vajrayana Series Weekend 4.
+
+---
+
+
+Title: Mahayana Series Weekend 4
+Date: 2026-09-19 to 2026-09-20
+Description: Mahayana Series Weekend 4.
+
+---
+
+
+Title: Vajrayana Online Retreat
+Date: 2026-09-30 to 2026-10-04
+Description: Vajrayana Online Retreat.
+
+---
+
+
+Title: Mahayana Series Weekend 5
+Date: 2026-10-17 to 2026-10-18
+Description: Mahayana Series Weekend 5.
+
+---
+
+
+Title: Guided Meditation Practice with Sakyong Mipham Rinpoche
+Date: 2026-10-25
+Description: Guided Meditation Practice with Sakyong Mipham Rinpoche. Open to everyone.
+
+---
+
+
+Title: Vajrayana Series Weekend 5
+Date: 2026-11-07 to 2026-11-08
+Description: Vajrayana Series Weekend 5.
+
+---
+
+
+Title: Mahayana Series Weekend 6
+Date: 2026-11-21 to 2026-11-22
+Description: Mahayana Series Weekend 6.
+
+---
+
+
+Title: Vajrayana Series Weekend 6
+Date: 2026-12-05 to 2026-12-06
+Description: Vajrayana Series Weekend 6.
+
+---
+
+
+Title: Buddha Sadhana Teaching and Practice Weekend
+Date: 2026-12-12 to 2026-12-13
+Description: Buddha Sadhana Teaching and Practice Weekend. Two full teaching days.
+
+---
+
