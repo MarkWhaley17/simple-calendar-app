@@ -6,8 +6,14 @@ import { isSameDay } from './dateHelpers';
  */
 export const getEventsForDate = (events: CalendarEvent[], date: Date): CalendarEvent[] => {
   return events.filter(event => {
-    const eventDate = event.fromDate || event.date || new Date();
-    return isSameDay(eventDate, date);
+    const fromDate = event.fromDate || event.date || new Date();
+    if (event.toDate) {
+      const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const from = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+      const to = new Date(event.toDate.getFullYear(), event.toDate.getMonth(), event.toDate.getDate());
+      return d >= from && d <= to;
+    }
+    return isSameDay(fromDate, date);
   });
 };
 

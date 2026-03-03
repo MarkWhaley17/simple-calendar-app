@@ -45,6 +45,22 @@ describe('eventHelpers', () => {
       expect(events).toHaveLength(0);
     });
 
+    it('should return a multi-day event for every date within its range', () => {
+      const multiDayEvent: CalendarEvent = {
+        id: '5',
+        title: 'Multi Day Event',
+        fromDate: new Date(2026, 3, 4), // April 4
+        toDate: new Date(2026, 3, 6),   // April 6
+        isAllDay: true,
+      };
+
+      expect(getEventsForDate([multiDayEvent], new Date(2026, 3, 4))).toHaveLength(1);
+      expect(getEventsForDate([multiDayEvent], new Date(2026, 3, 5))).toHaveLength(1);
+      expect(getEventsForDate([multiDayEvent], new Date(2026, 3, 6))).toHaveLength(1);
+      expect(getEventsForDate([multiDayEvent], new Date(2026, 3, 3))).toHaveLength(0);
+      expect(getEventsForDate([multiDayEvent], new Date(2026, 3, 7))).toHaveLength(0);
+    });
+
     it('should handle legacy date field', () => {
       const eventsWithLegacyDate: CalendarEvent[] = [
         {
