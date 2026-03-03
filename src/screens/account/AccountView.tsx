@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, Alert } from 'react-native';
 import { NotificationSettings } from '../../types';
 
 interface AccountViewProps {
@@ -13,6 +13,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   onUpdateNotificationSettings,
   settingsReady = true,
 }) => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
   const [eventMinutesInput, setEventMinutesInput] = useState(`${notificationSettings.eventReminderMinutes}`);
   const [allDayHoursInput, setAllDayHoursInput] = useState(`${notificationSettings.allDayReminderHours}`);
   const [eventMinutesError, setEventMinutesError] = useState<string | null>(null);
@@ -84,15 +85,26 @@ const AccountView: React.FC<AccountViewProps> = ({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Profile</Text>
           <View style={styles.card}>
-            <Text style={styles.cardText}>Sign in to sync your events across devices</Text>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.primaryButton}>
+            <Text style={styles.cardText}>
+              {isSignedIn
+                ? 'You are signed in.'
+                : 'Sign in to sync your events across devices'}
+            </Text>
+            {isSignedIn ? (
+              <TouchableOpacity
+                style={styles.secondaryButton}
+                onPress={() => setIsSignedIn(false)}
+              >
+                <Text style={styles.secondaryButtonText}>Sign Out</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.primaryButton}
+                onPress={() => setIsSignedIn(true)}
+              >
                 <Text style={styles.primaryButtonText}>Sign In</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.secondaryButton}>
-                <Text style={styles.secondaryButtonText}>Create Account</Text>
-              </TouchableOpacity>
-            </View>
+            )}
           </View>
         </View>
 
