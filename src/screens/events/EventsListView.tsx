@@ -9,12 +9,19 @@ interface EventsListViewProps {
 }
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress }) => {
-  // Sort events chronologically
-  const sortedEvents = [...events].sort((a, b) => {
-    const dateA = a.fromDate || a.date || new Date();
-    const dateB = b.fromDate || b.date || new Date();
-    return dateA.getTime() - dateB.getTime();
-  });
+  const currentYear = new Date().getFullYear();
+
+  // Filter to current year and sort chronologically
+  const sortedEvents = [...events]
+    .filter(event => {
+      const eventDate = event.fromDate || event.date || new Date();
+      return eventDate.getFullYear() === currentYear;
+    })
+    .sort((a, b) => {
+      const dateA = a.fromDate || a.date || new Date();
+      const dateB = b.fromDate || b.date || new Date();
+      return dateA.getTime() - dateB.getTime();
+    });
 
   const formatEventDate = (event: CalendarEvent): string => {
     const eventDate = event.fromDate || event.date || new Date();
@@ -35,7 +42,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress })
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>All Events</Text>
+        <Text style={styles.headerTitle}>{currentYear} Events</Text>
         <Text style={styles.headerSubtitle}>{sortedEvents.length} event{sortedEvents.length !== 1 ? 's' : ''}</Text>
       </View>
 

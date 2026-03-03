@@ -34,13 +34,28 @@ describe('EventsListView', () => {
     jest.clearAllMocks();
   });
 
-  it('should render header with event count', () => {
+  it('should render header with current year and event count', () => {
+    const currentYear = new Date().getFullYear();
     const { getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText('All Events')).toBeTruthy();
+    expect(getByText(`${currentYear} Events`)).toBeTruthy();
     expect(getByText('3 events')).toBeTruthy();
+  });
+
+  it('should only show events from the current year', () => {
+    const lastYearEvent: CalendarEvent = {
+      id: '99',
+      title: 'Last Year Event',
+      fromDate: new Date(new Date().getFullYear() - 1, 5, 15),
+      isAllDay: true,
+    };
+    const { queryByText } = render(
+      <EventsListView events={[...mockEvents, lastYearEvent]} onEventPress={mockOnEventPress} />
+    );
+
+    expect(queryByText('Last Year Event')).toBeNull();
   });
 
   it('should render singular "event" when only one event', () => {
