@@ -15,7 +15,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   settingsReady = true,
 }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -86,16 +86,16 @@ const AccountView: React.FC<AccountViewProps> = ({
   };
 
   const handleSignIn = async () => {
-    if (!email.trim() || !password) {
-      setAuthError('Please enter your email and password.');
+    if (!username.trim() || !password) {
+      setAuthError('Please enter your username and password.');
       return;
     }
     setAuthLoading(true);
     setAuthError(null);
     try {
-      const loggedInUser = await login(email.trim(), password);
+      const loggedInUser = await login(username.trim(), password);
       setUser(loggedInUser);
-      setEmail('');
+      setUsername('');
       setPassword('');
     } catch (err: unknown) {
       setAuthError(err instanceof Error ? err.message : 'Sign in failed. Please try again.');
@@ -127,7 +127,7 @@ const AccountView: React.FC<AccountViewProps> = ({
               <>
                 <Text style={styles.cardText}>Signed in as</Text>
                 <Text style={styles.userDisplayName}>{user.displayName}</Text>
-                <Text style={styles.userEmail}>{user.email}</Text>
+                <Text style={styles.userEmail}>@{user.email}</Text>
                 <TouchableOpacity style={styles.secondaryButton} onPress={handleSignOut}>
                   <Text style={styles.secondaryButtonText}>Sign Out</Text>
                 </TouchableOpacity>
@@ -137,12 +137,12 @@ const AccountView: React.FC<AccountViewProps> = ({
                 <Text style={styles.cardText}>Sign in to sync your events across devices</Text>
                 <TextInput
                   style={styles.authInput}
-                  placeholder="Email"
+                  placeholder="Username"
                   placeholderTextColor="#93C5FD"
                   autoCapitalize="none"
-                  keyboardType="email-address"
-                  value={email}
-                  onChangeText={setEmail}
+                  keyboardType="default"
+                  value={username}
+                  onChangeText={setUsername}
                   editable={!authLoading}
                 />
                 <TextInput
