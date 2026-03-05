@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, Alert } from 'react-native';
-import { NotificationSettings } from '../../types';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator } from 'react-native';
+import { NotificationSettings, AuthUser } from '../../types';
+import { login, logout, isAuthenticated, getUser } from '../../utils/auth';
 
 interface AccountViewProps {
   notificationSettings: NotificationSettings;
@@ -13,7 +14,11 @@ const AccountView: React.FC<AccountViewProps> = ({
   onUpdateNotificationSettings,
   settingsReady = true,
 }) => {
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [eventMinutesInput, setEventMinutesInput] = useState(`${notificationSettings.eventReminderMinutes}`);
   const [allDayHoursInput, setAllDayHoursInput] = useState(`${notificationSettings.allDayReminderHours}`);
   const [eventMinutesError, setEventMinutesError] = useState<string | null>(null);
@@ -25,6 +30,14 @@ const AccountView: React.FC<AccountViewProps> = ({
     setEventMinutesError(null);
     setAllDayHoursError(null);
   }, [notificationSettings.eventReminderMinutes, notificationSettings.allDayReminderHours]);
+
+  useEffect(() => {
+    isAuthenticated().then((authenticated) => {
+      if (authenticated) {
+        getUser().then(setUser);
+      }
+    });
+  }, []);
 
   const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
     onUpdateNotificationSettings({
@@ -72,6 +85,31 @@ const AccountView: React.FC<AccountViewProps> = ({
     });
   };
 
+  const handleSignIn = async () => {
+    if (!email.trim() || !password) {
+      setAuthError('Please enter your email and password.');
+      return;
+    }
+    setAuthLoading(true);
+    setAuthError(null);
+    try {
+      const loggedInUser = await login(email.trim(), password);
+      setUser(loggedInUser);
+      setEmail('');
+      setPassword('');
+    } catch (err: unknown) {
+      setAuthError(err instanceof Error ? err.message : 'Sign in failed. Please try again.');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    await logout();
+    setUser(null);
+    setAuthError(null);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -85,25 +123,49 @@ const AccountView: React.FC<AccountViewProps> = ({
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Profile</Text>
           <View style={styles.card}>
-            <Text style={styles.cardText}>
-              {isSignedIn
-                ? 'You are signed in.'
-                : 'Sign in to sync your events across devices'}
-            </Text>
-            {isSignedIn ? (
-              <TouchableOpacity
-                style={styles.secondaryButton}
-                onPress={() => setIsSignedIn(false)}
-              >
-                <Text style={styles.secondaryButtonText}>Sign Out</Text>
-              </TouchableOpacity>
+            {user ? (
+              <>
+                <Text style={styles.cardText}>Signed in as</Text>
+                <Text style={styles.userDisplayName}>{user.displayName}</Text>
+                <Text style={styles.userEmail}>{user.email}</Text>
+                <TouchableOpacity style={styles.secondaryButton} onPress={handleSignOut}>
+                  <Text style={styles.secondaryButtonText}>Sign Out</Text>
+                </TouchableOpacity>
+              </>
             ) : (
-              <TouchableOpacity
-                style={styles.primaryButton}
-                onPress={() => setIsSignedIn(true)}
-              >
-                <Text style={styles.primaryButtonText}>Sign In</Text>
-              </TouchableOpacity>
+              <>
+                <Text style={styles.cardText}>Sign in to sync your events across devices</Text>
+                <TextInput
+                  style={styles.authInput}
+                  placeholder="Email"
+                  placeholderTextColor="#93C5FD"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  value={email}
+                  onChangeText={setEmail}
+                  editable={!authLoading}
+                />
+                <TextInput
+                  style={[styles.authInput, styles.authInputSpaced]}
+                  placeholder="Password"
+                  placeholderTextColor="#93C5FD"
+                  secureTextEntry
+                  value={password}
+                  onChangeText={setPassword}
+                  editable={!authLoading}
+                />
+                {authError && <Text style={styles.authError}>{authError}</Text>}
+                <TouchableOpacity
+                  style={[styles.primaryButton, authLoading && styles.buttonDisabled]}
+                  onPress={handleSignIn}
+                  disabled={authLoading}
+                >
+                  {authLoading
+                    ? <ActivityIndicator color="#fff" />
+                    : <Text style={styles.primaryButtonText}>Sign In</Text>
+                  }
+                </TouchableOpacity>
+              </>
             )}
           </View>
         </View>
@@ -408,6 +470,44 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#60A5FA',
     letterSpacing: 0.1,
+  },
+  userDisplayName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1E3A8A',
+    marginBottom: 4,
+    letterSpacing: 0.2,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: '#60A5FA',
+    marginBottom: 20,
+    letterSpacing: 0.1,
+  },
+  authInput: {
+    borderWidth: 1,
+    borderColor: 'rgba(37, 99, 235, 0.2)',
+    borderRadius: 10,
+    backgroundColor: '#EFF6FF',
+    color: '#1E3A8A',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    fontSize: 15,
+    marginBottom: 0,
+  },
+  authInputSpaced: {
+    marginTop: 10,
+    marginBottom: 14,
+  },
+  authError: {
+    color: '#B91C1C',
+    fontSize: 13,
+    fontWeight: '600',
+    marginBottom: 12,
+    letterSpacing: 0.2,
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
   linkText: {
     fontSize: 16,

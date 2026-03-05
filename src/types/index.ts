@@ -44,3 +44,8 @@ export interface NotificationSettings {
 
 export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList';
 export type NavView = 'month' | 'day' | 'events' | 'account';
+
+export interface AuthUser {
+  email: string;
+  displayName: string;
+}
