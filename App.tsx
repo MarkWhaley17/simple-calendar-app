@@ -18,6 +18,9 @@ import { loadNotificationSettings, saveNotificationSettings, defaultNotification
 import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
 
 export default function App() {
+  const isMemberOnlyEvent = (event: CalendarEvent): boolean =>
+    event.isMembersOnly === true || event.id.startsWith('pre-member-');
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('month');
@@ -133,6 +136,7 @@ export default function App() {
 
   // Expanded events include all recurring instances for display
   const events = expandRecurringEvents(masterEvents);
+  const visibleEvents = user ? events : events.filter(event => !isMemberOnlyEvent(event));
 
   // Load user events from storage on mount and merge with pre-added events
   useEffect(() => {
@@ -143,7 +147,9 @@ export default function App() {
 
         // Merge stored events with pre-added events
         // Pre-added events have IDs starting with 'pre-', so we can filter them out from stored events
-        const userEvents = storedEvents.filter(event => !event.id.startsWith('pre-'));
+        const userEvents = storedEvents.filter(
+          event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+        );
 
         setMasterEvents([...preAddedEvents, ...userEvents]);
       } catch (error) {
@@ -167,10 +173,19 @@ export default function App() {
   // Add/remove member events when auth state changes
   useEffect(() => {
     setMasterEvents(prev => {
-      const withoutMemberEvents = prev.filter(e => !e.id.startsWith('pre-member-'));
+      const withoutMemberEvents = prev.filter(e => !isMemberOnlyEvent(e));
       return user ? [...withoutMemberEvents, ...getMemberEvents()] : withoutMemberEvents;
     });
   }, [user]);
+
+  useEffect(() => {
+    if (user || !selectedEvent || !isMemberOnlyEvent(selectedEvent)) return;
+
+    setSelectedEvent(null);
+    if (viewMode === 'event' || viewMode === 'editEvent') {
+      setViewMode('day');
+    }
+  }, [user, selectedEvent, viewMode]);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -185,10 +200,10 @@ export default function App() {
   useEffect(() => {
     if (!settingsReady) return;
 
-    scheduleNotifications(events, notificationSettings).catch(error => {
+    scheduleNotifications(visibleEvents, notificationSettings).catch(error => {
       console.error('Failed to schedule notifications:', error);
     });
-  }, [settingsReady, events, notificationSettings]);
+  }, [settingsReady, visibleEvents, notificationSettings]);
 
   useEffect(() => {
     selectedDateRef.current = selectedDate;
@@ -346,7 +361,9 @@ export default function App() {
 
     // Save only user events (not pre-added events) to storage
     try {
-      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      const userEvents = updatedEvents.filter(
+        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      );
       await saveEvents(userEvents);
     } catch (error) {
       console.error('Failed to save event to storage:', error);
@@ -538,7 +555,9 @@ export default function App() {
 
     // Save only user events (not pre-added events) to storage
     try {
-      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      const userEvents = updatedEvents.filter(
+        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      );
       await saveEvents(userEvents);
     } catch (error) {
       console.error('Failed to update event in storage:', error);
@@ -593,7 +612,9 @@ export default function App() {
 
     // Save only user events (not pre-added events) to storage
     try {
-      const userEvents = updatedEvents.filter(event => !event.id.startsWith('pre-'));
+      const userEvents = updatedEvents.filter(
+        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      );
       await saveEvents(userEvents);
     } catch (error) {
       console.error('Failed to delete event from storage:', error);
@@ -811,7 +832,7 @@ export default function App() {
             />
           ) : viewMode === 'eventsList' ? (
             <EventsListView
-              events={events}
+              events={visibleEvents}
               onEventPress={handleEventPress}
             />
           ) : viewMode === 'day' && selectedDate ? (
@@ -827,7 +848,7 @@ export default function App() {
               <DayView
                 selectedDate={selectedDate}
                 onBack={handleBackToMonth}
-                events={events}
+                events={visibleEvents}
                 onEventPress={handleEventPress}
                 onAddEvent={handleAddEvent}
               />
@@ -850,7 +871,7 @@ export default function App() {
                     onNextMonth={handleNextMonth}
                     onDatePress={handleOpenMonthYearPicker}
                   />
-                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={events} />
+                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} />
                   <View style={styles.quoteWrapper}>
                     <View style={styles.quoteContainer}>
                       <Animated.Text style={[styles.quoteText, { opacity: quoteOpacity }]}>
