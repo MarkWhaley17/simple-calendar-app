@@ -46,3 +46,31 @@ Title: MY Weekend 2
 Date: 2026-04-25
 ToDate: 2026-04-26
 Description: Member-only Mahayana Weekend 2.
+
+---
+
+Title: VY Weekend 2
+Date: 2026-05-16
+ToDate: 2026-05-17
+Description: Member-only Vajrayana Weekend 2.
+
+---
+
+Title: Online MY Retreat
+Date: 2026-05-27
+ToDate: 2026-05-31
+Description: Member-only online Mahayana retreat.
+
+---
+
+Title: VY Weekend 3
+Date: 2026-06-13
+ToDate: 2026-06-14
+Description: Member-only Vajrayana Weekend 3.
+
+---
+
+Title: MY Weekend 3
+Date: 2026-06-20
+ToDate: 2026-06-21
+Description: Member-only Mahayana Weekend 3.

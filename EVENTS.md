@@ -188,31 +188,155 @@ Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambha
 
 ---
 
-
-Title: Vajrayana Series Weekend 2
-Date: 2026-05-16 to 2026-05-17
-Description: Vajrayana Series Weekend 2.
-
----
-
-
-Title: Mahayana Online Retreat
-Date: 2026-05-27 to 2026-05-31
-Description: Mahayana Online Retreat.
+Title: Full Moon
+Date: 2026-05-01
+Description: Full moon day.
 
 ---
 
-
-Title: Vajrayana Series Weekend 3
-Date: 2026-06-13 to 2026-06-14
-Description: Vajrayana Series Weekend 3. Amitayus intensive, 2 full teaching days.
+Title: King of Ling Lhasang
+Date: 2026-05-01
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
 
 ---
 
+Title: Protector Day
+Date: 2026-05-05
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
 
-Title: Mahayana Series Weekend 3
-Date: 2026-06-20 to 2026-06-21
-Description: Mahayana Series Weekend 3.
+---
+
+Title: Dakini Day
+Date: 2026-05-12
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+
+---
+
+Title: Jambhala Day
+Date: 2026-05-15
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-05-15
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-05-16
+Description: New moon day.
+
+---
+
+Title: Jambhala Day
+Date: 2026-05-24
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-05-25
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-05-26
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+
+---
+
+Title: Full Moon
+Date: 2026-05-31
+Description: Full moon day.
+
+---
+
+Title: King of Ling Lhasang
+Date: 2026-05-31
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
+
+---
+
+Title: Vaishaka Day
+Date: 2026-05-31
+Description: Vaishaka Day observance.
+
+---
+
+Title: Protector Day
+Date: 2026-06-04
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Dakini Day
+Date: 2026-06-10
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+
+---
+
+Title: Jambhala Day
+Date: 2026-06-13
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-06-14
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-06-15
+Description: New moon day.
+
+---
+
+Title: Solstice
+Date: 2026-06-21
+Description: Solstice.
+
+---
+
+Title: Jambhala Day
+Date: 2026-06-22
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-06-23
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-06-24
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+
+---
+
+Title: Full Moon
+Date: 2026-06-29
+Description: Full moon day.
+
+---
+
+Title: King of Ling Lhasang
+Date: 2026-06-29
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
 
 ---
 
