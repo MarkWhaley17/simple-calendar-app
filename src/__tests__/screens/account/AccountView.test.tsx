@@ -1,10 +1,14 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import AccountView from '../../../screens/account/AccountView';
-import { NotificationSettings } from '../../../types';
+import { NotificationSettings, AuthUser } from '../../../types';
+import * as auth from '../../../utils/auth';
+
+jest.mock('../../../utils/auth');
 
 describe('AccountView', () => {
   const mockOnUpdateNotificationSettings = jest.fn();
+  const mockOnUserChange = jest.fn();
 
   const mockNotificationSettings: NotificationSettings = {
     practiceDayReminders: true,
@@ -18,45 +22,99 @@ describe('AccountView', () => {
     notificationSettings: mockNotificationSettings,
     onUpdateNotificationSettings: mockOnUpdateNotificationSettings,
     settingsReady: true,
+    user: null,
+    onUserChange: mockOnUserChange,
+  };
+
+  const signedInUser: AuthUser = {
+    email: 'marktwhaley',
+    displayName: 'Mark Whaley',
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Profile section', () => {
-    it('should show Sign In button when logged out', () => {
+  describe('signed-out state', () => {
+    it('shows username and password inputs', () => {
+      const { getByPlaceholderText } = render(<AccountView {...defaultProps} />);
+      expect(getByPlaceholderText('Username')).toBeTruthy();
+      expect(getByPlaceholderText('Password')).toBeTruthy();
+    });
+
+    it('shows Sign In button', () => {
       const { getByText } = render(<AccountView {...defaultProps} />);
       expect(getByText('Sign In')).toBeTruthy();
     });
 
-    it('should not show Create Account button', () => {
-      const { queryByText } = render(<AccountView {...defaultProps} />);
-      expect(queryByText('Create Account')).toBeNull();
-    });
-
-    it('should not show Sign Out button when logged out', () => {
+    it('does not show Sign Out button', () => {
       const { queryByText } = render(<AccountView {...defaultProps} />);
       expect(queryByText('Sign Out')).toBeNull();
     });
 
-    it('should show Sign Out button after signing in', () => {
+    it('shows error when Sign In pressed with empty fields', async () => {
       const { getByText } = render(<AccountView {...defaultProps} />);
       fireEvent.press(getByText('Sign In'));
+      await waitFor(() => {
+        expect(getByText('Please enter your username and password.')).toBeTruthy();
+      });
+    });
+
+    it('calls login and onUserChange on successful sign in', async () => {
+      (auth.login as jest.Mock).mockResolvedValueOnce(signedInUser);
+
+      const { getByPlaceholderText, getByText } = render(<AccountView {...defaultProps} />);
+      fireEvent.changeText(getByPlaceholderText('Username'), 'marktwhaley');
+      fireEvent.changeText(getByPlaceholderText('Password'), 'password123');
+      fireEvent.press(getByText('Sign In'));
+
+      await waitFor(() => {
+        expect(auth.login).toHaveBeenCalledWith('marktwhaley', 'password123');
+        expect(mockOnUserChange).toHaveBeenCalledWith(signedInUser);
+      });
+    });
+
+    it('shows error message on failed login', async () => {
+      (auth.login as jest.Mock).mockRejectedValueOnce(new Error('Invalid username or password.'));
+
+      const { getByPlaceholderText, getByText } = render(<AccountView {...defaultProps} />);
+      fireEvent.changeText(getByPlaceholderText('Username'), 'bad');
+      fireEvent.changeText(getByPlaceholderText('Password'), 'wrong');
+      fireEvent.press(getByText('Sign In'));
+
+      await waitFor(() => {
+        expect(getByText('Invalid username or password.')).toBeTruthy();
+      });
+    });
+  });
+
+  describe('signed-in state', () => {
+    it('shows display name and username when user prop is set', () => {
+      const { getByText } = render(<AccountView {...defaultProps} user={signedInUser} />);
+      expect(getByText('Mark Whaley')).toBeTruthy();
+      expect(getByText('@marktwhaley')).toBeTruthy();
+    });
+
+    it('shows Sign Out button', () => {
+      const { getByText } = render(<AccountView {...defaultProps} user={signedInUser} />);
       expect(getByText('Sign Out')).toBeTruthy();
     });
 
-    it('should not show Sign In button when logged in', () => {
-      const { getByText, queryByText } = render(<AccountView {...defaultProps} />);
-      fireEvent.press(getByText('Sign In'));
+    it('does not show Sign In button', () => {
+      const { queryByText } = render(<AccountView {...defaultProps} user={signedInUser} />);
       expect(queryByText('Sign In')).toBeNull();
     });
 
-    it('should return to Sign In after signing out', () => {
-      const { getByText } = render(<AccountView {...defaultProps} />);
-      fireEvent.press(getByText('Sign In'));
+    it('calls logout and onUserChange(null) on sign out', async () => {
+      (auth.logout as jest.Mock).mockResolvedValueOnce(undefined);
+
+      const { getByText } = render(<AccountView {...defaultProps} user={signedInUser} />);
       fireEvent.press(getByText('Sign Out'));
-      expect(getByText('Sign In')).toBeTruthy();
+
+      await waitFor(() => {
+        expect(auth.logout).toHaveBeenCalled();
+        expect(mockOnUserChange).toHaveBeenCalledWith(null);
+      });
     });
   });
 });
