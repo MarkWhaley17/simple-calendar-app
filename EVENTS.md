@@ -340,6 +340,70 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 
 ---
 
+Title: Protector Day
+Date: 2026-07-04
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Dakini Day
+Date: 2026-07-09
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+
+---
+
+Title: Jambhala Day
+Date: 2026-07-12
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-07-13
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-07-14
+Description: New moon day.
+
+---
+
+Title: Jambhala Day
+Date: 2026-07-22
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-07-23
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-07-24
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+
+---
+
+Title: Full Moon
+Date: 2026-07-29
+Description: Full moon day.
+
+---
+
+Title: King of Ling Lhasang
+Date: 2026-07-29
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
+
+---
+
 
 Title: In-Person Events Vermont
 Date: 2026-07-10 to 2026-07-19
@@ -347,27 +411,69 @@ Description: In-person events in Vermont.
 
 ---
 
-
-Title: Mahayana Retreat
-Date: 2026-07-10 to 2026-07-12
-Description: Mahayana Retreat, Vermont.
-
----
-
-
-Title: Vajrayana Retreat 1
-Date: 2026-07-13 to 2026-07-15
-Description: Vajrayana Retreat 1, Vermont.
+Title: Protector Day
+Date: 2026-08-02
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
 
 ---
 
-
-Title: Vajrayana Retreat 2
-Date: 2026-07-17 to 2026-07-19
-Description: Vajrayana Retreat 2, Vermont.
+Title: Dakini Day
+Date: 2026-08-08
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
 
 ---
 
+Title: Jambhala Day
+Date: 2026-08-10
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-08-11
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-08-12
+Description: New moon day.
+
+---
+
+Title: Jambhala Day
+Date: 2026-08-20
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-08-21
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-08-22
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+
+---
+
+Title: Full Moon
+Date: 2026-08-28
+Description: Full moon day.
+
+---
+
+Title: King of Ling Lhasang
+Date: 2026-08-28
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
+
+---
 
 Title: In-Person Events Switzerland
 Date: 2026-08-11 to 2026-08-22
@@ -375,38 +481,80 @@ Description: In-person events in Switzerland.
 
 ---
 
-
-Title: Mahayana Retreat
-Date: 2026-08-11 to 2026-08-16
-Description: Mahayana Retreat, Switzerland.
-
----
-
-
-Title: Vajrayana Retreat
-Date: 2026-08-16 to 2026-08-22
-Description: Vajrayana Retreat, Switzerland.
+Title: Protector Day
+Date: 2026-09-01
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
 
 ---
 
-
-Title: Vajrayana Series Weekend 4
-Date: 2026-09-12 to 2026-09-13
-Description: Vajrayana Series Weekend 4.
-
----
-
-
-Title: Mahayana Series Weekend 4
-Date: 2026-09-19 to 2026-09-20
-Description: Mahayana Series Weekend 4.
+Title: Dakini Day
+Date: 2026-09-06
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
 
 ---
 
+Title: Jambhala Day
+Date: 2026-09-09
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
 
-Title: Vajrayana Online Retreat
-Date: 2026-09-30 to 2026-10-04
-Description: Vajrayana Online Retreat.
+---
+
+Title: Protector Day
+Date: 2026-09-10
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-09-11
+Description: New moon day.
+
+---
+
+Title: Jambhala Day
+Date: 2026-09-19
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-09-20
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-09-21
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+
+---
+
+Title: Equinox
+Date: 2026-09-23
+Description: Autumn equinox.
+
+---
+
+Title: Full Moon
+Date: 2026-09-26
+Description: Full moon day.
+
+---
+
+Title: King of Ling Lhasang
+Date: 2026-09-26
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
+
+---
+
+Title: Protector Day
+Date: 2026-09-30
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
 
 ---
 

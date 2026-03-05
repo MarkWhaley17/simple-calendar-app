@@ -74,3 +74,65 @@ Title: MY Weekend 3
 Date: 2026-06-20
 ToDate: 2026-06-21
 Description: Member-only Mahayana Weekend 3.
+
+---
+
+Title: Vermont MY Retreat
+Date: 2026-07-10
+ToDate: 2026-07-12
+Description: Member-only Vermont Mahayana retreat.
+
+---
+
+Title: Vermont VY Retreat 1
+Date: 2026-07-13
+ToDate: 2026-07-15
+Description: Member-only Vermont Vajrayana retreat 1.
+
+---
+
+Title: Vermont VY Retreat 2
+Date: 2026-07-17
+ToDate: 2026-07-19
+Description: Member-only Vermont Vajrayana retreat 2.
+
+---
+
+Title: Swiss MY Retreat
+Date: 2026-08-11
+ToDate: 2026-08-15
+Description: Member-only Swiss Mahayana retreat.
+
+---
+
+Title: Swiss VY Retreat
+Date: 2026-08-16
+ToDate: 2026-08-22
+Description: Member-only Swiss Vajrayana retreat.
+
+---
+
+Title: Swiss Retreat ends
+Date: 2026-08-22
+Description: Member retreat in Switzerland ends.
+
+---
+
+Title: VY Weekend 4
+Date: 2026-09-12
+ToDate: 2026-09-13
+Description: Member-only Vajrayana Weekend 4.
+
+---
+
+Title: MY Weekend 4
+Date: 2026-09-19
+ToDate: 2026-09-20
+Description: Member-only Mahayana Weekend 4.
+
+---
+
+Title: Online VY Retreat
+Date: 2026-09-30
+ToDate: 2026-10-04
+Description: Member-only online Vajrayana retreat.
