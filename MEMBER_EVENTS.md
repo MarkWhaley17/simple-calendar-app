@@ -136,3 +136,56 @@ Title: Online VY Retreat
 Date: 2026-09-30
 ToDate: 2026-10-04
 Description: Member-only online Vajrayana retreat.
+
+---
+
+Title: Online VY Retreat ends
+Date: 2026-10-04
+Description: Member-only online Vajrayana retreat ends.
+
+---
+
+Title: MY Weekend 5
+Date: 2026-10-17
+ToDate: 2026-10-18
+Description: Member-only Mahayana Weekend 5.
+
+---
+
+Title: VY Weekend 5
+Date: 2026-11-07
+ToDate: 2026-11-08
+Description: Member-only Vajrayana Weekend 5.
+
+---
+
+Title: MY Weekend 6
+Date: 2026-11-21
+ToDate: 2026-11-22
+Description: Member-only Mahayana Weekend 6.
+
+---
+
+Title: VY Weekend 6
+Date: 2026-12-05
+ToDate: 2026-12-06
+Description: Member-only Vajrayana Weekend 6.
+
+---
+
+Title: Buddha Sadhana Weekend
+Date: 2026-12-12
+ToDate: 2026-12-13
+Description: Member-only Buddha Sadhana weekend.
+
+---
+
+Title: Mamo Chants begin
+Date: 2027-01-27
+Description: Member-only Mamo chants begin.
+
+---
+
+Title: Mamo Chants end
+Date: 2027-02-04
+Description: Member-only Mamo chants end.
