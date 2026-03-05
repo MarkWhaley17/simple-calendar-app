@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
-import { login, logout, isAuthenticated, getUser } from '../../utils/auth';
+import { login, logout } from '../../utils/auth';
 
 interface AccountViewProps {
   notificationSettings: NotificationSettings;
   onUpdateNotificationSettings: (settings: NotificationSettings) => void;
   settingsReady?: boolean;
+  user: AuthUser | null;
+  onUserChange: (user: AuthUser | null) => void;
 }
 
 const AccountView: React.FC<AccountViewProps> = ({
   notificationSettings,
   onUpdateNotificationSettings,
   settingsReady = true,
+  user,
+  onUserChange,
 }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -30,14 +33,6 @@ const AccountView: React.FC<AccountViewProps> = ({
     setEventMinutesError(null);
     setAllDayHoursError(null);
   }, [notificationSettings.eventReminderMinutes, notificationSettings.allDayReminderHours]);
-
-  useEffect(() => {
-    isAuthenticated().then((authenticated) => {
-      if (authenticated) {
-        getUser().then(setUser);
-      }
-    });
-  }, []);
 
   const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
     onUpdateNotificationSettings({
@@ -94,7 +89,7 @@ const AccountView: React.FC<AccountViewProps> = ({
     setAuthError(null);
     try {
       const loggedInUser = await login(username.trim(), password);
-      setUser(loggedInUser);
+      onUserChange(loggedInUser);
       setUsername('');
       setPassword('');
     } catch (err: unknown) {
@@ -106,7 +101,7 @@ const AccountView: React.FC<AccountViewProps> = ({
 
   const handleSignOut = async () => {
     await logout();
-    setUser(null);
+    onUserChange(null);
     setAuthError(null);
   };
 

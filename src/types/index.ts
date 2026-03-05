@@ -28,6 +28,7 @@ export interface CalendarEvent {
   isRecurringInstance?: boolean; // true if this is a generated instance
   originalEventId?: string; // reference to the master event for instances
   image?: string; // optional background image filename for this event
+  isMembersOnly?: boolean; // if true, only shown to signed-in users
   // Legacy fields for backward compatibility
   date?: Date;
   startTime?: string;

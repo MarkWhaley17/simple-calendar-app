@@ -6,10 +6,12 @@ import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
 import { AccountView } from './src/screens/account';
-import { CalendarEvent, ViewMode, NavView, NotificationSettings } from './src/types';
+import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
+import { getMemberEvents } from './src/utils/memberEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
+import { isAuthenticated, getUser } from './src/utils/auth';
 import { expandRecurringEvents } from './src/utils/recurrence';
 import { toDateKey } from './src/utils/dateHelpers';
 import { loadNotificationSettings, saveNotificationSettings, defaultNotificationSettings } from './src/utils/settings';
@@ -28,6 +30,7 @@ export default function App() {
   const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>(defaultNotificationSettings);
   const [settingsReady, setSettingsReady] = useState(false);
   const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const previousViewModeRef = useRef<ViewMode | null>(null);
   const selectedDateRef = useRef<Date | null>(null);
 
@@ -151,6 +154,23 @@ export default function App() {
 
     loadUserEvents();
   }, []);
+
+  // Restore auth session on mount
+  useEffect(() => {
+    isAuthenticated().then((authenticated) => {
+      if (authenticated) {
+        getUser().then(setUser);
+      }
+    });
+  }, []);
+
+  // Add/remove member events when auth state changes
+  useEffect(() => {
+    setMasterEvents(prev => {
+      const withoutMemberEvents = prev.filter(e => !e.id.startsWith('pre-member-'));
+      return user ? [...withoutMemberEvents, ...getMemberEvents()] : withoutMemberEvents;
+    });
+  }, [user]);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -786,6 +806,8 @@ export default function App() {
               notificationSettings={notificationSettings}
               onUpdateNotificationSettings={handleUpdateNotificationSettings}
               settingsReady={settingsReady}
+              user={user}
+              onUserChange={setUser}
             />
           ) : viewMode === 'eventsList' ? (
             <EventsListView
