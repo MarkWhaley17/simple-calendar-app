@@ -28,6 +28,21 @@ Description: Member pilgrimage to Nepal. Begins March 12, returns March 21.
 
 ---
 
-Title: Nepal Retreat begins
+Title: Nepal Retreat
 Date: 2026-03-27
-Description: Member retreat in Nepal begins.
+ToDate: 2026-04-10
+Description: Member retreat in Nepal.
+
+---
+
+Title: VY Weekend 1
+Date: 2026-04-04
+ToDate: 2026-04-05
+Description: Member-only Vajrayana Weekend 1.
+
+---
+
+Title: MY Weekend 2
+Date: 2026-04-25
+ToDate: 2026-04-26
+Description: Member-only Mahayana Weekend 2.

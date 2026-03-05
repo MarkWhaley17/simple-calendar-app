@@ -118,17 +118,73 @@ Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambha
 
 ---
 
-
-Title: Vajrayana Series Weekend 1
-Date: 2026-04-04 to 2026-04-05
-Description: Vajrayana Series Weekend 1.
+Title: Full Moon
+Date: 2026-04-02
+Description: Full moon day.
 
 ---
 
+Title: King of Ling Lhasang
+Date: 2026-04-02
+Description: Celebration of the King of Ling with lhasang smoke offering ceremony.
 
-Title: Mahayana Series Weekend 2
-Date: 2026-04-25 to 2026-04-26
-Description: Mahayana Series Weekend 2.
+---
+
+Title: Vidyadhara Chogyam Trungpa Rinpoche Parinirvana
+Date: 2026-04-04
+Description: Vidyadhara Chogyam Trungpa Rinpoche Parinirvana observance.
+
+---
+
+Title: Protector Day
+Date: 2026-04-06
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Dakini Day
+Date: 2026-04-12
+Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+
+---
+
+Title: Jambhala Day
+Date: 2026-04-15
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-04-16
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: New Moon
+Date: 2026-04-17
+Description: New moon day.
+
+---
+
+Title: Jambhala Day
+Date: 2026-04-24
+Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+
+---
+
+Title: Protector Day
+Date: 2026-04-25
+Image: protector-day.jpg
+Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+
+---
+
+Title: Guru Rinpoche Day
+Date: 2026-04-26
+Image: guru-rinpoche.jpg
+Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
 
 ---
 
@@ -271,4 +327,3 @@ Date: 2026-12-12 to 2026-12-13
 Description: Buddha Sadhana Teaching and Practice Weekend. Two full teaching days.
 
 ---
-
