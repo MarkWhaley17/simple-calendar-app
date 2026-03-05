@@ -15,19 +15,19 @@ All events are all-day events by default.
 
 ---
 
-Title: Member Retreat – Spring 2026
-Date: 2026-04-10
-ToDate: 2026-04-12
-Description: Exclusive three-day spring retreat for registered members. Includes teachings, practice sessions, and community meals.
+Title: MY Weekend 1
+Date: 2026-03-01
+Description: Member-only Mahayana/Vajrayana Weekend 1.
 
 ---
 
-Title: Member Q&A with Teacher
-Date: 2026-05-15
-Description: Private question and answer session for members. Submit your questions in advance through the member portal.
+Title: VY Nepal Pilgrimage
+Date: 2026-03-12
+ToDate: 2026-03-21
+Description: Member pilgrimage to Nepal. Begins March 12, returns March 21.
 
 ---
 
-Title: Advanced Practice Day
-Date: 2026-06-20
-Description: Member-only advanced practice day. Prerequisites apply — contact the center for details.
+Title: Nepal Retreat begins
+Date: 2026-03-27
+Description: Member retreat in Nepal begins.

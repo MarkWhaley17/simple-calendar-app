@@ -26,6 +26,65 @@ const eventData: { title: string; date: string; toDate?: string; description: st
     image: "guru-rinpoche.jpg",
   },
   {
+    title: "Full Moon",
+    date: "2026-03-03",
+    description: "Full moon day.",
+  },
+  {
+    title: "King of Ling Lhasang",
+    date: "2026-03-03",
+    description: "Celebration of the King of Ling with lhasang smoke offering ceremony.",
+  },
+  {
+    title: "Protector Day",
+    date: "2026-03-07",
+    description: "Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.",
+    image: "protector-day.jpg",
+  },
+  {
+    title: "Dakini Day",
+    date: "2026-03-13",
+    description: "Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.",
+  },
+  {
+    title: "Jambhala Day",
+    date: "2026-03-16",
+    description: "Monthly Jambhala Day for wealth deity practices and generosity offerings.",
+  },
+  {
+    title: "Protector Day",
+    date: "2026-03-17",
+    description: "Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.",
+    image: "protector-day.jpg",
+  },
+  {
+    title: "New Moon",
+    date: "2026-03-19",
+    description: "New moon day.",
+  },
+  {
+    title: "Spring Equinox",
+    date: "2026-03-20",
+    description: "Spring equinox.",
+  },
+  {
+    title: "Jambhala Day",
+    date: "2026-03-26",
+    description: "Monthly Jambhala Day for wealth deity practices and generosity offerings.",
+  },
+  {
+    title: "Protector Day",
+    date: "2026-03-27",
+    description: "Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.",
+    image: "protector-day.jpg",
+  },
+  {
+    title: "Guru Rinpoche Day",
+    date: "2026-03-28",
+    description: "Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.",
+    image: "guru-rinpoche.jpg",
+  },
+  {
     title: "Vajrayana Series Weekend 1",
     date: "2026-04-04",
     toDate: "2026-04-05",

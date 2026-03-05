@@ -5,20 +5,20 @@ import { CalendarEvent } from '../types';
 
 const memberEventData: { title: string; date: string; toDate?: string; description: string; image?: string }[] = [
   {
-    title: "Member Retreat – Spring 2026",
-    date: "2026-04-10",
-    toDate: "2026-04-12",
-    description: "Exclusive three-day spring retreat for registered members. Includes teachings, practice sessions, and community meals.",
+    title: "MY Weekend 1",
+    date: "2026-03-01",
+    description: "Member-only Mahayana/Vajrayana Weekend 1.",
   },
   {
-    title: "Member Q&A with Teacher",
-    date: "2026-05-15",
-    description: "Private question and answer session for members. Submit your questions in advance through the member portal.",
+    title: "VY Nepal Pilgrimage",
+    date: "2026-03-12",
+    toDate: "2026-03-21",
+    description: "Member pilgrimage to Nepal. Begins March 12, returns March 21.",
   },
   {
-    title: "Advanced Practice Day",
-    date: "2026-06-20",
-    description: "Member-only advanced practice day. Prerequisites apply — contact the center for details.",
+    title: "Nepal Retreat begins",
+    date: "2026-03-27",
+    description: "Member retreat in Nepal begins.",
   },
 ];
 
