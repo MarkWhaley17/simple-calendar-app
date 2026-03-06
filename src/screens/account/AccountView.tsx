@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
 interface AccountViewProps {
@@ -19,6 +21,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   user,
   onUserChange,
 }) => {
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
@@ -106,6 +109,20 @@ const AccountView: React.FC<AccountViewProps> = ({
     setAuthError(null);
   };
 
+  const renderCard = (children: React.ReactNode) => {
+    if (useIosPilot) {
+      return (
+        <View style={styles.cardWrapper}>
+          <GlassSurface style={styles.card} intensity={40}>
+            {children}
+          </GlassSurface>
+        </View>
+      );
+    }
+
+    return <View style={styles.card}>{children}</View>;
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -118,7 +135,8 @@ const AccountView: React.FC<AccountViewProps> = ({
         {/* Login/Sign Up Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Profile</Text>
-          <View style={styles.card}>
+          {renderCard(
+            <>
             {user ? (
               <>
                 <Text style={styles.cardText}>Signed in as</Text>
@@ -163,13 +181,15 @@ const AccountView: React.FC<AccountViewProps> = ({
                 </TouchableOpacity>
               </>
             )}
-          </View>
+            </>
+          )}
         </View>
 
         {/* Notification Settings Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Notifications</Text>
-          <View style={styles.card}>
+          {renderCard(
+            <>
             <View style={styles.settingRow}>
               <View style={styles.settingInfo}>
                 <Text style={styles.settingLabel}>Practice Day Reminders</Text>
@@ -265,13 +285,15 @@ const AccountView: React.FC<AccountViewProps> = ({
             {allDayHoursError && (
               <Text style={styles.inputError}>{allDayHoursError}</Text>
             )}
-          </View>
+            </>
+          )}
         </View>
 
         {/* About Section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>About</Text>
-          <View style={styles.card}>
+          {renderCard(
+            <>
             <View style={styles.aboutRow}>
               <Text style={styles.aboutLabel}>Version</Text>
               <Text style={styles.aboutValue}>1.0.0</Text>
@@ -292,7 +314,8 @@ const AccountView: React.FC<AccountViewProps> = ({
               <Text style={styles.aboutLabel}>Send Feedback</Text>
               <Text style={styles.linkText}>Email →</Text>
             </TouchableOpacity>
-          </View>
+            </>
+          )}
         </View>
 
         {/* Footer info */}
@@ -352,6 +375,9 @@ const styles = StyleSheet.create({
     ...elevation.card,
     borderWidth: 1,
     borderColor: colors.borderSubtle,
+  },
+  cardWrapper: {
+    borderRadius: 16,
   },
   cardText: {
     fontSize: 15,

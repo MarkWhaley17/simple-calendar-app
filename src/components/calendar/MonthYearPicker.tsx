@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { MONTH_NAMES } from '../../constants/dates';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../ui/GlassSurface';
+import { colors, elevation } from '../../theme/tokens';
 
 interface MonthYearPickerProps {
   visible: boolean;
@@ -10,6 +13,7 @@ interface MonthYearPickerProps {
 }
 
 const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ visible, currentDate, onClose, onSelect }) => {
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
 
@@ -38,10 +42,11 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ visible, currentDate,
       onRequestClose={handleCancel}
     >
       <View style={styles.overlay}>
-        <View style={styles.pickerContainer}>
-          <Text style={styles.title}>Select Month & Year</Text>
+        {useIosPilot ? (
+          <GlassSurface style={styles.pickerContainer} intensity={40}>
+            <Text style={styles.title}>Select Month & Year</Text>
 
-          <View style={styles.selectorsContainer}>
+            <View style={styles.selectorsContainer}>
             {/* Month Selector */}
             <View style={styles.selectorColumn}>
               <Text style={styles.selectorLabel}>Month</Text>
@@ -95,26 +100,105 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ visible, currentDate,
                 ))}
               </ScrollView>
             </View>
-          </View>
+            </View>
 
-          {/* Action Buttons */}
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.cancelButton]}
-              onPress={handleCancel}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.applyButton]}
-              onPress={handleApply}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.applyButtonText}>Apply</Text>
-            </TouchableOpacity>
+            {/* Action Buttons */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={handleCancel}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.applyButton]}
+                onPress={handleApply}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.applyButtonText}>Apply</Text>
+              </TouchableOpacity>
+            </View>
+          </GlassSurface>
+        ) : (
+          <View style={styles.pickerContainer}>
+            <Text style={styles.title}>Select Month & Year</Text>
+
+            <View style={styles.selectorsContainer}>
+              {/* Month Selector */}
+              <View style={styles.selectorColumn}>
+                <Text style={styles.selectorLabel}>Month</Text>
+                <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+                  {MONTH_NAMES.map((month, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.selectorItem,
+                        selectedMonth === index && styles.selectedItem,
+                      ]}
+                      onPress={() => setSelectedMonth(index)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.selectorText,
+                          selectedMonth === index && styles.selectedText,
+                        ]}
+                      >
+                        {month}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+
+              {/* Year Selector */}
+              <View style={styles.selectorColumn}>
+                <Text style={styles.selectorLabel}>Year</Text>
+                <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+                  {years.map((year) => (
+                    <TouchableOpacity
+                      key={year}
+                      style={[
+                        styles.selectorItem,
+                        selectedYear === year && styles.selectedItem,
+                      ]}
+                      onPress={() => setSelectedYear(year)}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.selectorText,
+                          selectedYear === year && styles.selectedText,
+                        ]}
+                      >
+                        {year}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+
+            {/* Action Buttons */}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={handleCancel}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.applyButton]}
+                onPress={handleApply}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.applyButtonText}>Apply</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        )}
       </View>
     </Modal>
   );
@@ -129,16 +213,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   pickerContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     borderRadius: 20,
     padding: 24,
     width: '100%',
     maxWidth: 400,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 10,
+    ...elevation.floating,
   },
   title: {
     fontSize: 24,

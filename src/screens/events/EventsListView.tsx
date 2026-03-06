@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
 interface EventsListViewProps {
@@ -11,6 +13,7 @@ interface EventsListViewProps {
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress }) => {
   const currentYear = new Date().getFullYear();
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
 
   // Filter to current year and sort chronologically
   const sortedEvents = [...events]
@@ -54,12 +57,21 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress })
             {sortedEvents.map((event) => (
               <TouchableOpacity
                 key={event.id}
-                style={styles.eventBar}
+                style={styles.eventBarTouchable}
                 onPress={() => onEventPress(event)}
                 activeOpacity={0.8}
               >
-                <Text style={styles.eventTitle}>{event.title}</Text>
-                <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                {useIosPilot ? (
+                  <GlassSurface style={styles.eventBar} intensity={40}>
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                  </GlassSurface>
+                ) : (
+                  <View style={styles.eventBar}>
+                    <Text style={styles.eventTitle}>{event.title}</Text>
+                    <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                  </View>
+                )}
               </TouchableOpacity>
             ))}
           </View>
@@ -113,12 +125,15 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 22,
     borderRadius: radius.md,
-    marginBottom: 16,
+    marginBottom: 0,
     borderLeftWidth: 5,
     borderLeftColor: colors.danger,
     borderWidth: 1,
     borderColor: colors.borderSubtle,
     ...elevation.card,
+  },
+  eventBarTouchable: {
+    marginBottom: 16,
   },
   eventTitle: {
     fontSize: 17,

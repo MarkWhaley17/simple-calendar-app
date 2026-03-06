@@ -4,6 +4,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import RecurrencePicker from '../../components/common/RecurrencePicker';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { getRecurrenceLabel } from '../../utils/recurrence';
 
@@ -42,6 +44,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   defaultEventReminderMinutes,
   defaultAllDayReminderHours,
 }) => {
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -162,6 +165,20 @@ const EditEventView: React.FC<EditEventViewProps> = ({
     );
   };
 
+  const SectionContainer = ({ children }: { children: React.ReactNode }) => {
+    if (useIosPilot) {
+      return (
+        <View style={styles.sectionWrapper}>
+          <GlassSurface style={styles.section} intensity={36}>
+            {children}
+          </GlassSurface>
+        </View>
+      );
+    }
+
+    return <View style={styles.section}>{children}</View>;
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -197,7 +214,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         )}
 
         {/* Title */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>Title *</Text>
           <TextInput
             style={styles.input}
@@ -206,10 +223,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             value={title}
             onChangeText={setTitle}
           />
-        </View>
+        </SectionContainer>
 
         {/* Description */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
@@ -220,10 +237,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             multiline
             numberOfLines={4}
           />
-        </View>
+        </SectionContainer>
 
         {/* All Day Toggle */}
-        <View style={styles.section}>
+        <SectionContainer>
           <View style={styles.toggleRow}>
             <Text style={styles.label}>All Day</Text>
             <Switch
@@ -233,10 +250,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               thumbColor={isAllDay ? colors.danger : colors.toggleThumb}
             />
           </View>
-        </View>
+        </SectionContainer>
 
         {/* From Date/Time */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>From</Text>
           <View style={styles.dateTimeRow}>
             <TouchableOpacity
@@ -268,10 +285,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               }}
             />
           )}
-        </View>
+        </SectionContainer>
 
         {/* To Date/Time */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>To</Text>
           <View style={styles.dateTimeRow}>
             <TouchableOpacity
@@ -303,10 +320,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               }}
             />
           )}
-        </View>
+        </SectionContainer>
 
         {/* Recurrence */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>Repeat</Text>
           <Pressable
             style={({ pressed }) => [
@@ -320,10 +337,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           >
             <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
           </Pressable>
-        </View>
+        </SectionContainer>
 
         {/* Reminder */}
-        <View style={styles.section}>
+        <SectionContainer>
           <View style={styles.toggleRow}>
             <Text style={styles.label}>Enable Reminder</Text>
             <Switch
@@ -372,10 +389,10 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               )}
             </>
           )}
-        </View>
+        </SectionContainer>
 
         {/* Links */}
-        <View style={styles.section}>
+        <SectionContainer>
           <Text style={styles.label}>Links</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
@@ -386,7 +403,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             multiline
             numberOfLines={3}
           />
-        </View>
+        </SectionContainer>
 
         {/* Delete Button */}
         <View style={styles.deleteSection}>
@@ -466,6 +483,9 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 1,
     ...elevation.card,
+  },
+  sectionWrapper: {
+    marginTop: 1,
   },
   label: {
     fontSize: 15,

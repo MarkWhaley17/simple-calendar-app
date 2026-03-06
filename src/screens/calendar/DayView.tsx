@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
 interface DayViewProps {
@@ -20,6 +22,7 @@ const DayView: React.FC<DayViewProps> = ({
   onEventPress,
   onAddEvent,
 }) => {
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
   const dayName = DAY_NAMES[selectedDate.getDay()];
   const monthName = MONTH_NAMES[selectedDate.getMonth()];
   const dayNumber = selectedDate.getDate();
@@ -105,13 +108,24 @@ const DayView: React.FC<DayViewProps> = ({
                 return (
                   <TouchableOpacity
                     key={event.id}
-                    style={styles.eventCard}
+                    style={styles.eventCardTouchable}
                     onPress={() => onEventPress && onEventPress(event)}
                     activeOpacity={0.8}
                   >
-                    <Text style={styles.eventTitle}>{event.title}</Text>
-                    {eventTime && (
-                      <Text style={styles.eventTime}>{eventTime}</Text>
+                    {useIosPilot ? (
+                      <GlassSurface style={styles.eventCard} intensity={38}>
+                        <Text style={styles.eventTitle}>{event.title}</Text>
+                        {eventTime && (
+                          <Text style={styles.eventTime}>{eventTime}</Text>
+                        )}
+                      </GlassSurface>
+                    ) : (
+                      <View style={styles.eventCard}>
+                        <Text style={styles.eventTitle}>{event.title}</Text>
+                        {eventTime && (
+                          <Text style={styles.eventTime}>{eventTime}</Text>
+                        )}
+                      </View>
                     )}
                   </TouchableOpacity>
                 );
@@ -201,10 +215,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSolid,
     padding: 18,
     borderRadius: 16,
-    marginBottom: 14,
+    marginBottom: 0,
     borderLeftWidth: 4,
     borderLeftColor: colors.danger,
     ...elevation.card,
+  },
+  eventCardTouchable: {
+    marginBottom: 14,
   },
   eventTitle: {
     fontSize: 17,

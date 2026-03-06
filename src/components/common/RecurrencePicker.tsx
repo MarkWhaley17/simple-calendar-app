@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Platform } from 'react-native';
 import { RecurrenceRule, RecurrenceFrequency } from '../../types';
+import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { GlassSurface } from '../ui/GlassSurface';
 import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
 interface RecurrencePickerProps {
@@ -11,6 +13,7 @@ interface RecurrencePickerProps {
 }
 
 const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence, onClose, onSave }) => {
+  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
   const options: Array<{ label: string; frequency: RecurrenceFrequency; interval: number }> = [
     { label: 'Does not repeat', frequency: 'none', interval: 1 },
     { label: 'Weekly', frequency: 'weekly', interval: 1 },
@@ -41,44 +44,85 @@ const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence
       presentationStyle="overFullScreen"
     >
       <View style={styles.overlay}>
-        <View style={styles.container}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Repeat</Text>
-            <TouchableOpacity
-              onPress={onClose}
-              accessibilityRole="button"
-              accessibilityLabel="Close repeat picker"
-              style={styles.closeButton}
-            >
-              <Text style={styles.closeButtonText}>×</Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.section}>
-              {options.map((option, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.option}
-                  onPress={() => handleSelect(option.frequency, option.interval)}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.optionText,
-                      isSelected(option.frequency, option.interval) && styles.selectedOptionText
-                    ]}
-                  >
-                    {option.label}
-                  </Text>
-                  {isSelected(option.frequency, option.interval) && (
-                    <Text style={styles.checkmark}>✓</Text>
-                  )}
-                </TouchableOpacity>
-              ))}
+        {useIosPilot ? (
+          <GlassSurface style={styles.container} intensity={42}>
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Repeat</Text>
+              <TouchableOpacity
+                onPress={onClose}
+                accessibilityRole="button"
+                accessibilityLabel="Close repeat picker"
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeButtonText}>×</Text>
+              </TouchableOpacity>
             </View>
-          </ScrollView>
-        </View>
+
+            <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+              <View style={styles.section}>
+                {options.map((option, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.option}
+                    onPress={() => handleSelect(option.frequency, option.interval)}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={[
+                        styles.optionText,
+                        isSelected(option.frequency, option.interval) && styles.selectedOptionText
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                    {isSelected(option.frequency, option.interval) && (
+                      <Text style={styles.checkmark}>✓</Text>
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </GlassSurface>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={styles.headerTitle}>Repeat</Text>
+              <TouchableOpacity
+                onPress={onClose}
+                accessibilityRole="button"
+                accessibilityLabel="Close repeat picker"
+                style={styles.closeButton}
+              >
+                <Text style={styles.closeButtonText}>×</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+              <View style={styles.section}>
+                {options.map((option, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.option}
+                    onPress={() => handleSelect(option.frequency, option.interval)}
+                    activeOpacity={0.7}
+                  >
+                    <Text
+                      style={[
+                        styles.optionText,
+                        isSelected(option.frequency, option.interval) && styles.selectedOptionText
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                    {isSelected(option.frequency, option.interval) && (
+                      <Text style={styles.checkmark}>✓</Text>
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          </View>
+        )}
       </View>
     </Modal>
   );
