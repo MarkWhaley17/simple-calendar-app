@@ -55,6 +55,8 @@ const DayView: React.FC<DayViewProps> = ({
     'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
     'full-moon.png': require('../../../assets/FullMoon.png'),
     'new-moon.png': require('../../../assets/NewMoon.png'),
+    'dakini.jpg': require('../../../assets/Dakini.JPG'),
+    'jambhala.jpg': require('../../../assets/Jambhala.jpg'),
     // Add more mappings as you add images
   };
 
@@ -67,6 +69,12 @@ const DayView: React.FC<DayViewProps> = ({
     }
     if (event.title.toLowerCase().includes('new moon')) {
       return 'new-moon.png';
+    }
+    if (event.title.toLowerCase().includes('dakini day')) {
+      return 'dakini.jpg';
+    }
+    if (event.title.toLowerCase().includes('jambhala day')) {
+      return 'jambhala.jpg';
     }
     return undefined;
   };

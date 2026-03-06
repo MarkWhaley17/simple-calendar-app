@@ -3,6 +3,9 @@ import { render } from '@testing-library/react-native';
 import DayView from '../../../screens/calendar/DayView';
 import { CalendarEvent } from '../../../types';
 
+jest.mock('../../../../assets/Dakini.JPG', () => 98765);
+jest.mock('../../../../assets/Jambhala.jpg', () => 87654);
+
 describe('DayView', () => {
   it('renders the header image and event list background pattern', () => {
     const event: CalendarEvent = {
@@ -122,6 +125,48 @@ describe('DayView', () => {
 
     expect(getByTestId('day-view-header-image').props.source).toBe(
       require('../../../../assets/NewMoon.png')
+    );
+  });
+
+  it('uses the Dakini banner image on dakini days', () => {
+    const dakiniEvent: CalendarEvent = {
+      id: 'event-dakini-day',
+      title: 'Dakini Day',
+      fromDate: new Date(2026, 3, 2),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 3, 2)}
+        onBack={jest.fn()}
+        events={[dakiniEvent]}
+      />
+    );
+
+    expect(getByTestId('day-view-header-image').props.source).toBe(
+      require('../../../../assets/Dakini.JPG')
+    );
+  });
+
+  it('uses the Jambhala banner image on jambhala days', () => {
+    const jambhalaEvent: CalendarEvent = {
+      id: 'event-jambhala-day',
+      title: 'Jambhala Day',
+      fromDate: new Date(2026, 3, 10),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 3, 10)}
+        onBack={jest.fn()}
+        events={[jambhalaEvent]}
+      />
+    );
+
+    expect(getByTestId('day-view-header-image').props.source).toBe(
+      require('../../../../assets/Jambhala.jpg')
     );
   });
 });
