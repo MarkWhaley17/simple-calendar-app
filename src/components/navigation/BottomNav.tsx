@@ -29,7 +29,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.userIcon, currentView === 'account' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
+          <View style={[styles.userIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'account' && styles.activeIcon]}>
             <Text style={[styles.userIconText, currentView === 'account' && styles.activeIconText]}>👤</Text>
           </View>
         </View>
@@ -43,7 +43,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.monthIcon, currentView === 'month' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
+          <View style={[styles.monthIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'month' && styles.activeIcon]}>
             <View style={styles.gridRow}>
               <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
               <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
@@ -71,7 +71,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.dayIcon, currentView === 'day' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
+          <View style={[styles.dayIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'day' && styles.activeIcon]}>
             <Text style={[styles.dayIconText, currentView === 'day' && styles.activeIconText]}>
               {todayDate}
             </Text>
@@ -87,7 +87,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.eventsIcon, currentView === 'events' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
+          <View style={[styles.eventsIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'events' && styles.activeIcon]}>
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
