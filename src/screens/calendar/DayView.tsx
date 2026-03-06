@@ -62,6 +62,12 @@ const DayView: React.FC<DayViewProps> = ({
     : require('../../../assets/day-bg.jpg');
   const eventsBackground = require('../../../assets/day-view-pattern.png');
 
+  const formatDateRange = (start: Date, end: Date) => {
+    const startMonth = MONTH_NAMES[start.getMonth()];
+    const endMonth = MONTH_NAMES[end.getMonth()];
+    return `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}`;
+  };
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -101,9 +107,12 @@ const DayView: React.FC<DayViewProps> = ({
           {sortedEvents.length > 0 ? (
             <View style={styles.eventsList}>
               {sortedEvents.map((event) => {
-                const eventTime = event.isAllDay
-                  ? 'All Day'
-                  : (event.fromTime || event.startTime || '');
+                const start = event.fromDate || event.date || selectedDate;
+                const end = event.toDate || start;
+                const isMultiDayAllDay = Boolean(event.isAllDay && start < end);
+                const eventTime = isMultiDayAllDay
+                  ? formatDateRange(start, end)
+                  : (event.isAllDay ? 'All Day' : (event.fromTime || event.startTime || ''));
 
                 return (
                   <TouchableOpacity

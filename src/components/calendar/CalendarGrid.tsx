@@ -194,23 +194,17 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
                 {(() => {
                   const type = getMultiDayEventType(dayData.year, dayData.month, dayData.day);
                   if (!type) return null;
-                  if (type === 'start') {
-                    return (
-                      <View
-                        style={[styles.multiDayLine, styles.multiDayLineStart]}
-                        testID={`multi-day-line-${dayKey}`}
-                      />
-                    );
-                  } else if (type === 'end') {
-                    return (
-                      <View
-                        style={[styles.multiDayLine, styles.multiDayLineEnd]}
-                        testID={`multi-day-line-${dayKey}`}
-                      />
-                    );
-                  } else {
-                    return <View style={styles.multiDayLine} testID={`multi-day-line-${dayKey}`} />;
-                  }
+                  return (
+                    <View
+                      style={[
+                        styles.multiDayBand,
+                        type === 'start' && styles.multiDayBandStart,
+                        type === 'end' && styles.multiDayBandEnd,
+                      ]}
+                      testID={`multi-day-line-${dayKey}`}
+                      pointerEvents="none"
+                    />
+                  );
                 })()}
                 {/* Single-day event indicator */}
                 {hasNonMultiDayEvents(dayData.year, dayData.month, dayData.day) && (
@@ -331,33 +325,31 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: '#991B1B',
     position: 'absolute',
-    bottom: 2,
-    zIndex: 2,
+    bottom: 8,
+    zIndex: 3,
     shadowColor: '#991B1B',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.4,
     shadowRadius: 2,
   },
-  multiDayLine: {
+  multiDayBand: {
     position: 'absolute',
-    bottom: 8,
-    height: 2,
-    width: cellSize,
+    top: 0,
     left: -5,
-    backgroundColor: '#F59E0B',
+    width: cellSize,
+    height: cellSize - 10,
+    backgroundColor: 'rgba(245, 158, 11, 0.11)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 158, 11, 0.23)',
     zIndex: 1,
   },
-  multiDayLineStart: {
-    borderTopLeftRadius: 6,
-    borderBottomLeftRadius: 6,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
+  multiDayBandStart: {
+    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 12,
   },
-  multiDayLineEnd: {
-    borderTopRightRadius: 6,
-    borderBottomRightRadius: 6,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
+  multiDayBandEnd: {
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
   },
 });
 
