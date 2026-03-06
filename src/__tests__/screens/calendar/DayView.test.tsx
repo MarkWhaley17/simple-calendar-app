@@ -3,8 +3,8 @@ import { render } from '@testing-library/react-native';
 import DayView from '../../../screens/calendar/DayView';
 import { CalendarEvent } from '../../../types';
 
-jest.mock('../../../../assets/Dakini.JPG', () => 98765);
-jest.mock('../../../../assets/Jambhala.jpg', () => 87654);
+jest.mock('../../../../assets/dakini.jpg', () => 98765);
+jest.mock('../../../../assets/jambhala.jpg', () => 87654);
 
 describe('DayView', () => {
   it('renders the header image and event list background pattern', () => {
@@ -103,7 +103,7 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-view-header-image').props.source).toBe(
-      require('../../../../assets/FullMoon.png')
+      require('../../../../assets/full-moon.png')
     );
   });
 
@@ -124,7 +124,7 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-view-header-image').props.source).toBe(
-      require('../../../../assets/NewMoon.png')
+      require('../../../../assets/new-moon.png')
     );
   });
 
@@ -145,7 +145,7 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-view-header-image').props.source).toBe(
-      require('../../../../assets/Dakini.JPG')
+      require('../../../../assets/dakini.jpg')
     );
   });
 
@@ -166,7 +166,7 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-view-header-image').props.source).toBe(
-      require('../../../../assets/Jambhala.jpg')
+      require('../../../../assets/jambhala.jpg')
     );
   });
 });

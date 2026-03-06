@@ -53,10 +53,10 @@ const DayView: React.FC<DayViewProps> = ({
     'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
     'protector-day.jpg': require('../../../assets/protector-day.jpg'),
     'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
-    'full-moon.png': require('../../../assets/FullMoon.png'),
-    'new-moon.png': require('../../../assets/NewMoon.png'),
-    'dakini.jpg': require('../../../assets/Dakini.JPG'),
-    'jambhala.jpg': require('../../../assets/Jambhala.jpg'),
+    'full-moon.png': require('../../../assets/full-moon.png'),
+    'new-moon.png': require('../../../assets/new-moon.png'),
+    'dakini.jpg': require('../../../assets/dakini.jpg'),
+    'jambhala.jpg': require('../../../assets/jambhala.jpg'),
     // Add more mappings as you add images
   };
 
