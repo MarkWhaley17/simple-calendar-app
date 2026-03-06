@@ -16,11 +16,9 @@ import { expandRecurringEvents } from './src/utils/recurrence';
 import { toDateKey } from './src/utils/dateHelpers';
 import { loadNotificationSettings, saveNotificationSettings, defaultNotificationSettings } from './src/utils/settings';
 import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
+import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
 
 export default function App() {
-  const isMemberOnlyEvent = (event: CalendarEvent): boolean =>
-    event.isMembersOnly === true || event.id.startsWith('pre-member-');
-
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('month');
@@ -136,7 +134,7 @@ export default function App() {
 
   // Expanded events include all recurring instances for display
   const events = expandRecurringEvents(masterEvents);
-  const visibleEvents = user ? events : events.filter(event => !isMemberOnlyEvent(event));
+  const visibleEvents = filterVisibleEvents(events, Boolean(user));
 
   // Load user events from storage on mount and merge with pre-added events
   useEffect(() => {
