@@ -41,6 +41,7 @@ export default function App() {
   const quoteOpacity = useRef(new Animated.Value(1)).current;
   const dayViewTranslateY = useRef(new Animated.Value(0)).current;
   const dayViewTranslateX = useRef(new Animated.Value(0)).current;
+  const dayViewOpacity = useRef(new Animated.Value(1)).current;
   const dayViewPanResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
@@ -55,45 +56,71 @@ export default function App() {
       onShouldBlockNativeResponder: () => true,
       onPanResponderMove: (_evt, gestureState) => {
         dayViewTranslateX.setValue(gestureState.dx);
+        const opacityValue = 1 - Math.abs(gestureState.dx) / 1000;
+        dayViewOpacity.setValue(Math.max(opacityValue, 0.7));
       },
       onPanResponderRelease: (_evt, gestureState) => {
         const threshold = 60;
+        const runDaySwipeTransition = (direction: 'previous' | 'next') => {
+          const swipeOutX = direction === 'previous' ? 300 : -300;
+          const swipeInStartX = direction === 'previous' ? -300 : 300;
+          const dayDelta = direction === 'previous' ? -1 : 1;
+
+          Animated.parallel([
+            Animated.timing(dayViewTranslateX, {
+              toValue: swipeOutX,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+            Animated.timing(dayViewOpacity, {
+              toValue: 0,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start(() => {
+            const currentDate = selectedDateRef.current;
+            if (currentDate) {
+              const next = new Date(currentDate);
+              next.setDate(next.getDate() + dayDelta);
+              setSkipDayViewEnterAnimation(true);
+              setSelectedDate(next);
+            }
+
+            dayViewTranslateX.setValue(swipeInStartX);
+            dayViewOpacity.setValue(0);
+
+            Animated.parallel([
+              Animated.timing(dayViewTranslateX, {
+                toValue: 0,
+                duration: 200,
+                useNativeDriver: true,
+              }),
+              Animated.timing(dayViewOpacity, {
+                toValue: 1,
+                duration: 200,
+                useNativeDriver: true,
+              }),
+            ]).start();
+          });
+        };
+
         if (gestureState.dx > threshold) {
-          Animated.timing(dayViewTranslateX, {
-            toValue: 300,
-            duration: 150,
-            useNativeDriver: true,
-          }).start(() => {
-            dayViewTranslateX.setValue(0);
-            const currentDate = selectedDateRef.current;
-            if (currentDate) {
-              const next = new Date(currentDate);
-              next.setDate(next.getDate() - 1);
-              setSkipDayViewEnterAnimation(true);
-              setSelectedDate(next);
-            }
-          });
+          runDaySwipeTransition('previous');
         } else if (gestureState.dx < -threshold) {
-          Animated.timing(dayViewTranslateX, {
-            toValue: -300,
-            duration: 150,
-            useNativeDriver: true,
-          }).start(() => {
-            dayViewTranslateX.setValue(0);
-            const currentDate = selectedDateRef.current;
-            if (currentDate) {
-              const next = new Date(currentDate);
-              next.setDate(next.getDate() + 1);
-              setSkipDayViewEnterAnimation(true);
-              setSelectedDate(next);
-            }
-          });
+          runDaySwipeTransition('next');
         } else {
-          Animated.spring(dayViewTranslateX, {
-            toValue: 0,
-            useNativeDriver: true,
-            friction: 6,
-          }).start();
+          Animated.parallel([
+            Animated.spring(dayViewTranslateX, {
+              toValue: 0,
+              useNativeDriver: true,
+              friction: 6,
+            }),
+            Animated.timing(dayViewOpacity, {
+              toValue: 1,
+              duration: 200,
+              useNativeDriver: true,
+            }),
+          ]).start();
         }
       },
     })
@@ -231,10 +258,11 @@ export default function App() {
       // Reset when leaving day view
       dayViewTranslateY.setValue(0);
       dayViewTranslateX.setValue(0);
+      dayViewOpacity.setValue(1);
     }
 
     previousViewModeRef.current = viewMode;
-  }, [viewMode, selectedDate, dayViewTranslateY, skipDayViewEnterAnimation]);
+  }, [viewMode, selectedDate, dayViewTranslateY, dayViewOpacity, skipDayViewEnterAnimation]);
 
   const handlePreviousMonth = () => {
     // Animate the transition - slide right and fade out
@@ -839,6 +867,7 @@ export default function App() {
                 { flex: 1 },
                 {
                   transform: [{ translateY: dayViewTranslateY }, { translateX: dayViewTranslateX }],
+                  opacity: dayViewOpacity,
                 },
               ]}
               {...dayViewPanResponder.panHandlers}
