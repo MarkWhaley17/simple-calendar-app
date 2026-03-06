@@ -226,21 +226,21 @@ const cellSize = (screenWidth - 16) / 7; // Account for horizontal padding (8px 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingBottom: 24,
+    paddingBottom: 20,
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
     overflow: 'hidden',
   },
   weekDaysRow: {
     flexDirection: 'row',
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 8,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(37, 99, 235, 0.1)', // Softer blue border
+    borderBottomColor: 'rgba(37, 99, 235, 0.08)',
   },
   weekDayCell: {
     width: cellSize,
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingHorizontal: 8,
-    paddingTop: 8,
+    paddingTop: 10,
   },
   dayCell: {
     width: cellSize,
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
   todayContent: {
     backgroundColor: '#F59E0B',

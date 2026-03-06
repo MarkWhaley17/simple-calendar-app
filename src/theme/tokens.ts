@@ -1,0 +1,54 @@
+export const colors = {
+  bg: '#F6F8FB',
+  surface: 'rgba(255,255,255,0.58)',
+  surfaceStrong: 'rgba(255,255,255,0.78)',
+  surfaceOverlay: 'rgba(255,255,255,0.18)',
+  borderSoft: 'rgba(255,255,255,0.42)',
+  borderStrong: 'rgba(255,255,255,0.58)',
+  textPrimary: '#0F172A',
+  textSecondary: '#475569',
+  accent: '#2F6FED',
+  accentWarm: '#D4A94D',
+  shadow: 'rgba(15,23,42,0.12)',
+  shadowStrong: 'rgba(15,23,42,0.18)',
+};
+
+export const radius = {
+  sm: 12,
+  md: 18,
+  lg: 24,
+  xl: 30,
+  pill: 999,
+};
+
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+};
+
+export const blur = {
+  low: 16,
+  medium: 28,
+  high: 40,
+};
+
+export const elevation = {
+  card: {
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 6,
+  },
+  floating: {
+    shadowColor: '#000',
+    shadowOpacity: 0.16,
+    shadowRadius: 22,
+    shadowOffset: { width: 0, height: 12 },
+    elevation: 10,
+  },
+};

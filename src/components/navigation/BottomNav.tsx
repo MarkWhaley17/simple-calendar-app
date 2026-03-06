@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Platform, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+
+import { ENABLE_GLASS_UI } from '../../theme/flags';
+import { colors, radius, spacing } from '../../theme/tokens';
+import { GlassSurface } from '../ui/GlassSurface';
+import { glassStyles } from '../ui/glassStyles';
 
 interface BottomNavProps {
   currentView: 'month' | 'day' | 'events' | 'account';
@@ -8,30 +13,37 @@ interface BottomNavProps {
 }
 
 const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDate = new Date().getDate() }) => {
-  return (
-    <View style={styles.container}>
+  const bottomInset = Platform.OS === 'ios' ? spacing.lg : spacing.sm;
+
+  const containerStyle = ENABLE_GLASS_UI
+    ? [styles.glassOuter, { paddingBottom: bottomInset + spacing.sm }]
+    : [styles.container];
+  const barStyle = ENABLE_GLASS_UI ? [styles.glassContainer, glassStyles.floating] : null;
+
+  const content = (
+    <>
       {/* Account */}
       <TouchableOpacity
-        style={[styles.navItem, currentView === 'account' && styles.activeNavItem]}
+        style={[styles.navItem, currentView === 'account' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
         onPress={() => onNavigate('account')}
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.userIcon, currentView === 'account' && styles.activeIcon]}>
+          <View style={[styles.userIcon, currentView === 'account' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
             <Text style={[styles.userIconText, currentView === 'account' && styles.activeIconText]}>👤</Text>
           </View>
         </View>
-        <Text style={[styles.navLabel, currentView === 'account' && styles.activeNavLabel]}>Account</Text>
+        <Text style={[styles.navLabel, currentView === 'account' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Account</Text>
       </TouchableOpacity>
 
       {/* Month View */}
       <TouchableOpacity
-        style={[styles.navItem, currentView === 'month' && styles.activeNavItem]}
+        style={[styles.navItem, currentView === 'month' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
         onPress={() => onNavigate('month')}
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.monthIcon, currentView === 'month' && styles.activeIcon]}>
+          <View style={[styles.monthIcon, currentView === 'month' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
             <View style={styles.gridRow}>
               <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
               <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
@@ -49,40 +61,56 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
             </View>
           </View>
         </View>
-        <Text style={[styles.navLabel, currentView === 'month' && styles.activeNavLabel]}>Month</Text>
+        <Text style={[styles.navLabel, currentView === 'month' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Month</Text>
       </TouchableOpacity>
 
       {/* Day View */}
       <TouchableOpacity
-        style={[styles.navItem, currentView === 'day' && styles.activeNavItem]}
+        style={[styles.navItem, currentView === 'day' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
         onPress={() => onNavigate('day')}
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.dayIcon, currentView === 'day' && styles.activeIcon]}>
+          <View style={[styles.dayIcon, currentView === 'day' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
             <Text style={[styles.dayIconText, currentView === 'day' && styles.activeIconText]}>
               {todayDate}
             </Text>
           </View>
         </View>
-        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel]}>Today</Text>
+        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Today</Text>
       </TouchableOpacity>
 
       {/* Events List */}
       <TouchableOpacity
-        style={[styles.navItem, currentView === 'events' && styles.activeNavItem]}
+        style={[styles.navItem, currentView === 'events' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
         onPress={() => onNavigate('events')}
         activeOpacity={0.7}
       >
         <View style={styles.iconContainer}>
-          <View style={[styles.eventsIcon, currentView === 'events' && styles.activeIcon]}>
+          <View style={[styles.eventsIcon, currentView === 'events' && styles.activeIcon, ENABLE_GLASS_UI && styles.glassIcon]}>
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
             <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
           </View>
         </View>
-        <Text style={[styles.navLabel, currentView === 'events' && styles.activeNavLabel]}>Events</Text>
+        <Text style={[styles.navLabel, currentView === 'events' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Events</Text>
       </TouchableOpacity>
+    </>
+  );
+
+  if (ENABLE_GLASS_UI) {
+    return (
+      <View style={containerStyle}>
+        <GlassSurface style={barStyle} contentStyle={styles.glassRow} intensity={Platform.OS === 'ios' ? 38 : 20}>
+          {content}
+        </GlassSurface>
+      </View>
+    );
+  }
+
+  return (
+    <View style={containerStyle}>
+      {content}
     </View>
   );
 };
@@ -106,8 +134,29 @@ const styles = StyleSheet.create({
   activeNavItem: {
     // Active state styling
   },
+  glassOuter: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xs,
+  },
+  glassContainer: {
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: radius.xl,
+  },
+  glassRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xs,
+    minHeight: 72,
+  },
   iconContainer: {
     marginBottom: 4,
+  },
+  glassNavItem: {
+    borderRadius: radius.pill,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
   },
   userIcon: {
     width: 32,
@@ -119,6 +168,11 @@ const styles = StyleSheet.create({
   },
   activeIcon: {
     backgroundColor: '#F59E0B', // Gold background when active
+  },
+  glassIcon: {
+    backgroundColor: colors.surfaceStrong,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
   },
   userIconText: {
     fontSize: 20,
@@ -185,6 +239,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#DBEAFE',
     fontWeight: '500',
+  },
+  glassNavLabel: {
+    color: colors.textSecondary,
   },
   activeNavLabel: {
     color: '#F59E0B', // Gold text when active
