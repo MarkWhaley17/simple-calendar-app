@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "sync:events": "node scripts/sync-events-from-md.js",
+    "start": "npm run sync:events && expo start",
+    "android": "npm run sync:events && expo start --android",
+    "ios": "npm run sync:events && expo start --ios",
+    "web": "npm run sync:events && expo start --web",
+    "test": "npm run sync:events && jest",
+    "test:watch": "npm run sync:events && jest --watch",
+    "test:coverage": "npm run sync:events && jest --coverage"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
