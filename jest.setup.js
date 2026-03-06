@@ -10,6 +10,19 @@ jest.mock('@react-native-community/datetimepicker', () => 'DateTimePicker');
 jest.mock('expo-status-bar', () => ({
   StatusBar: 'StatusBar',
 }));
+jest.mock('expo-haptics', () => ({
+  selectionAsync: jest.fn(() => Promise.resolve()),
+  impactAsync: jest.fn(() => Promise.resolve()),
+  ImpactFeedbackStyle: {
+    Light: 'Light',
+  },
+}));
+
+jest.mock('react-native-reanimated', () => {
+  const Reanimated = require('react-native-reanimated/mock');
+  Reanimated.default.call = () => {};
+  return Reanimated;
+});
 
 // Global setup for Expo
 global.__ExpoImportMetaRegistry = {};

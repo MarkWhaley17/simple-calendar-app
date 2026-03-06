@@ -1,10 +1,13 @@
-import React from 'react';
-import { Platform, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { LayoutChangeEvent, Platform, View, Text, StyleSheet } from 'react-native';
 
-import { ENABLE_GLASS_UI } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_MOTION_UI } from '../../theme/flags';
 import { colors, radius, spacing } from '../../theme/tokens';
+import { AnimatedPressable } from '../ui/AnimatedPressable';
 import { GlassSurface } from '../ui/GlassSurface';
 import { glassStyles } from '../ui/glassStyles';
+import { AnimatedTabIndicator } from './AnimatedTabIndicator';
+import { AnimatedTabItemContent } from './AnimatedTabItemContent';
 
 interface BottomNavProps {
   currentView: 'month' | 'day' | 'events' | 'account';
@@ -13,88 +16,116 @@ interface BottomNavProps {
 }
 
 const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDate = new Date().getDate() }) => {
+  type NavItemKey = BottomNavProps['currentView'];
+  type TabLayout = { x: number; width: number };
+
   const bottomInset = Platform.OS === 'ios' ? spacing.lg : spacing.sm;
+  const [tabLayouts, setTabLayouts] = useState<Record<NavItemKey, TabLayout | null>>({
+    account: null,
+    month: null,
+    day: null,
+    events: null,
+  });
 
   const containerStyle = ENABLE_GLASS_UI
     ? [styles.glassOuter, { paddingBottom: bottomInset + spacing.sm }]
     : [styles.container];
   const barStyle = ENABLE_GLASS_UI ? [styles.glassContainer, glassStyles.floating] : null;
 
+  const tabs: Array<{ key: NavItemKey; label: string }> = useMemo(() => ([
+    { key: 'account', label: 'Account' },
+    { key: 'month', label: 'Month' },
+    { key: 'day', label: 'Today' },
+    { key: 'events', label: 'Events' },
+  ]), []);
+
+  const handleLayout = (key: NavItemKey) => (event: LayoutChangeEvent) => {
+    const { x, width } = event.nativeEvent.layout;
+    setTabLayouts((prev) => ({ ...prev, [key]: { x, width } }));
+  };
+
+  const activeLayout = tabLayouts[currentView];
+
+  const renderIcon = (key: NavItemKey, isActive: boolean) => {
+    if (key === 'account') {
+      return (
+        <View style={[styles.userIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
+          <Text style={[styles.userIconText, isActive && styles.activeIconText]}>👤</Text>
+        </View>
+      );
+    }
+
+    if (key === 'month') {
+      return (
+        <View style={[styles.monthIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
+          <View style={styles.gridRow}>
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+          </View>
+          <View style={styles.gridRow}>
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+          </View>
+          <View style={styles.gridRow}>
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+            <View style={[styles.gridDot, isActive && styles.activeGridDot]} />
+          </View>
+        </View>
+      );
+    }
+
+    if (key === 'day') {
+      return (
+        <View style={[styles.dayIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
+          <Text style={[styles.dayIconText, isActive && styles.activeIconText]}>
+            {todayDate}
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={[styles.eventsIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
+        <View style={[styles.eventBar, isActive && styles.activeEventBar]} />
+        <View style={[styles.eventBar, isActive && styles.activeEventBar]} />
+        <View style={[styles.eventBar, isActive && styles.activeEventBar]} />
+      </View>
+    );
+  };
+
   const content = (
     <>
-      {/* Account */}
-      <TouchableOpacity
-        style={[styles.navItem, currentView === 'account' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
-        onPress={() => onNavigate('account')}
-        activeOpacity={0.7}
-      >
-        <View style={styles.iconContainer}>
-          <View style={[styles.userIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'account' && styles.activeIcon]}>
-            <Text style={[styles.userIconText, currentView === 'account' && styles.activeIconText]}>👤</Text>
-          </View>
-        </View>
-        <Text style={[styles.navLabel, currentView === 'account' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Account</Text>
-      </TouchableOpacity>
-
-      {/* Month View */}
-      <TouchableOpacity
-        style={[styles.navItem, currentView === 'month' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
-        onPress={() => onNavigate('month')}
-        activeOpacity={0.7}
-      >
-        <View style={styles.iconContainer}>
-          <View style={[styles.monthIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'month' && styles.activeIcon]}>
-            <View style={styles.gridRow}>
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-            </View>
-            <View style={styles.gridRow}>
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-            </View>
-            <View style={styles.gridRow}>
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-              <View style={[styles.gridDot, currentView === 'month' && styles.activeGridDot]} />
-            </View>
-          </View>
-        </View>
-        <Text style={[styles.navLabel, currentView === 'month' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Month</Text>
-      </TouchableOpacity>
-
-      {/* Day View */}
-      <TouchableOpacity
-        style={[styles.navItem, currentView === 'day' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
-        onPress={() => onNavigate('day')}
-        activeOpacity={0.7}
-      >
-        <View style={styles.iconContainer}>
-          <View style={[styles.dayIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'day' && styles.activeIcon]}>
-            <Text style={[styles.dayIconText, currentView === 'day' && styles.activeIconText]}>
-              {todayDate}
-            </Text>
-          </View>
-        </View>
-        <Text style={[styles.navLabel, currentView === 'day' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Today</Text>
-      </TouchableOpacity>
-
-      {/* Events List */}
-      <TouchableOpacity
-        style={[styles.navItem, currentView === 'events' && styles.activeNavItem, ENABLE_GLASS_UI && styles.glassNavItem]}
-        onPress={() => onNavigate('events')}
-        activeOpacity={0.7}
-      >
-        <View style={styles.iconContainer}>
-          <View style={[styles.eventsIcon, ENABLE_GLASS_UI && styles.glassIcon, currentView === 'events' && styles.activeIcon]}>
-            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
-            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
-            <View style={[styles.eventBar, currentView === 'events' && styles.activeEventBar]} />
-          </View>
-        </View>
-        <Text style={[styles.navLabel, currentView === 'events' && styles.activeNavLabel, ENABLE_GLASS_UI && styles.glassNavLabel]}>Events</Text>
-      </TouchableOpacity>
+      {ENABLE_MOTION_UI && activeLayout ? (
+        <AnimatedTabIndicator x={activeLayout.x} width={activeLayout.width} />
+      ) : null}
+      {tabs.map((tab) => {
+        const isActive = currentView === tab.key;
+        return (
+          <AnimatedPressable
+            key={tab.key}
+            style={[styles.navItem, ENABLE_GLASS_UI && styles.glassNavItem]}
+            onLayout={handleLayout(tab.key)}
+            onPress={() => onNavigate(tab.key)}
+            hapticOnPress={ENABLE_MOTION_UI && currentView !== tab.key}
+            scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
+          >
+            <AnimatedTabItemContent
+              isActive={ENABLE_MOTION_UI ? isActive : false}
+              icon={renderIcon(tab.key, isActive)}
+              label={tab.label}
+              iconContainerStyle={styles.iconContainer}
+              labelStyle={[
+                styles.navLabel,
+                isActive && styles.activeNavLabel,
+                ENABLE_GLASS_UI && styles.glassNavLabel,
+              ]}
+            />
+          </AnimatedPressable>
+        );
+      })}
     </>
   );
 
@@ -131,9 +162,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 4,
   },
-  activeNavItem: {
-    // Active state styling
-  },
   glassOuter: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xs,
@@ -143,6 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
   },
   glassRow: {
+    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
