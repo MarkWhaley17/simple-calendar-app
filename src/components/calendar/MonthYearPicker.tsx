@@ -207,7 +207,7 @@ const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ visible, currentDate,
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: colors.overlayBackdrop,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: colors.brandInk,
     marginBottom: 24,
     textAlign: 'center',
     letterSpacing: 0.3,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   selectorLabel: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1E40AF',
+    color: colors.brandPrimaryDark,
     marginBottom: 12,
     textAlign: 'center',
     letterSpacing: 0.3,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 280,
     borderRadius: 12,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
     padding: 8,
   },
   selectorItem: {
@@ -257,8 +257,8 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   selectedItem: {
-    backgroundColor: '#2563EB',
-    shadowColor: '#2563EB',
+    backgroundColor: colors.brandPrimary,
+    shadowColor: colors.brandPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -267,12 +267,12 @@ const styles = StyleSheet.create({
   selectorText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: colors.brandInk,
     textAlign: 'center',
     letterSpacing: 0.2,
   },
   selectedText: {
-    color: '#fff',
+    color: colors.white,
     fontWeight: '700',
   },
   buttonContainer: {
@@ -286,26 +286,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
     borderWidth: 2,
-    borderColor: '#2563EB',
+    borderColor: colors.brandPrimary,
   },
   cancelButtonText: {
-    color: '#2563EB',
+    color: colors.brandPrimary,
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.3,
   },
   applyButton: {
-    backgroundColor: '#2563EB',
-    shadowColor: '#2563EB',
+    backgroundColor: colors.brandPrimary,
+    shadowColor: colors.brandPrimary,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
     elevation: 4,
   },
   applyButtonText: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.3,

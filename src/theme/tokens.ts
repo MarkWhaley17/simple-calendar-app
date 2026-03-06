@@ -1,4 +1,5 @@
 export const colors = {
+  black: '#000000',
   bg: '#F6F8FB',
   bgSubtle: '#EFF6FF',
   white: '#FFFFFF',
@@ -22,6 +23,7 @@ export const colors = {
   textOnBrandMuted: '#DBEAFE',
   textMuted: '#60A5FA',
   textMutedSoft: '#93C5FD',
+  textTertiary: '#94A3B8',
   accent: '#2F6FED',
   accentStrong: '#F59E0B',
   accentWarm: '#D4A94D',
@@ -33,6 +35,9 @@ export const colors = {
   error: '#B91C1C',
   toggleThumb: '#F4F3F4',
   toggleDangerTrack: '#FEE2E2',
+  multiDaySpanFill: 'rgba(245, 158, 11, 0.11)',
+  multiDaySpanBorder: 'rgba(245, 158, 11, 0.23)',
+  dayCellSurface: 'rgba(255, 255, 255, 0.7)',
   shadow: 'rgba(15,23,42,0.12)',
   shadowStrong: 'rgba(15,23,42,0.18)',
 };
