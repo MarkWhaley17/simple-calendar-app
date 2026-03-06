@@ -169,4 +169,25 @@ describe('DayView', () => {
       require('../../../../assets/jambhala.jpg')
     );
   });
+
+  it('shows same-day events even when the event date includes a time component', () => {
+    const timedEvent: CalendarEvent = {
+      id: 'event-time-component',
+      title: 'Evening Practice',
+      fromDate: new Date(2026, 2, 10, 18, 0, 0),
+      toDate: new Date(2026, 2, 10, 18, 0, 0),
+      fromTime: '6:00 PM',
+      isAllDay: false,
+    };
+
+    const { getByText } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 10, 0, 0, 0)}
+        onBack={jest.fn()}
+        events={[timedEvent]}
+      />
+    );
+
+    expect(getByText('Evening Practice')).toBeTruthy();
+  });
 });

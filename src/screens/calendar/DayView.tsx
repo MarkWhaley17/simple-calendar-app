@@ -28,16 +28,20 @@ const DayView: React.FC<DayViewProps> = ({
   const dayNumber = selectedDate.getDate();
   const year = selectedDate.getFullYear();
   // Swipe handling is managed by the parent view.
+  const toDateOnly = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
   // Filter events for the selected date, including multi-day events
   const dayEvents = events.filter(event => {
     const start = event.fromDate || event.date || new Date();
     const end = event.toDate || start;
+    const selectedDateOnly = toDateOnly(selectedDate);
+    const startDateOnly = toDateOnly(start);
+    const endDateOnly = toDateOnly(end);
     // Check if selectedDate is within the event's date range (inclusive)
     return (
-      selectedDate >= start &&
-      selectedDate <= end &&
-      start <= end // sanity check
+      selectedDateOnly >= startDateOnly &&
+      selectedDateOnly <= endDateOnly &&
+      startDateOnly <= endDateOnly // sanity check
     );
   });
 
