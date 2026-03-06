@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { WEEK_DAY_ABBR } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { colors, spacing } from '../../theme/tokens';
 import { GlassSurface } from '../ui/GlassSurface';
 
@@ -13,7 +13,7 @@ interface CalendarGridProps {
 }
 
 const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [] }) => {
-  const useIosNativePilot = ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const useGlassGrid = ENABLE_GLASS_UI && useIosNativePilot;
   const today = new Date();
   const currentYear = currentDate.getFullYear();

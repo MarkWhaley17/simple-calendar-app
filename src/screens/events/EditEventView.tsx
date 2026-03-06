@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import RecurrencePicker from '../../components/common/RecurrencePicker';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { getRecurrenceLabel } from '../../utils/recurrence';
@@ -44,7 +44,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   defaultEventReminderMinutes,
   defaultAllDayReminderHours,
 }) => {
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());

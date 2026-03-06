@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
@@ -22,7 +22,7 @@ const DayView: React.FC<DayViewProps> = ({
   onEventPress,
   onAddEvent,
 }) => {
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const dayName = DAY_NAMES[selectedDate.getDay()];
   const monthName = MONTH_NAMES[selectedDate.getMonth()];
   const dayNumber = selectedDate.getDate();

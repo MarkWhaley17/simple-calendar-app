@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../ui/GlassSurface';
 import { colors, elevation } from '../../theme/tokens';
 
@@ -13,7 +13,7 @@ interface MonthYearPickerProps {
 }
 
 const MonthYearPicker: React.FC<MonthYearPickerProps> = ({ visible, currentDate, onClose, onSelect }) => {
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
 

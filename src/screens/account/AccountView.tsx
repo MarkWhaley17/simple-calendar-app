@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
@@ -21,7 +21,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   user,
   onUserChange,
 }) => {
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [authLoading, setAuthLoading] = useState(false);

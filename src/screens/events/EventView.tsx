@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 
@@ -34,7 +34,7 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
     }
   };
 
-  const useIosNativePilot = ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
 
   const renderSection = (title: string, content: React.ReactNode) => {
     if (useIosNativePilot) {

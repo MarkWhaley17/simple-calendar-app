@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
@@ -13,7 +13,7 @@ interface EventsListViewProps {
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress }) => {
   const currentYear = new Date().getFullYear();
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
 
   // Filter to current year and sort chronologically
   const sortedEvents = [...events]

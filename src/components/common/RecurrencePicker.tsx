@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Platform } from 'react-native';
 import { RecurrenceRule, RecurrenceFrequency } from '../../types';
-import { ENABLE_GLASS_UI, ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
+import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../ui/GlassSurface';
 import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
@@ -13,7 +13,7 @@ interface RecurrencePickerProps {
 }
 
 const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence, onClose, onSave }) => {
-  const useIosPilot = ENABLE_GLASS_UI && ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+  const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const options: Array<{ label: string; frequency: RecurrenceFrequency; interval: number }> = [
     { label: 'Does not repeat', frequency: 'none', interval: 1 },
     { label: 'Weekly', frequency: 'weekly', interval: 1 },
