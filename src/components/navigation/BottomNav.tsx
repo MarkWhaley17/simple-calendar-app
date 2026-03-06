@@ -118,11 +118,11 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#2563EB', // Blue background
+    backgroundColor: colors.brandPrimary,
     paddingVertical: 8,
     paddingBottom: 20, // Extra padding for iOS home indicator
     borderTopWidth: 1,
-    borderTopColor: '#1E40AF',
+    borderTopColor: colors.brandPrimaryDark,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.brandSurface,
     justifyContent: 'center',
     alignItems: 'center',
   },
   activeIcon: {
-    backgroundColor: '#F59E0B', // Gold background when active
+    backgroundColor: colors.accentStrong,
   },
   glassIcon: {
     backgroundColor: colors.surfaceStrong,
@@ -184,20 +184,20 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.brandSurface,
     justifyContent: 'center',
     alignItems: 'center',
   },
   dayIconText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1E40AF',
+    color: colors.brandPrimaryDark,
   },
   eventsIcon: {
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.brandSurface,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 6,
@@ -206,17 +206,17 @@ const styles = StyleSheet.create({
     width: 20,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: '#1E40AF',
+    backgroundColor: colors.brandPrimaryDark,
     marginVertical: 1.5,
   },
   activeEventBar: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   monthIcon: {
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#DBEAFE',
+    backgroundColor: colors.brandSurface,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 4,
@@ -230,21 +230,21 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 1,
-    backgroundColor: '#1E40AF',
+    backgroundColor: colors.brandPrimaryDark,
   },
   activeGridDot: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
   },
   navLabel: {
     fontSize: 11,
-    color: '#DBEAFE',
+    color: colors.brandSurface,
     fontWeight: '500',
   },
   glassNavLabel: {
     color: colors.textSecondary,
   },
   activeNavLabel: {
-    color: '#F59E0B', // Gold text when active
+    color: colors.accentStrong,
     fontWeight: '600',
   },
 });

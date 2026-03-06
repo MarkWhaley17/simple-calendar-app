@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#2563EB', // Blue header
+    backgroundColor: colors.brandPrimary,
   },
   navButton: {
     width: 44,
@@ -88,12 +88,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 22,
-    backgroundColor: '#F59E0B', // Gold buttons
+    backgroundColor: colors.accentStrong,
   },
   navButtonText: {
     fontSize: 32,
     fontWeight: '300',
-    color: '#fff',
+    color: colors.white,
     marginTop: -4,
   },
   dateContainer: {
@@ -102,12 +102,12 @@ const styles = StyleSheet.create({
   monthText: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#fff', // White text on blue
+    color: colors.white,
   },
   yearText: {
     fontSize: 16,
     fontWeight: '400',
-    color: '#DBEAFE', // Light blue text
+    color: colors.brandSurface,
     marginTop: 2,
   },
   glassOuter: {
