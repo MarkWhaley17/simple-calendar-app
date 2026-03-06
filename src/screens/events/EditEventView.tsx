@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import RecurrencePicker from '../../components/common/RecurrencePicker';
+import { colors, elevation, spacing } from '../../theme/tokens';
 import { getRecurrenceLabel } from '../../utils/recurrence';
 
 interface EditEventViewProps {
@@ -201,7 +202,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           <TextInput
             style={styles.input}
             placeholder="Event title"
-            placeholderTextColor="#BFDBFE"
+            placeholderTextColor={colors.placeholder}
             value={title}
             onChangeText={setTitle}
           />
@@ -213,7 +214,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           <TextInput
             style={[styles.input, styles.textArea]}
             placeholder="Add description or practice details"
-            placeholderTextColor="#BFDBFE"
+            placeholderTextColor={colors.placeholder}
             value={description}
             onChangeText={setDescription}
             multiline
@@ -228,8 +229,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             <Switch
               value={isAllDay}
               onValueChange={setIsAllDay}
-              trackColor={{ false: '#BFDBFE', true: '#FEE2E2' }}
-              thumbColor={isAllDay ? '#991B1B' : '#f4f3f4'}
+              trackColor={{ false: colors.placeholder, true: colors.toggleDangerTrack }}
+              thumbColor={isAllDay ? colors.danger : colors.toggleThumb}
             />
           </View>
         </View>
@@ -248,7 +249,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               <TextInput
                 style={[styles.input, styles.timeInput]}
                 placeholder="9:00 AM"
-                placeholderTextColor="#BFDBFE"
+                placeholderTextColor={colors.placeholder}
                 value={fromTime}
                 onChangeText={setFromTime}
               />
@@ -283,7 +284,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               <TextInput
                 style={[styles.input, styles.timeInput]}
                 placeholder="10:00 AM"
-                placeholderTextColor="#BFDBFE"
+                placeholderTextColor={colors.placeholder}
                 value={toTime}
                 onChangeText={setToTime}
               />
@@ -333,8 +334,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                   setReminderError(null);
                 }
               }}
-              trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
-              thumbColor="#fff"
+              trackColor={{ false: colors.placeholder, true: colors.accentStrong }}
+              thumbColor={colors.white}
             />
           </View>
           {reminderEnabled && (
@@ -349,8 +350,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                       setReminderError(null);
                     }
                   }}
-                  trackColor={{ false: '#BFDBFE', true: '#F59E0B' }}
-                  thumbColor="#fff"
+                  trackColor={{ false: colors.placeholder, true: colors.accentStrong }}
+                  thumbColor={colors.white}
                 />
               </View>
               {!useDefaultReminder && (
@@ -379,7 +380,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           <TextInput
             style={[styles.input, styles.textArea]}
             placeholder="Add links (one per line)"
-            placeholderTextColor="#BFDBFE"
+            placeholderTextColor={colors.placeholder}
             value={links}
             onChangeText={setLinks}
             multiline
@@ -413,14 +414,14 @@ const EditEventView: React.FC<EditEventViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
   },
   header: {
-    backgroundColor: '#2563EB',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-    shadowColor: '#1E40AF',
+    backgroundColor: colors.brandPrimary,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.lg + spacing.xs,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -437,14 +438,14 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontSize: 17,
-    color: '#DBEAFE',
+    color: colors.textOnBrandMuted,
     fontWeight: '600',
     letterSpacing: 0.2,
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textOnBrand,
     letterSpacing: 0.3,
   },
   saveButton: {
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontSize: 17,
-    color: '#F59E0B',
+    color: colors.accentStrong,
     fontWeight: '700',
     letterSpacing: 0.3,
   },
@@ -461,31 +462,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     padding: 20,
     marginTop: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
+    ...elevation.card,
   },
   label: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1E40AF',
+    color: colors.brandPrimaryDark,
     marginBottom: 10,
     letterSpacing: 0.2,
   },
   input: {
     borderWidth: 2,
-    borderColor: 'rgba(37, 99, 235, 0.15)',
+    borderColor: colors.borderInput,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
     lineHeight: 22,
-    color: '#1E3A8A',
-    backgroundColor: '#fff',
+    color: colors.brandInk,
+    backgroundColor: colors.surfaceSolid,
   },
   textArea: {
     minHeight: 100,
@@ -497,11 +494,11 @@ const styles = StyleSheet.create({
   },
   dateTimeInput: {
     borderWidth: 2,
-    borderColor: 'rgba(37, 99, 235, 0.15)',
+    borderColor: colors.borderInput,
     borderRadius: 12,
     padding: 14,
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
   },
   dateInput: {
     flex: 1,
@@ -511,7 +508,7 @@ const styles = StyleSheet.create({
   },
   dateTimeText: {
     fontSize: 16,
-    color: '#1E3A8A',
+    color: colors.brandInk,
     fontWeight: '500',
     letterSpacing: 0.2,
   },
@@ -531,7 +528,7 @@ const styles = StyleSheet.create({
   },
   reminderLabel: {
     fontSize: 15,
-    color: '#1E3A8A',
+    color: colors.brandInk,
     fontWeight: '600',
     letterSpacing: 0.2,
   },
@@ -541,21 +538,21 @@ const styles = StyleSheet.create({
   },
   inputError: {
     marginTop: 8,
-    color: '#B91C1C',
+    color: colors.error,
     fontSize: 12,
     fontWeight: '600',
     letterSpacing: 0.2,
   },
   noticeSection: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: colors.warningSurface,
     padding: 16,
     marginTop: 1,
     borderLeftWidth: 4,
-    borderLeftColor: '#F59E0B',
+    borderLeftColor: colors.warningBorder,
   },
   noticeText: {
     fontSize: 14,
-    color: '#92400E',
+    color: colors.warningText,
     fontWeight: '600',
     letterSpacing: 0.2,
     lineHeight: 20,
@@ -566,15 +563,15 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
   },
   deleteButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#991B1B',
+    borderColor: colors.danger,
   },
   deleteButtonText: {
-    color: '#991B1B',
+    color: colors.danger,
     fontSize: 17,
     fontWeight: '700',
     letterSpacing: 0.3,

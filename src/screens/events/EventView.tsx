@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
+import { colors, elevation, spacing } from '../../theme/tokens';
 
 interface EventViewProps {
   event: CalendarEvent;
@@ -96,14 +97,14 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
   },
   header: {
-    backgroundColor: '#2563EB',
-    paddingTop: 20,
-    paddingBottom: 24,
-    paddingHorizontal: 20,
-    shadowColor: '#1E40AF',
+    backgroundColor: colors.brandPrimary,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.xl,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 18,
-    color: '#F59E0B',
+    color: colors.accentStrong,
     fontWeight: '600',
     letterSpacing: 0.3,
   },
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     fontSize: 18,
-    color: '#F59E0B',
+    color: colors.accentStrong,
     fontWeight: '700',
     letterSpacing: 0.3,
   },
@@ -140,12 +141,12 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textOnBrand,
     letterSpacing: 0.3,
   },
   eventDate: {
     fontSize: 16,
-    color: '#DBEAFE',
+    color: colors.textOnBrandMuted,
     marginTop: 6,
     letterSpacing: 0.3,
   },
@@ -153,32 +154,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     padding: 24,
     marginTop: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.03,
-    shadowRadius: 2,
-    elevation: 1,
+    ...elevation.card,
   },
   sectionTitle: {
     fontSize: 19,
     fontWeight: '700',
-    color: '#1E40AF',
+    color: colors.brandPrimaryDark,
     marginBottom: 14,
     letterSpacing: 0.3,
   },
   descriptionText: {
     fontSize: 16,
     lineHeight: 26,
-    color: '#1E3A8A',
+    color: colors.brandInk,
     letterSpacing: 0.2,
   },
   linkText: {
     fontSize: 16,
     lineHeight: 26,
-    color: '#2563EB',
+    color: colors.brandPrimary,
     marginBottom: 10,
     fontWeight: '600',
     letterSpacing: 0.2,
