@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { RecurrenceRule, RecurrenceFrequency } from '../../types';
+import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
 interface RecurrencePickerProps {
   visible: boolean;
@@ -86,37 +87,33 @@ const RecurrencePicker: React.FC<RecurrencePickerProps> = ({ visible, recurrence
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: colors.overlayBackdrop,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: spacing.lg + spacing.xs,
   },
   container: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
+    backgroundColor: colors.surfaceSolid,
+    borderRadius: radius.lg - spacing.xs,
     width: '90%',
     maxWidth: 400,
     maxHeight: '70%',
     minHeight: 260,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 10,
+    ...elevation.floating,
   },
   header: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: colors.brandPrimary,
+    paddingVertical: spacing.lg + spacing.xs,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    borderTopLeftRadius: radius.lg - spacing.xs,
+    borderTopRightRadius: radius.lg - spacing.xs,
     alignItems: 'center',
     justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textOnBrand,
     letterSpacing: 0.3,
   },
   closeButton: {
@@ -130,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   closeButtonText: {
-    color: '#fff',
+    color: colors.textOnBrand,
     fontSize: 26,
     lineHeight: 28,
     fontWeight: '700',
@@ -142,7 +139,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   section: {
-    padding: 20,
+    padding: spacing.lg + spacing.xs,
   },
   option: {
     flexDirection: 'row',
@@ -150,20 +147,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(37, 99, 235, 0.08)',
+    borderBottomColor: colors.borderSubtle,
   },
   optionText: {
     fontSize: 16,
-    color: '#1E3A8A',
+    color: colors.brandInk,
     letterSpacing: 0.2,
   },
   selectedOptionText: {
     fontWeight: '700',
-    color: '#2563EB',
+    color: colors.brandPrimary,
   },
   checkmark: {
     fontSize: 18,
-    color: '#2563EB',
+    color: colors.brandPrimary,
     fontWeight: '700',
   },
 });

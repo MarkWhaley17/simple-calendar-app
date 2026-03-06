@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
+import { colors, elevation, radius, spacing } from '../../theme/tokens';
 
 interface EventsListViewProps {
   events: CalendarEvent[];
@@ -76,14 +77,14 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress })
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
   },
   header: {
-    backgroundColor: '#2563EB',
-    paddingTop: 20,
-    paddingBottom: 24,
-    paddingHorizontal: 20,
-    shadowColor: '#1E40AF',
+    backgroundColor: colors.brandPrimary,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.xl,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -92,12 +93,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textOnBrand,
     letterSpacing: 0.3,
   },
   headerSubtitle: {
     fontSize: 15,
-    color: '#DBEAFE',
+    color: colors.textOnBrandMuted,
     marginTop: 6,
     letterSpacing: 0.3,
   },
@@ -105,35 +106,31 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   eventsList: {
-    padding: 20,
+    padding: spacing.lg + spacing.xs,
   },
   eventBar: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     paddingVertical: 20,
     paddingHorizontal: 22,
-    borderRadius: 16,
+    borderRadius: radius.md,
     marginBottom: 16,
     borderLeftWidth: 5,
-    borderLeftColor: '#991B1B',
+    borderLeftColor: colors.danger,
     borderWidth: 1,
-    borderColor: 'rgba(37, 99, 235, 0.08)',
-    shadowColor: '#1E40AF',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    elevation: 6,
+    borderColor: colors.borderSubtle,
+    ...elevation.card,
   },
   eventTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: colors.brandInk,
     marginBottom: 8,
     letterSpacing: 0.2,
   },
   eventDate: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#991B1B',
+    color: colors.danger,
     letterSpacing: 0.2,
   },
   emptyState: {
@@ -145,7 +142,7 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     lineHeight: 26,
-    color: '#60A5FA',
+    color: colors.textMuted,
     fontWeight: '700',
     marginBottom: 10,
     letterSpacing: 0.2,
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
   emptyStateSubtext: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#93C5FD',
+    color: colors.textMutedSoft,
     fontStyle: 'italic',
     letterSpacing: 0.2,
   },
