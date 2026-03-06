@@ -4,11 +4,11 @@
     "slug": "temp-expo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/KalapaCalIcon.png",
+    "icon": "./assets/KalapaCalIcon1.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/KalapaCalIcon.png",
+      "image": "./assets/KalapaCalIcon1.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/KalapaCalIcon.png",
+        "foregroundImage": "./assets/KalapaCalIcon1.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
