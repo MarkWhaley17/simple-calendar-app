@@ -61,4 +61,67 @@ describe('DayView', () => {
     const background = getByTestId('day-view-events-background');
     expect(background).toHaveStyle({ transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }] });
   });
+
+  it('shows a date range instead of "All Day" for multi-day all-day events', () => {
+    const event: CalendarEvent = {
+      id: 'event-range',
+      title: 'VY Nepal Pilgrimage',
+      fromDate: new Date(2026, 2, 12),
+      toDate: new Date(2026, 2, 21),
+      isAllDay: true,
+    };
+
+    const { getByText, queryByText } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 15)}
+        onBack={jest.fn()}
+        events={[event]}
+      />
+    );
+
+    expect(getByText('March 12 - March 21')).toBeTruthy();
+    expect(queryByText('All Day')).toBeNull();
+  });
+
+  it('uses the FullMoon banner image on full moon days', () => {
+    const fullMoonEvent: CalendarEvent = {
+      id: 'event-full-moon',
+      title: 'Full Moon King of Ling Lhasang',
+      fromDate: new Date(2026, 2, 14),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 14)}
+        onBack={jest.fn()}
+        events={[fullMoonEvent]}
+      />
+    );
+
+    expect(getByTestId('day-view-header-image').props.source).toBe(
+      require('../../../../assets/FullMoon.png')
+    );
+  });
+
+  it('uses the NewMoon banner image on new moon days', () => {
+    const newMoonEvent: CalendarEvent = {
+      id: 'event-new-moon',
+      title: 'New Moon',
+      fromDate: new Date(2026, 2, 10),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 10)}
+        onBack={jest.fn()}
+        events={[newMoonEvent]}
+      />
+    );
+
+    expect(getByTestId('day-view-header-image').props.source).toBe(
+      require('../../../../assets/NewMoon.png')
+    );
+  });
 });

@@ -50,4 +50,36 @@ describe('CalendarGrid', () => {
     expect(queryByTestId('event-indicator-2026-1-8')).toBeNull();
     expect(getByTestId('event-indicator-2026-1-10')).toBeTruthy();
   });
+
+  it('keeps the multi-day span translucent and red dot visible above it', () => {
+    const currentDate = new Date(2026, 1, 1); // February 2026
+    const events: CalendarEvent[] = [
+      {
+        id: 'multi-1',
+        title: 'Multi-day',
+        fromDate: new Date(2026, 1, 7),
+        toDate: new Date(2026, 1, 17),
+        isAllDay: true,
+      },
+      {
+        id: 'single-1',
+        title: 'Single-day overlap',
+        fromDate: new Date(2026, 1, 10),
+        isAllDay: true,
+      },
+    ];
+
+    const { getByTestId } = render(
+      <CalendarGrid currentDate={currentDate} events={events} />
+    );
+
+    expect(getByTestId('multi-day-line-2026-1-10')).toHaveStyle({
+      top: 0,
+      backgroundColor: 'rgba(245, 158, 11, 0.11)',
+    });
+    expect(getByTestId('event-indicator-2026-1-10')).toHaveStyle({
+      bottom: 8,
+      zIndex: 3,
+    });
+  });
 });

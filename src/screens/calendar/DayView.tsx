@@ -53,12 +53,30 @@ const DayView: React.FC<DayViewProps> = ({
     'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
     'protector-day.jpg': require('../../../assets/protector-day.jpg'),
     'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
+    'full-moon.png': require('../../../assets/FullMoon.png'),
+    'new-moon.png': require('../../../assets/NewMoon.png'),
     // Add more mappings as you add images
   };
 
-  const eventWithImage = sortedEvents.find(e => e.image && imageMap[e.image]);
-  const headerBackground = eventWithImage && eventWithImage.image && imageMap[eventWithImage.image]
-    ? imageMap[eventWithImage.image]
+  const getEventImageKey = (event: CalendarEvent): string | undefined => {
+    if (event.image && imageMap[event.image]) {
+      return event.image;
+    }
+    if (event.title.toLowerCase().includes('full moon')) {
+      return 'full-moon.png';
+    }
+    if (event.title.toLowerCase().includes('new moon')) {
+      return 'new-moon.png';
+    }
+    return undefined;
+  };
+
+  const eventWithImageKey = sortedEvents
+    .map(getEventImageKey)
+    .find((key): key is string => Boolean(key));
+
+  const headerBackground = eventWithImageKey
+    ? imageMap[eventWithImageKey]
     : require('../../../assets/day-bg.jpg');
   const eventsBackground = require('../../../assets/day-view-pattern.png');
 
