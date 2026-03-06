@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
+import { ENABLE_IOS_NATIVE_PILOT } from '../../theme/flags';
 import { colors, elevation, spacing } from '../../theme/tokens';
+import { GlassSurface } from '../../components/ui/GlassSurface';
 
 interface EventViewProps {
   event: CalendarEvent;
@@ -30,6 +32,28 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
     } catch (error) {
       Alert.alert('Error', 'Failed to open link');
     }
+  };
+
+  const useIosNativePilot = ENABLE_IOS_NATIVE_PILOT && Platform.OS === 'ios';
+
+  const renderSection = (title: string, content: React.ReactNode) => {
+    if (useIosNativePilot) {
+      return (
+        <View style={styles.pilotSectionOuter}>
+          <GlassSurface style={styles.pilotSection} intensity={46}>
+            <Text style={styles.sectionTitle}>{title}</Text>
+            {content}
+          </GlassSurface>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        {content}
+      </View>
+    );
   };
 
   return (
@@ -66,16 +90,15 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
 
       {/* Event Details */}
       <ScrollView style={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Description</Text>
+        {renderSection('Description', (
           <Text style={styles.descriptionText}>
             {event.description || 'No description available'}
           </Text>
-        </View>
+        ))}
 
         {event.links && event.links.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Links</Text>
+          renderSection('Links', (
+            <>
             {event.links.map((link, index) => (
               <TouchableOpacity
                 key={index}
@@ -87,7 +110,8 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </View>
+            </>
+          ))
         )}
       </ScrollView>
     </View>
@@ -158,6 +182,14 @@ const styles = StyleSheet.create({
     padding: 24,
     marginTop: 1,
     ...elevation.card,
+  },
+  pilotSectionOuter: {
+    paddingHorizontal: spacing.lg + spacing.xs,
+    paddingTop: spacing.sm,
+  },
+  pilotSection: {
+    padding: spacing.xl,
+    backgroundColor: colors.surfaceStrong,
   },
   sectionTitle: {
     fontSize: 19,
