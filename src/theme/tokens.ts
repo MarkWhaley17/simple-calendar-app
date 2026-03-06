@@ -13,6 +13,7 @@ export const colors = {
   borderInput: 'rgba(37, 99, 235, 0.15)',
   brandPrimary: '#2563EB',
   brandPrimaryDark: '#1E40AF',
+  brandOverlay: 'rgba(37, 99, 235, 0.55)',
   brandSurface: '#DBEAFE',
   brandInk: '#1E3A8A',
   textPrimary: '#0F172A',

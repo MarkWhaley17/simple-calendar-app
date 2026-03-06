@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
+import { colors, elevation, spacing } from '../../theme/tokens';
 
 interface DayViewProps {
   selectedDate: Date;
@@ -139,17 +140,17 @@ const DayView: React.FC<DayViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.bgSubtle,
   },
   headerBackground: {
     width: '100%',
   },
   headerOverlay: {
-    backgroundColor: 'rgba(37, 99, 235, 0.55)',
-    paddingTop: 20,
-    paddingBottom: 24,
-    paddingHorizontal: 20,
-    shadowColor: '#1E40AF',
+    backgroundColor: colors.brandOverlay,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.xl,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 18,
-    color: '#F59E0B',
+    color: colors.accentStrong,
     fontWeight: '600',
     letterSpacing: 0.3,
   },
@@ -172,12 +173,12 @@ const styles = StyleSheet.create({
   dayName: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textOnBrand,
     letterSpacing: 0.3,
   },
   fullDate: {
     fontSize: 16,
-    color: '#DBEAFE',
+    color: colors.textOnBrandMuted,
     marginTop: 6,
     letterSpacing: 0.3,
   },
@@ -194,32 +195,28 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   eventsList: {
-    padding: 20,
+    padding: spacing.lg + spacing.xs,
   },
   eventCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceSolid,
     padding: 18,
     borderRadius: 16,
     marginBottom: 14,
     borderLeftWidth: 4,
-    borderLeftColor: '#991B1B',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 3,
+    borderLeftColor: colors.danger,
+    ...elevation.card,
   },
   eventTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1E3A8A',
+    color: colors.brandInk,
     marginBottom: 6,
     letterSpacing: 0.2,
   },
   eventTime: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#991B1B',
+    color: colors.danger,
     letterSpacing: 0.2,
   },
   emptyState: {
@@ -231,24 +228,24 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#60A5FA',
+    color: colors.textMuted,
     fontStyle: 'italic',
     letterSpacing: 0.2,
   },
   addButton: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.accentStrong,
     margin: 20,
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: 'center',
-    shadowColor: '#F59E0B',
+    shadowColor: colors.accentStrong,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 5,
   },
   addButtonText: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 0.4,
