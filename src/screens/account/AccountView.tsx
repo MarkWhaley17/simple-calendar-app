@@ -13,6 +13,9 @@ interface AccountViewProps {
   user: AuthUser | null;
   onUserChange: (user: AuthUser | null) => void;
   onOpenRecordings: () => void;
+  onOpenPrivacyPolicy: () => void;
+  onOpenTermsOfService: () => void;
+  onOpenFeedback: () => void;
 }
 
 const AccountView: React.FC<AccountViewProps> = ({
@@ -22,6 +25,9 @@ const AccountView: React.FC<AccountViewProps> = ({
   user,
   onUserChange,
   onOpenRecordings,
+  onOpenPrivacyPolicy,
+  onOpenTermsOfService,
+  onOpenFeedback,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [username, setUsername] = useState('');
@@ -316,17 +322,17 @@ const AccountView: React.FC<AccountViewProps> = ({
               <Text style={styles.aboutLabel}>App Name</Text>
               <Text style={styles.aboutValue}>Kalapa Calendar</Text>
             </View>
-            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]}>
+            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]} onPress={onOpenPrivacyPolicy} testID="open-privacy-policy">
               <Text style={styles.aboutLabel}>Privacy Policy</Text>
               <Text style={styles.linkText}>View →</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]}>
+            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]} onPress={onOpenTermsOfService} testID="open-terms-of-service">
               <Text style={styles.aboutLabel}>Terms of Service</Text>
               <Text style={styles.linkText}>View →</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]}>
+            <TouchableOpacity style={[styles.aboutRow, styles.settingRowBorder]} onPress={onOpenFeedback} testID="open-feedback">
               <Text style={styles.aboutLabel}>Send Feedback</Text>
-              <Text style={styles.linkText}>Email →</Text>
+              <Text style={styles.linkText}>Open →</Text>
             </TouchableOpacity>
             </>
           )}

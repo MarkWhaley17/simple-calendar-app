@@ -5,7 +5,7 @@ import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
-import { AccountView, RecordingsWebView } from './src/screens/account';
+import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
@@ -691,6 +691,18 @@ export default function App() {
     setViewMode('recordingsWeb');
   };
 
+  const handleOpenPrivacyPolicy = () => {
+    setViewMode('privacyPolicy');
+  };
+
+  const handleOpenTermsOfService = () => {
+    setViewMode('termsOfService');
+  };
+
+  const handleOpenFeedback = () => {
+    setViewMode('feedback');
+  };
+
   // Pan responder for swipe gestures on month view
   const panResponder = useRef(
     PanResponder.create({
@@ -852,6 +864,12 @@ export default function App() {
         <EventView event={selectedEvent} onBack={handleBackToDay} onEdit={handleEditEvent} />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />
+      ) : viewMode === 'privacyPolicy' ? (
+        <PrivacyPolicyView onBack={() => setViewMode('account')} />
+      ) : viewMode === 'termsOfService' ? (
+        <TermsOfServiceView onBack={() => setViewMode('account')} />
+      ) : viewMode === 'feedback' ? (
+        <FeedbackView onBack={() => setViewMode('account')} />
       ) : (
         <>
           {viewMode === 'account' ? (
@@ -862,6 +880,9 @@ export default function App() {
               user={user}
               onUserChange={setUser}
               onOpenRecordings={handleOpenRecordings}
+              onOpenPrivacyPolicy={handleOpenPrivacyPolicy}
+              onOpenTermsOfService={handleOpenTermsOfService}
+              onOpenFeedback={handleOpenFeedback}
             />
           ) : viewMode === 'eventsList' ? (
             <EventsListView
