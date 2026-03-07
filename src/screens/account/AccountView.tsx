@@ -12,6 +12,7 @@ interface AccountViewProps {
   settingsReady?: boolean;
   user: AuthUser | null;
   onUserChange: (user: AuthUser | null) => void;
+  onOpenRecordings: () => void;
 }
 
 const AccountView: React.FC<AccountViewProps> = ({
@@ -20,6 +21,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   settingsReady = true,
   user,
   onUserChange,
+  onOpenRecordings,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [username, setUsername] = useState('');
@@ -181,6 +183,18 @@ const AccountView: React.FC<AccountViewProps> = ({
                 </TouchableOpacity>
               </>
             )}
+            <View style={styles.profileDivider} />
+            <Text style={styles.cardText}>My Recordings</Text>
+            <Text style={styles.settingDescription}>
+              Open your Kalapa Media recordings library.
+            </Text>
+            <TouchableOpacity
+              style={[styles.primaryButton, styles.recordingsButton]}
+              onPress={onOpenRecordings}
+              testID="open-recordings-button"
+            >
+              <Text style={styles.primaryButtonText}>Open My Recordings</Text>
+            </TouchableOpacity>
             </>
           )}
         </View>
@@ -386,6 +400,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     letterSpacing: 0.2,
   },
+  profileDivider: {
+    height: 1,
+    backgroundColor: colors.borderSubtle,
+    marginVertical: spacing.lg,
+  },
   buttonRow: {
     flexDirection: 'row',
     gap: 14,
@@ -416,6 +435,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: colors.brandPrimary,
+  },
+  recordingsButton: {
+    marginTop: spacing.sm,
   },
   secondaryButtonText: {
     color: colors.brandPrimary,

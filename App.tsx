@@ -687,6 +687,10 @@ export default function App() {
     }
   };
 
+  const handleOpenRecordings = () => {
+    Alert.alert('My Recordings', 'Webview flow will be connected in the next step.');
+  };
+
   // Pan responder for swipe gestures on month view
   const panResponder = useRef(
     PanResponder.create({
@@ -855,6 +859,7 @@ export default function App() {
               settingsReady={settingsReady}
               user={user}
               onUserChange={setUser}
+              onOpenRecordings={handleOpenRecordings}
             />
           ) : viewMode === 'eventsList' ? (
             <EventsListView

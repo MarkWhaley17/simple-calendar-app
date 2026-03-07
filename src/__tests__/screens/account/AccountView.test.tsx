@@ -9,6 +9,7 @@ jest.mock('../../../utils/auth');
 describe('AccountView', () => {
   const mockOnUpdateNotificationSettings = jest.fn();
   const mockOnUserChange = jest.fn();
+  const mockOnOpenRecordings = jest.fn();
 
   const mockNotificationSettings: NotificationSettings = {
     practiceDayReminders: true,
@@ -24,6 +25,7 @@ describe('AccountView', () => {
     settingsReady: true,
     user: null,
     onUserChange: mockOnUserChange,
+    onOpenRecordings: mockOnOpenRecordings,
   };
 
   const signedInUser: AuthUser = {
@@ -45,6 +47,11 @@ describe('AccountView', () => {
     it('shows Sign In button', () => {
       const { getByText } = render(<AccountView {...defaultProps} />);
       expect(getByText('Sign In')).toBeTruthy();
+    });
+
+    it('shows Open My Recordings button', () => {
+      const { getByText } = render(<AccountView {...defaultProps} />);
+      expect(getByText('Open My Recordings')).toBeTruthy();
     });
 
     it('does not show Sign Out button', () => {
@@ -115,6 +122,12 @@ describe('AccountView', () => {
         expect(auth.logout).toHaveBeenCalled();
         expect(mockOnUserChange).toHaveBeenCalledWith(null);
       });
+    });
+
+    it('calls onOpenRecordings when My Recordings button is pressed', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
+      fireEvent.press(getByTestId('open-recordings-button'));
+      expect(mockOnOpenRecordings).toHaveBeenCalledTimes(1);
     });
   });
 });
