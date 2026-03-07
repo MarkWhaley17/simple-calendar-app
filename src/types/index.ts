@@ -43,7 +43,7 @@ export interface NotificationSettings {
   allDayReminderHours: number;
 }
 
-export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList';
+export type ViewMode = 'month' | 'day' | 'event' | 'addEvent' | 'editEvent' | 'account' | 'eventsList' | 'recordingsWeb';
 export type NavView = 'month' | 'day' | 'events' | 'account';
 
 export interface AuthUser {

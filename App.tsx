@@ -5,7 +5,7 @@ import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
-import { AccountView } from './src/screens/account';
+import { AccountView, RecordingsWebView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getPreAddedEvents } from './src/utils/preAddedEvents';
@@ -688,7 +688,7 @@ export default function App() {
   };
 
   const handleOpenRecordings = () => {
-    Alert.alert('My Recordings', 'Webview flow will be connected in the next step.');
+    setViewMode('recordingsWeb');
   };
 
   // Pan responder for swipe gestures on month view
@@ -850,6 +850,8 @@ export default function App() {
         />
       ) : viewMode === 'event' && selectedEvent ? (
         <EventView event={selectedEvent} onBack={handleBackToDay} onEdit={handleEditEvent} />
+      ) : viewMode === 'recordingsWeb' ? (
+        <RecordingsWebView onBack={() => setViewMode('account')} />
       ) : (
         <>
           {viewMode === 'account' ? (
