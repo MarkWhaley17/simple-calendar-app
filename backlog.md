@@ -7,6 +7,11 @@ Use this file to capture ideas while working. Keep each item short and actionabl
 Add new ideas here first:
 
 - [ ] Example: Improve My Recordings webview loading state
+- [ ] Motion + animation for Privacy Policy, Terms of Service, and Send Feedback screens
+- [ ] Glass UI updates for Privacy Policy, Terms of Service, and Send Feedback screens
+- [ ] Recommended UI uplift for webview navigation and motion
+- [ ] Debug day view: does not always show current-day events after repeated scrolling
+- [ ] Add Tara and Medicine Buddha Days to 2026
 
 ## Prioritized
 
