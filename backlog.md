@@ -6,7 +6,6 @@ Use this file to capture ideas while working. Keep each item short and actionabl
 
 Add new ideas here first:
 
-- [ ] Change sign-in message to: "Sign in to see member-level events."
 - [ ] Example: Improve My Recordings webview loading state
 
 ## Prioritized
@@ -45,7 +44,7 @@ Items with clear scope/acceptance criteria.
 
 ## Done
 
-- [ ] (Date: )
+- [x] Change sign-in message to: "Sign in to see member-level events." (Date: 2026-03-07)
 
 ## Item Template (copy/paste)
 

@@ -150,7 +150,7 @@ const AccountView: React.FC<AccountViewProps> = ({
               </>
             ) : (
               <>
-                <Text style={styles.cardText}>Sign in to sync your events across devices</Text>
+                <Text style={styles.cardText}>Sign in to see member-level events.</Text>
                 <TextInput
                   style={styles.authInput}
                   placeholder="Username"
