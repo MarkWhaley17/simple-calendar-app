@@ -140,22 +140,34 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
   }
 
   return (
-    <View style={containerStyle}>
-      {content}
+    <View style={styles.outer}>
+      <View style={containerStyle}>
+        {content}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outer: {
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.xs,
+    paddingBottom: spacing.sm,
+  },
   container: {
     flexDirection: 'row',
     backgroundColor: colors.brandPrimary,
-    paddingVertical: 8,
-    paddingBottom: 20, // Extra padding for iOS home indicator
-    borderTopWidth: 1,
-    borderTopColor: colors.brandPrimaryDark,
+    paddingVertical: 10,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 10,
+    borderRadius: radius.xl,
     justifyContent: 'space-around',
     alignItems: 'center',
+    shadowColor: colors.brandPrimaryDark,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    elevation: 8,
   },
   navItem: {
     flex: 1,
