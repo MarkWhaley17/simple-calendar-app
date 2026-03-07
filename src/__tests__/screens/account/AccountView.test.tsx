@@ -10,6 +10,9 @@ describe('AccountView', () => {
   const mockOnUpdateNotificationSettings = jest.fn();
   const mockOnUserChange = jest.fn();
   const mockOnOpenRecordings = jest.fn();
+  const mockOnOpenPrivacyPolicy = jest.fn();
+  const mockOnOpenTermsOfService = jest.fn();
+  const mockOnOpenFeedback = jest.fn();
 
   const mockNotificationSettings: NotificationSettings = {
     practiceDayReminders: true,
@@ -26,6 +29,9 @@ describe('AccountView', () => {
     user: null,
     onUserChange: mockOnUserChange,
     onOpenRecordings: mockOnOpenRecordings,
+    onOpenPrivacyPolicy: mockOnOpenPrivacyPolicy,
+    onOpenTermsOfService: mockOnOpenTermsOfService,
+    onOpenFeedback: mockOnOpenFeedback,
   };
 
   const signedInUser: AuthUser = {
@@ -128,6 +134,24 @@ describe('AccountView', () => {
       const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
       fireEvent.press(getByTestId('open-recordings-button'));
       expect(mockOnOpenRecordings).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens privacy policy page from About section', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
+      fireEvent.press(getByTestId('open-privacy-policy'));
+      expect(mockOnOpenPrivacyPolicy).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens terms of service page from About section', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
+      fireEvent.press(getByTestId('open-terms-of-service'));
+      expect(mockOnOpenTermsOfService).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens feedback page from About section', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
+      fireEvent.press(getByTestId('open-feedback'));
+      expect(mockOnOpenFeedback).toHaveBeenCalledTimes(1);
     });
   });
 });

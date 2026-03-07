@@ -1,24 +1,45 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { colors, spacing } from '../../theme/tokens';
+import { AuthUser } from '../../types';
+import { submitFeedback } from '../../utils/feedback';
 
 interface FeedbackViewProps {
   onBack: () => void;
+  user: AuthUser | null;
 }
 
-const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack }) => {
+const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack, user }) => {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
     if (!subject.trim() || !message.trim()) {
       Alert.alert('Missing details', 'Please enter both a subject and message.');
       return;
     }
 
-    Alert.alert('Thanks for the feedback', 'Your message has been captured for review.');
-    setSubject('');
-    setMessage('');
+    try {
+      setIsSubmitting(true);
+      await submitFeedback({
+        message,
+        subject,
+        user,
+      });
+      Alert.alert('Thanks for the feedback', 'Your feedback was sent successfully.');
+      setSubject('');
+      setMessage('');
+    } catch (error) {
+      const fallback = 'Could not send feedback right now. Please try again shortly.';
+      Alert.alert('Submit failed', error instanceof Error ? error.message : fallback);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,7 +55,7 @@ const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack }) => {
       <View style={styles.content}>
         <Text style={styles.title}>Help us improve Kalapa Calendar</Text>
         <Text style={styles.body}>
-          Share bugs, ideas, or requests. Fill this out and we can route feedback in a later backend step.
+          Share bugs, ideas, or requests. Feedback is submitted securely to our review queue.
         </Text>
 
         <TextInput
@@ -43,6 +64,7 @@ const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack }) => {
           style={styles.input}
           value={subject}
           onChangeText={setSubject}
+          editable={!isSubmitting}
         />
         <TextInput
           placeholder="Message"
@@ -51,10 +73,16 @@ const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack }) => {
           value={message}
           onChangeText={setMessage}
           multiline
+          editable={!isSubmitting}
         />
 
-        <TouchableOpacity style={styles.primaryButton} onPress={handleSubmit}>
-          <Text style={styles.primaryButtonText}>Submit Feedback</Text>
+        <TouchableOpacity
+          style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
+          onPress={handleSubmit}
+          testID="submit-feedback"
+          disabled={isSubmitting}
+        >
+          <Text style={styles.primaryButtonText}>{isSubmitting ? 'Sending…' : 'Submit Feedback'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -107,6 +135,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: spacing.md,
     paddingVertical: spacing.md,
+  },
+  primaryButtonDisabled: {
+    opacity: 0.7,
   },
   primaryButtonText: { color: colors.textOnBrand, fontSize: 16, fontWeight: '700' },
 });

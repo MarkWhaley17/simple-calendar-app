@@ -56,6 +56,19 @@ This project uses:
 - **TypeScript** - Type-safe JavaScript
 - **React Native** - Cross-platform mobile development
 
+## Feedback Ingestion Setup
+
+The in-app feedback form can post to a Google Apps Script web app that writes to Google Sheets.
+
+Required env vars:
+
+- `EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL`
+- `EXPO_PUBLIC_FEEDBACK_APP_TOKEN`
+
+Deployment template:
+
+- See [`integrations/google-feedback-apps-script/README.md`](integrations/google-feedback-apps-script/README.md)
+
 ## Tech Stack
 
 - React Native

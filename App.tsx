@@ -869,7 +869,7 @@ export default function App() {
       ) : viewMode === 'termsOfService' ? (
         <TermsOfServiceView onBack={() => setViewMode('account')} />
       ) : viewMode === 'feedback' ? (
-        <FeedbackView onBack={() => setViewMode('account')} />
+        <FeedbackView onBack={() => setViewMode('account')} user={user} />
       ) : (
         <>
           {viewMode === 'account' ? (
