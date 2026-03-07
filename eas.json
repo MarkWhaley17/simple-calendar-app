@@ -12,7 +12,11 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL": "https://script.google.com/macros/s/AKfycby916BM0ziuuU8H0uFv8S1iSyORgalH7Nj0JthxzBjOwQ4O6B-woDHKlZJezIm0RIoXIw/exec",
+        "EXPO_PUBLIC_FEEDBACK_APP_TOKEN": "924c13fd30dd3409fd9f927def25566eb51a9d4441ce61c2666f1865d2ea69ab"
+      }
     }
   },
   "submit": {
