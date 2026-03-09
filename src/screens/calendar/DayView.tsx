@@ -46,9 +46,14 @@ const DayView: React.FC<DayViewProps> = ({
   });
 
   // Sort events: all-day first, then by time
+  const isMedicineBuddhaDay = (event: CalendarEvent): boolean =>
+    event.title.toLowerCase().includes('medicine buddha day');
+
   const sortedEvents = [...dayEvents].sort((a, b) => {
     if (a.isAllDay && !b.isAllDay) return -1;
     if (!a.isAllDay && b.isAllDay) return 1;
+    if (isMedicineBuddhaDay(a) && !isMedicineBuddhaDay(b)) return 1;
+    if (!isMedicineBuddhaDay(a) && isMedicineBuddhaDay(b)) return -1;
     return 0;
   });
 

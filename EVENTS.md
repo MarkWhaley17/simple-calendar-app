@@ -21,6 +21,83 @@ Description: Monthly practice day on the 8th lunar day honoring the Medicine Bud
 
 ---
 
+Title: Medicine Buddha Day
+Date: 2026-02-24
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-03-26
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-04-24
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-05-23
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-06-22
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-07-21
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-08-19
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-09-17
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-10-17
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-11-15
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
+Title: Medicine Buddha Day
+Date: 2026-12-15
+Image: medicine-buddha.jpg
+Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+
+---
+
 
 Title: Protector Day
 Date: 2026-01-07 (lunar day 19)

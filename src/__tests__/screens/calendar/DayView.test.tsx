@@ -190,4 +190,63 @@ describe('DayView', () => {
 
     expect(getByText('Evening Practice')).toBeTruthy();
   });
+
+  it('prioritizes non-Medicine-Buddha header image on conflict days', () => {
+    const medicineEvent: CalendarEvent = {
+      id: 'event-medicine',
+      title: 'Medicine Buddha Day',
+      fromDate: new Date(2026, 2, 26),
+      image: 'medicine-buddha.jpg',
+      isAllDay: true,
+    };
+    const protectorEvent: CalendarEvent = {
+      id: 'event-protector',
+      title: 'Protector Day',
+      fromDate: new Date(2026, 2, 26),
+      image: 'protector-day.jpg',
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 26)}
+        onBack={jest.fn()}
+        events={[medicineEvent, protectorEvent]}
+      />
+    );
+
+    expect(getByTestId('day-view-header-image').props.source).toBe(
+      require('../../../../assets/protector-day.jpg')
+    );
+  });
+
+  it('renders Medicine Buddha Day under other pre-loaded events on conflict days', () => {
+    const medicineEvent: CalendarEvent = {
+      id: 'event-medicine',
+      title: 'Medicine Buddha Day',
+      fromDate: new Date(2026, 2, 26),
+      image: 'medicine-buddha.jpg',
+      isAllDay: true,
+    };
+    const protectorEvent: CalendarEvent = {
+      id: 'event-protector',
+      title: 'Protector Day',
+      fromDate: new Date(2026, 2, 26),
+      image: 'protector-day.jpg',
+      isAllDay: true,
+    };
+
+    const screen = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 26)}
+        onBack={jest.fn()}
+        events={[medicineEvent, protectorEvent]}
+      />
+    );
+
+    const tree = JSON.stringify(screen.toJSON());
+    expect(tree.indexOf('Protector Day')).toBeGreaterThan(-1);
+    expect(tree.indexOf('Medicine Buddha Day')).toBeGreaterThan(-1);
+    expect(tree.indexOf('Protector Day')).toBeLessThan(tree.indexOf('Medicine Buddha Day'));
+  });
 });
