@@ -17,84 +17,84 @@ All events are all-day events by default.
 Title: Medicine Buddha Day
 Date: 2026-01-06 (lunar day 18)
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-02-24
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-03-26
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-04-24
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-05-23
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-06-22
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-07-21
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-08-19
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-09-17
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-10-17
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-11-15
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
 Title: Medicine Buddha Day
 Date: 2026-12-15
 Image: medicine-buddha.jpg
-Description: Monthly practice day on the 8th lunar day honoring the Medicine Buddha, especially for healing prayers and mantra recitation.
+Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajyaguru, the Buddha of healing and compassion. Practitioners recite the Medicine Buddha mantra and make offerings to support physical and spiritual healing for themselves and others. The day is also commonly used for practices of Tara and other peaceful deities.
 
 ---
 
@@ -102,7 +102,7 @@ Description: Monthly practice day on the 8th lunar day honoring the Medicine Bud
 Title: Protector Day
 Date: 2026-01-07 (lunar day 19)
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
@@ -110,14 +110,14 @@ Description: Monthly day on the 29th lunar day for Dharma protector practices, o
 Title: Guru Rinpoche Day
 Date: 2026-01-08 (lunar day 20)
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 
 Title: Full Moon
 Date: 2026-03-03
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -132,21 +132,21 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-03-07
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 
 Title: Dakini Day
 Date: 2026-03-13
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 
 Title: Jambhala Day
 Date: 2026-03-16
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
@@ -154,14 +154,14 @@ Description: Monthly Jambhala Day for wealth deity practices and generosity offe
 Title: Protector Day
 Date: 2026-03-17
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 
 Title: New Moon
 Date: 2026-03-19
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
@@ -175,7 +175,7 @@ Description: Spring equinox.
 
 Title: Jambhala Day
 Date: 2026-03-26
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
@@ -183,7 +183,7 @@ Description: Monthly Jambhala Day for wealth deity practices and generosity offe
 Title: Protector Day
 Date: 2026-03-27
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
@@ -191,13 +191,13 @@ Description: Monthly day on the 29th lunar day for Dharma protector practices, o
 Title: Guru Rinpoche Day
 Date: 2026-03-28
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-04-02
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -216,58 +216,58 @@ Description: Vidyadhara Chogyam Trungpa Rinpoche Parinirvana observance.
 Title: Protector Day
 Date: 2026-04-06
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-04-12
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-04-15
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-04-16
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-04-17
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-04-24
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-04-25
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-04-26
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-05-01
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -280,58 +280,58 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-05-05
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-05-12
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-05-15
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-05-15
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-05-16
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-05-24
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-05-25
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-05-26
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-05-31
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -343,39 +343,39 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 
 Title: Vaishaka Day
 Date: 2026-05-31
-Description: Vaishaka Day observance.
+Description: Vaisakha Day, often called Vesak or Saga Dawa Duchen, commemorates the birth, enlightenment, and parinirvana of Lord Buddha. It falls on the full moon of the lunar month of Vaisakha and is one of the most sacred days in Buddhism. Practitioners emphasize generosity, ethical conduct, and meditation, as merit is believed to be greatly multiplied.
 
 ---
 
 Title: Protector Day
 Date: 2026-06-04
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-06-10
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-06-13
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-06-14
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-06-15
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
@@ -387,27 +387,27 @@ Description: Solstice.
 
 Title: Jambhala Day
 Date: 2026-06-22
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-06-23
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-06-24
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-06-29
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -420,58 +420,58 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-07-04
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-07-09
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-07-12
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-07-13
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-07-14
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-07-22
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-07-23
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-07-24
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-07-29
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -491,58 +491,58 @@ Description: In-person events in Vermont.
 Title: Protector Day
 Date: 2026-08-02
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-08-08
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-08-10
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-08-11
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-08-12
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-08-20
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-08-21
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-08-22
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-08-28
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -561,52 +561,52 @@ Description: In-person events in Switzerland.
 Title: Protector Day
 Date: 2026-09-01
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-09-06
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-09-09
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-09-10
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-09-11
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-09-19
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-09-20
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-09-21
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
@@ -618,7 +618,7 @@ Description: Autumn equinox.
 
 Title: Full Moon
 Date: 2026-09-26
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -631,52 +631,52 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-09-30
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-10-05
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-10-08
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-10-09
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-10-10
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-10-18
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-10-20
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-10-21
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
@@ -689,7 +689,7 @@ Description: Guided Meditation Practice with Sakyong Mipham Rinpoche. Open to ev
 
 Title: Full Moon
 Date: 2026-10-26
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -702,32 +702,32 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-10-29
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2026-11-04
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-11-07
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-11-08
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-11-09
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
@@ -739,27 +739,27 @@ Description: Celebration of Kongma Sakyong Mipham Rinpoche's birthday.
 
 Title: Jambhala Day
 Date: 2026-11-17
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-11-18
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-11-19
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2026-11-24
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -772,53 +772,53 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-11-28
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 
 Title: Dakini Day
 Date: 2026-12-03
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-12-06
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-12-07
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2026-12-09
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2026-12-17
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2026-12-18
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2026-12-19
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
@@ -836,7 +836,7 @@ Description: Children's Day observance.
 
 Title: Full Moon
 Date: 2026-12-24
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -849,58 +849,58 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2026-12-27
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2027-01-02
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2027-01-05
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2027-01-06
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2027-01-07
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Jambhala Day
 Date: 2027-01-15
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2027-01-16
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2027-01-17
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2027-01-22
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -913,64 +913,64 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2027-01-26
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Dakini Day
 Date: 2027-02-02
-Description: Monthly Dakini Day on the 25th lunar day, honoring the feminine principle of enlightened energy.
+Description: The 25th lunar day is Dakini Day, honoring wisdom dakinis, female embodiments of enlightened energy and insight. Vajrayana practitioners often perform tsok offerings and tantric practices connected with the mother tantras. It is considered a powerful time to connect with wisdom energy and the activity of enlightened feminine principles.
 
 ---
 
 Title: Jambhala Day
 Date: 2027-02-04
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2027-02-05
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: New Moon
 Date: 2027-02-06
-Description: New moon day.
+Description: The 30th day of the lunar month marks the new moon, traditionally associated with meditation on Gautama Buddha and reflection on impermanence. Many practitioners renew ethical commitments, confess negativities, and set intentions for the coming lunar cycle. It is considered a quiet day for purification and renewed mindfulness.
 
 ---
 
 Title: Losar Year of the Fire Sheep
 Date: 2027-02-07
-Description: Losar, the Tibetan New Year, Year of the Fire Sheep.
+Description: Losar is the Tibetan New Year, marking the beginning of a new lunar year and a time of purification and renewal. Traditional observances include offerings, prayers for good fortune, and practices to remove obstacles for the coming year. It is both a spiritual and cultural celebration across Tibetan Buddhist communities.
 
 ---
 
 Title: Jambhala Day
 Date: 2027-02-14
-Description: Monthly Jambhala Day for wealth deity practices and generosity offerings.
+Description: Jambhala Day is dedicated to the wealth deity Jambhala, a protector of generosity and prosperity on the Dharma path. Practice, tsok, offerings and mantra practice are performed to remove poverty, cultivate generosity, and support the flourishing of spiritual practice. The day emphasizes wealth as a means for benefiting beings and supporting the Dharma.
 
 ---
 
 Title: Protector Day
 Date: 2027-02-15
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
 
 Title: Guru Rinpoche Day
 Date: 2027-02-16
 Image: guru-rinpoche.jpg
-Description: Monthly holy day on the 10th Tibetan lunar day honoring Padmasambhava, traditionally observed with guru yoga, mantra recitation, and tsok offerings.
+Description: Observed on the 10th day of each lunar month, this day honors Padmasambhava, the tantric master who established Vajrayana Buddhism in Tibet. Each monthly observance commemorates one of his enlightened deeds and is traditionally marked with tsok offerings and mantra recitation. Practitioners supplicate the guru to remove obstacles and awaken wisdom.
 
 ---
 
 Title: Full Moon
 Date: 2027-02-20
-Description: Full moon day.
+Description: The 15th lunar day is the full moon, an especially auspicious day for prayer, meditation, and virtuous activity. Many Tibetan calendars associate it with practices connected to buddhas such as Amitabha and with taking precepts for a day. Positive actions performed on this day are traditionally believed to bring especially powerful results.
 
 ---
 
@@ -983,6 +983,6 @@ Description: Celebration of the King of Ling with lhasang smoke offering ceremon
 Title: Protector Day
 Date: 2027-02-24
 Image: protector-day.jpg
-Description: Monthly day on the 29th lunar day for Dharma protector practices, offerings, and removing obstacles.
+Description: Protector Day is devoted to Dharma protectors (dharmapalas), wrathful guardians who safeguard the teachings and practitioners. Rituals often include protector chants and offerings requesting protection from obstacles to practice. These practices emphasize calling out to the protectors to maintain their samaya and preserve the Dharma in these dark ages.
 
 ---
