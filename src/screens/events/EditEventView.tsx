@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert, Pressable, KeyboardAvoidingView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -8,6 +8,7 @@ import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { getRecurrenceLabel } from '../../utils/recurrence';
+import { isPreloadedEvent } from '../../utils/eventEditability';
 
 interface EditEventViewProps {
   event: CalendarEvent;
@@ -34,6 +35,25 @@ interface EditEventViewProps {
   defaultAllDayReminderHours: number;
 }
 
+interface SectionContainerProps {
+  children: React.ReactNode;
+  useIosPilot: boolean;
+}
+
+const SectionContainer: React.FC<SectionContainerProps> = ({ children, useIosPilot }) => {
+  if (useIosPilot) {
+    return (
+      <View style={styles.sectionWrapper}>
+        <GlassSurface style={styles.section} intensity={36}>
+          {children}
+        </GlassSurface>
+      </View>
+    );
+  }
+
+  return <View style={styles.section}>{children}</View>;
+};
+
 const EditEventView: React.FC<EditEventViewProps> = ({
   event,
   onBack,
@@ -45,6 +65,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   defaultAllDayReminderHours,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
+  const isLockedEvent = isPreloadedEvent(event);
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -165,22 +186,12 @@ const EditEventView: React.FC<EditEventViewProps> = ({
     );
   };
 
-  const SectionContainer = ({ children }: { children: React.ReactNode }) => {
-    if (useIosPilot) {
-      return (
-        <View style={styles.sectionWrapper}>
-          <GlassSurface style={styles.section} intensity={36}>
-            {children}
-          </GlassSurface>
-        </View>
-      );
-    }
-
-    return <View style={styles.section}>{children}</View>;
-  };
-
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
+    >
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerButtons}>
@@ -203,7 +214,14 @@ const EditEventView: React.FC<EditEventViewProps> = ({
       </View>
 
       {/* Form */}
-      <ScrollView style={styles.form}>
+      <ScrollView
+        style={styles.form}
+        contentContainerStyle={styles.formContent}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="none"
+        automaticallyAdjustKeyboardInsets
+        testID="edit-event-scrollview"
+      >
         {/* Recurring Event Notice */}
         {showRecurringNotice && event.recurrence && event.recurrence.frequency !== 'none' && (
           <View style={styles.noticeSection}>
@@ -212,9 +230,16 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             </Text>
           </View>
         )}
+        {isLockedEvent && (
+          <View style={styles.noticeSection}>
+            <Text style={styles.noticeText}>
+              This pre-loaded event is locked. You can edit links only.
+            </Text>
+          </View>
+        )}
 
         {/* Title */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <Text style={styles.label}>Title *</Text>
           <TextInput
             style={styles.input}
@@ -222,11 +247,13 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             placeholderTextColor={colors.placeholder}
             value={title}
             onChangeText={setTitle}
+            editable={!isLockedEvent}
+            testID="edit-title-input"
           />
         </SectionContainer>
 
         {/* Description */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
@@ -236,11 +263,13 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             onChangeText={setDescription}
             multiline
             numberOfLines={4}
+            editable={!isLockedEvent}
+            testID="edit-description-input"
           />
         </SectionContainer>
 
         {/* All Day Toggle */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <View style={styles.toggleRow}>
             <Text style={styles.label}>All Day</Text>
             <Switch
@@ -248,17 +277,21 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               onValueChange={setIsAllDay}
               trackColor={{ false: colors.placeholder, true: colors.toggleDangerTrack }}
               thumbColor={isAllDay ? colors.danger : colors.toggleThumb}
+              disabled={isLockedEvent}
             />
           </View>
         </SectionContainer>
 
         {/* From Date/Time */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <Text style={styles.label}>From</Text>
           <View style={styles.dateTimeRow}>
             <TouchableOpacity
               style={[styles.dateTimeInput, styles.dateInput]}
               onPress={() => setShowFromDatePicker(true)}
+              disabled={isLockedEvent}
+              accessibilityState={{ disabled: isLockedEvent }}
+              testID="edit-from-date-button"
             >
               <Text style={styles.dateTimeText}>{formatDate(fromDate)}</Text>
             </TouchableOpacity>
@@ -269,6 +302,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                 placeholderTextColor={colors.placeholder}
                 value={fromTime}
                 onChangeText={setFromTime}
+                editable={!isLockedEvent}
+                testID="edit-from-time-input"
               />
             )}
           </View>
@@ -288,12 +323,15 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         </SectionContainer>
 
         {/* To Date/Time */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <Text style={styles.label}>To</Text>
           <View style={styles.dateTimeRow}>
             <TouchableOpacity
               style={[styles.dateTimeInput, styles.dateInput]}
               onPress={() => setShowToDatePicker(true)}
+              disabled={isLockedEvent}
+              accessibilityState={{ disabled: isLockedEvent }}
+              testID="edit-to-date-button"
             >
               <Text style={styles.dateTimeText}>{formatDate(toDate)}</Text>
             </TouchableOpacity>
@@ -304,6 +342,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                 placeholderTextColor={colors.placeholder}
                 value={toTime}
                 onChangeText={setToTime}
+                editable={!isLockedEvent}
+                testID="edit-to-time-input"
               />
             )}
           </View>
@@ -323,7 +363,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         </SectionContainer>
 
         {/* Recurrence */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <Text style={styles.label}>Repeat</Text>
           <Pressable
             style={({ pressed }) => [
@@ -334,13 +374,16 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               console.log('Repeat button pressed');
               setShowRecurrencePicker(true);
             }}
+            disabled={isLockedEvent}
+            accessibilityState={{ disabled: isLockedEvent }}
+            testID="edit-repeat-button"
           >
             <Text style={styles.dateTimeText}>{getRecurrenceLabel(recurrence)}</Text>
           </Pressable>
         </SectionContainer>
 
         {/* Reminder */}
-        <SectionContainer>
+        <SectionContainer useIosPilot={useIosPilot}>
           <View style={styles.toggleRow}>
             <Text style={styles.label}>Enable Reminder</Text>
             <Switch
@@ -353,6 +396,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               }}
               trackColor={{ false: colors.placeholder, true: colors.accentStrong }}
               thumbColor={colors.white}
+              disabled={isLockedEvent}
             />
           </View>
           {reminderEnabled && (
@@ -369,6 +413,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                   }}
                   trackColor={{ false: colors.placeholder, true: colors.accentStrong }}
                   thumbColor={colors.white}
+                  disabled={isLockedEvent}
                 />
               </View>
               {!useDefaultReminder && (
@@ -381,6 +426,8 @@ const EditEventView: React.FC<EditEventViewProps> = ({
                     keyboardType="number-pad"
                     value={isAllDay ? reminderHoursInput : reminderMinutesInput}
                     onChangeText={isAllDay ? setReminderHoursInput : setReminderMinutesInput}
+                    editable={!isLockedEvent}
+                    testID="edit-reminder-input"
                   />
                 </View>
               )}
@@ -392,29 +439,35 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         </SectionContainer>
 
         {/* Links */}
-        <SectionContainer>
-          <Text style={styles.label}>Links</Text>
+        <SectionContainer useIosPilot={useIosPilot}>
+          <Text style={styles.label}>Notes</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="Add links (one per line)"
+            placeholder="Add your notes and comments here"
             placeholderTextColor={colors.placeholder}
             value={links}
             onChangeText={setLinks}
             multiline
             numberOfLines={3}
+            blurOnSubmit={false}
+            returnKeyType="default"
+            submitBehavior="newline"
+            testID="edit-links-input"
           />
         </SectionContainer>
 
         {/* Delete Button */}
-        <View style={styles.deleteSection}>
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={handleDelete}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.deleteButtonText}>Delete Event</Text>
-          </TouchableOpacity>
-        </View>
+        {!isLockedEvent && (
+          <View style={styles.deleteSection}>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={handleDelete}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.deleteButtonText}>Delete Event</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
 
       {/* Recurrence Picker Modal */}
@@ -424,7 +477,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         onClose={() => setShowRecurrencePicker(false)}
         onSave={setRecurrence}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -477,6 +530,9 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
+  },
+  formContent: {
+    paddingBottom: 24,
   },
   section: {
     backgroundColor: colors.surfaceSolid,

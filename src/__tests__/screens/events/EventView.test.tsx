@@ -45,11 +45,12 @@ describe('EventView', () => {
     expect(getByText(/9:00 AM/)).toBeTruthy();
   });
 
-  it('should render links when provided', () => {
+  it('should render notes when provided', () => {
     const { getByText } = render(
       <EventView event={mockEvent} onBack={mockOnBack} />
     );
 
+    expect(getByText('Notes')).toBeTruthy();
     expect(getByText('https://example.com')).toBeTruthy();
     expect(getByText('https://google.com')).toBeTruthy();
   });
@@ -111,7 +112,7 @@ describe('EventView', () => {
       <EventView event={eventNoLinks} onBack={mockOnBack} />
     );
 
-    expect(queryByText('Links')).toBeNull();
+    expect(queryByText('Notes')).toBeNull();
   });
 
   it('should handle legacy date field', () => {

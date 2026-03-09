@@ -17,6 +17,10 @@ import { toDateKey } from './src/utils/dateHelpers';
 import { loadNotificationSettings, saveNotificationSettings, defaultNotificationSettings } from './src/utils/settings';
 import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
 import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
+import {
+  EditableEventUpdate,
+  sanitizeEventUpdateForEditability,
+} from './src/utils/eventEditability';
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -453,22 +457,11 @@ export default function App() {
     }
   };
 
-  const handleUpdateEvent = async (eventData: {
-    id: string;
-    title: string;
-    description: string;
-    fromDate: Date;
-    fromTime: string;
-    toDate: Date;
-    toTime: string;
-    links: string[];
-    isAllDay: boolean;
-    recurrence?: import('./src/types').RecurrenceRule;
-    reminderEnabled?: boolean;
-    reminderMinutesBefore?: number;
-    reminderHoursBefore?: number;
-  }) => {
+  const handleUpdateEvent = async (eventData: EditableEventUpdate) => {
     const eventToEdit = selectedEvent;
+    const sanitizedEventData = eventToEdit
+      ? sanitizeEventUpdateForEditability(eventToEdit, eventData)
+      : eventData;
 
     let updatedEvents = masterEvents;
     let nextSelectedEvent: CalendarEvent | null = eventToEdit;
@@ -483,19 +476,19 @@ export default function App() {
         const overrides = {
           ...(existingRecurrence.overrides || {}),
           [occurrenceKey]: {
-            title: eventData.title,
-            description: eventData.description,
-            fromDate: eventData.fromDate,
-            fromTime: eventData.fromTime,
-            toDate: eventData.toDate,
-            toTime: eventData.toTime,
-            links: eventData.links,
-            isAllDay: eventData.isAllDay,
-            reminderEnabled: eventData.reminderEnabled,
-            reminderMinutesBefore: eventData.reminderMinutesBefore,
-            reminderHoursBefore: eventData.reminderHoursBefore,
-            date: eventData.fromDate,
-            startTime: eventData.fromTime,
+            title: sanitizedEventData.title,
+            description: sanitizedEventData.description,
+            fromDate: sanitizedEventData.fromDate,
+            fromTime: sanitizedEventData.fromTime,
+            toDate: sanitizedEventData.toDate,
+            toTime: sanitizedEventData.toTime,
+            links: sanitizedEventData.links,
+            isAllDay: sanitizedEventData.isAllDay,
+            reminderEnabled: sanitizedEventData.reminderEnabled,
+            reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
+            reminderHoursBefore: sanitizedEventData.reminderHoursBefore,
+            date: sanitizedEventData.fromDate,
+            startTime: sanitizedEventData.fromTime,
           },
         };
 
@@ -510,46 +503,46 @@ export default function App() {
 
       nextSelectedEvent = {
         ...eventToEdit,
-        title: eventData.title,
-        description: eventData.description,
-        fromDate: eventData.fromDate,
-        fromTime: eventData.fromTime,
-        toDate: eventData.toDate,
-        toTime: eventData.toTime,
-        links: eventData.links,
-        isAllDay: eventData.isAllDay,
-        reminderEnabled: eventData.reminderEnabled,
-        reminderMinutesBefore: eventData.reminderMinutesBefore,
-        reminderHoursBefore: eventData.reminderHoursBefore,
+        title: sanitizedEventData.title,
+        description: sanitizedEventData.description,
+        fromDate: sanitizedEventData.fromDate,
+        fromTime: sanitizedEventData.fromTime,
+        toDate: sanitizedEventData.toDate,
+        toTime: sanitizedEventData.toTime,
+        links: sanitizedEventData.links,
+        isAllDay: sanitizedEventData.isAllDay,
+        reminderEnabled: sanitizedEventData.reminderEnabled,
+        reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
+        reminderHoursBefore: sanitizedEventData.reminderHoursBefore,
         recurrence: eventToEdit.recurrence,
-        date: eventData.fromDate,
-        startTime: eventData.fromTime,
+        date: sanitizedEventData.fromDate,
+        startTime: sanitizedEventData.fromTime,
       };
     } else {
       const targetId = eventToEdit?.isRecurringInstance && eventToEdit.originalEventId
         ? eventToEdit.originalEventId
-        : eventData.id;
+        : sanitizedEventData.id;
 
       updatedEvents = masterEvents.map(event =>
         event.id === targetId
           ? {
               ...event,
-              title: eventData.title,
-              description: eventData.description,
-              fromDate: eventToEdit?.isRecurringInstance ? event.fromDate : eventData.fromDate,
-              fromTime: eventData.fromTime,
-              toDate: eventToEdit?.isRecurringInstance ? event.toDate : eventData.toDate,
-              toTime: eventData.toTime,
-              links: eventData.links,
-              isAllDay: eventData.isAllDay,
-              recurrence: eventData.recurrence,
-              recurrenceId: eventData.recurrence ? (event.recurrenceId || event.id) : undefined,
-              reminderEnabled: eventData.reminderEnabled,
-              reminderMinutesBefore: eventData.reminderMinutesBefore,
-              reminderHoursBefore: eventData.reminderHoursBefore,
+              title: sanitizedEventData.title,
+              description: sanitizedEventData.description,
+              fromDate: eventToEdit?.isRecurringInstance ? event.fromDate : sanitizedEventData.fromDate,
+              fromTime: sanitizedEventData.fromTime,
+              toDate: eventToEdit?.isRecurringInstance ? event.toDate : sanitizedEventData.toDate,
+              toTime: sanitizedEventData.toTime,
+              links: sanitizedEventData.links,
+              isAllDay: sanitizedEventData.isAllDay,
+              recurrence: sanitizedEventData.recurrence,
+              recurrenceId: sanitizedEventData.recurrence ? (event.recurrenceId || event.id) : undefined,
+              reminderEnabled: sanitizedEventData.reminderEnabled,
+              reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
+              reminderHoursBefore: sanitizedEventData.reminderHoursBefore,
               // Update legacy fields
-              date: eventToEdit?.isRecurringInstance ? event.date : eventData.fromDate,
-              startTime: eventData.fromTime,
+              date: eventToEdit?.isRecurringInstance ? event.date : sanitizedEventData.fromDate,
+              startTime: sanitizedEventData.fromTime,
             }
           : event
       );
@@ -558,20 +551,20 @@ export default function App() {
       nextSelectedEvent = eventToEdit
         ? {
             ...eventToEdit,
-            title: eventData.title,
-            description: eventData.description,
-            fromDate: shouldKeepInstanceDate ? eventToEdit.fromDate : eventData.fromDate,
-            fromTime: eventData.fromTime,
-            toDate: shouldKeepInstanceDate ? eventToEdit.toDate : eventData.toDate,
-            toTime: eventData.toTime,
-            links: eventData.links,
-            isAllDay: eventData.isAllDay,
-            recurrence: eventData.recurrence,
-            reminderEnabled: eventData.reminderEnabled,
-            reminderMinutesBefore: eventData.reminderMinutesBefore,
-            reminderHoursBefore: eventData.reminderHoursBefore,
-            date: shouldKeepInstanceDate ? eventToEdit.date : eventData.fromDate,
-            startTime: eventData.fromTime,
+            title: sanitizedEventData.title,
+            description: sanitizedEventData.description,
+            fromDate: shouldKeepInstanceDate ? eventToEdit.fromDate : sanitizedEventData.fromDate,
+            fromTime: sanitizedEventData.fromTime,
+            toDate: shouldKeepInstanceDate ? eventToEdit.toDate : sanitizedEventData.toDate,
+            toTime: sanitizedEventData.toTime,
+            links: sanitizedEventData.links,
+            isAllDay: sanitizedEventData.isAllDay,
+            recurrence: sanitizedEventData.recurrence,
+            reminderEnabled: sanitizedEventData.reminderEnabled,
+            reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
+            reminderHoursBefore: sanitizedEventData.reminderHoursBefore,
+            date: shouldKeepInstanceDate ? eventToEdit.date : sanitizedEventData.fromDate,
+            startTime: sanitizedEventData.fromTime,
           }
         : eventToEdit;
     }

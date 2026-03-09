@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Linking, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
@@ -20,19 +20,6 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
   const monthName = MONTH_NAMES[eventDate.getMonth()];
   const dayNumber = eventDate.getDate();
   const year = eventDate.getFullYear();
-
-  const handleLinkPress = async (url: string) => {
-    try {
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      } else {
-        Alert.alert('Error', `Unable to open this link: ${url}`);
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to open link');
-    }
-  };
 
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
 
@@ -97,18 +84,12 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
         ))}
 
         {event.links && event.links.length > 0 && (
-          renderSection('Links', (
+          renderSection('Notes', (
             <>
             {event.links.map((link, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handleLinkPress(link)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.linkText}>
-                  {link}
-                </Text>
-              </TouchableOpacity>
+              <Text key={index} style={styles.notesText}>
+                {link}
+              </Text>
             ))}
             </>
           ))
@@ -204,14 +185,13 @@ const styles = StyleSheet.create({
     color: colors.brandInk,
     letterSpacing: 0.2,
   },
-  linkText: {
+  notesText: {
     fontSize: 16,
     lineHeight: 26,
-    color: colors.brandPrimary,
+    color: colors.brandInk,
     marginBottom: 10,
-    fontWeight: '600',
+    fontWeight: '500',
     letterSpacing: 0.2,
-    textDecorationLine: 'underline',
   },
 });
 
