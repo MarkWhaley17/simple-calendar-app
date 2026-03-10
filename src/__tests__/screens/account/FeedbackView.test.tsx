@@ -26,6 +26,18 @@ describe('FeedbackView', () => {
     });
   });
 
+  it('renders refreshed feedback layout and supports back', () => {
+    const { getByTestId, getByText } = render(<FeedbackView onBack={onBack} user={null} />);
+
+    expect(getByTestId('feedback-background-pattern')).toBeTruthy();
+    expect(getByTestId('feedback-intro-card')).toBeTruthy();
+    expect(getByTestId('feedback-form-card')).toBeTruthy();
+    expect(getByText('Help us improve Kalapa Calendar')).toBeTruthy();
+
+    fireEvent.press(getByText('Back'));
+    expect(onBack).toHaveBeenCalledTimes(1);
+  });
+
   it('submits feedback and shows success alert', async () => {
     mockedSubmitFeedback.mockResolvedValueOnce(undefined);
     const user = { displayName: 'Mark', email: 'mark@example.com' };
