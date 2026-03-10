@@ -14,6 +14,7 @@ import { saveEvents, loadEvents } from './src/utils/storage';
 import { isAuthenticated, getUser } from './src/utils/auth';
 import { expandRecurringEvents } from './src/utils/recurrence';
 import { toDateKey } from './src/utils/dateHelpers';
+import { shiftCalendarDay } from './src/utils/dayNavigation';
 import { loadNotificationSettings, saveNotificationSettings, defaultNotificationSettings } from './src/utils/settings';
 import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
 import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
@@ -82,13 +83,13 @@ export default function App() {
               useNativeDriver: true,
             }),
           ]).start(() => {
-            const currentDate = selectedDateRef.current;
-            if (currentDate) {
-              const next = new Date(currentDate);
-              next.setDate(next.getDate() + dayDelta);
-              setSkipDayViewEnterAnimation(true);
-              setSelectedDate(next);
-            }
+            const baseDate = selectedDateRef.current ?? new Date();
+            const next = shiftCalendarDay(baseDate, dayDelta);
+            // Keep ref in sync immediately to avoid stale reads during rapid swipes.
+            selectedDateRef.current = next;
+            setSkipDayViewEnterAnimation(true);
+            setSelectedDate(next);
+            setCurrentDate(new Date(next.getFullYear(), next.getMonth(), 1));
 
             dayViewTranslateX.setValue(swipeInStartX);
             dayViewOpacity.setValue(0);
@@ -317,16 +318,19 @@ export default function App() {
   };
 
   const handleDayPress = (date: Date) => {
+    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     // If the clicked day is from a different month, update the current month
     if (date.getMonth() !== currentDate.getMonth() || date.getFullYear() !== currentDate.getFullYear()) {
       setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
     }
-    setSelectedDate(date);
+    selectedDateRef.current = normalizedDate;
+    setSelectedDate(normalizedDate);
     setViewMode('day');
   };
 
   const handleBackToMonth = () => {
     setViewMode('month');
+    selectedDateRef.current = null;
     setSelectedDate(null);
   };
 
@@ -666,11 +670,15 @@ export default function App() {
     if (view === 'month') {
       setViewMode('month');
       setCurrentDate(new Date()); // Reset to current month
+      selectedDateRef.current = null;
       setSelectedDate(null);
       setSelectedEvent(null);
     } else if (view === 'day') {
+      const today = new Date();
+      const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       setViewMode('day');
-      setSelectedDate(new Date()); // Set to today
+      selectedDateRef.current = normalizedToday;
+      setSelectedDate(normalizedToday); // Set to today
       setSelectedEvent(null);
     } else if (view === 'events') {
       setViewMode('eventsList');
