@@ -1,24 +1,58 @@
 import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import { Linking } from 'react-native';
+
 import RecordingsWebView from '../../../screens/account/RecordingsWebView';
+
+const mockWebViewMethodMocks = {
+  goBack: jest.fn(),
+  goForward: jest.fn(),
+  reload: jest.fn(),
+};
 
 jest.mock('react-native-webview', () => {
   const React = require('react');
   const { Text, TouchableOpacity, View } = require('react-native');
 
   return {
-    WebView: ({ source, onError, onLoadEnd }: any) => (
-      <View testID="webview-mock">
-        <Text testID="webview-source">{source?.uri ?? ''}</Text>
-        <TouchableOpacity testID="webview-trigger-error" onPress={() => onError?.({})}>
-          <Text>Trigger error</Text>
-        </TouchableOpacity>
-        <TouchableOpacity testID="webview-trigger-load-end" onPress={() => onLoadEnd?.({})}>
-          <Text>Trigger load end</Text>
-        </TouchableOpacity>
-      </View>
-    ),
+    WebView: React.forwardRef(({ source, onError, onLoadEnd, onNavigationStateChange }: any, ref: any) => {
+      React.useImperativeHandle(ref, () => mockWebViewMethodMocks);
+      return (
+        <View testID="webview-mock">
+          <Text testID="webview-source">{source?.uri ?? ''}</Text>
+          <TouchableOpacity testID="webview-trigger-error" onPress={() => onError?.({})}>
+            <Text>Trigger error</Text>
+          </TouchableOpacity>
+          <TouchableOpacity testID="webview-trigger-load-end" onPress={() => onLoadEnd?.({})}>
+            <Text>Trigger load end</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="webview-nav-login"
+            onPress={() =>
+              onNavigationStateChange?.({
+                canGoBack: false,
+                canGoForward: false,
+                url: source?.uri ?? '',
+              })
+            }
+          >
+            <Text>Nav login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="webview-nav-recordings"
+            onPress={() =>
+              onNavigationStateChange?.({
+                canGoBack: true,
+                canGoForward: true,
+                url: 'https://kalapamedia.com/my-recordings/',
+              })
+            }
+          >
+            <Text>Nav recordings</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }),
   };
 });
 
@@ -36,15 +70,34 @@ describe('RecordingsWebView', () => {
     expect(getByTestId('webview-source').props.children).toBe(expected);
   });
 
+  it('renders upgraded shell elements', () => {
+    const { getByTestId, getByText } = render(<RecordingsWebView onBack={onBack} />);
+
+    expect(getByTestId('webview-background-pattern')).toBeTruthy();
+    expect(getByTestId('webview-loading-overlay')).toBeTruthy();
+    expect(getByText('Loading My Recordings')).toBeTruthy();
+    expect(getByTestId('recordings-login-hint')).toBeTruthy();
+  });
+
   it('calls onBack when back is pressed', () => {
-    const { getByText } = render(<RecordingsWebView onBack={onBack} />);
-    fireEvent.press(getByText('Back'));
+    const { getByTestId } = render(<RecordingsWebView onBack={onBack} />);
+    fireEvent.press(getByTestId('recordings-header-back'));
     expect(onBack).toHaveBeenCalledTimes(1);
   });
 
-  it('opens recordings page in external browser', async () => {
-    const { getByText } = render(<RecordingsWebView onBack={onBack} />);
-    fireEvent.press(getByText('Browser'));
+  it('opens recordings page in external browser from header', async () => {
+    const { getByTestId } = render(<RecordingsWebView onBack={onBack} />);
+    fireEvent.press(getByTestId('recordings-header-browser'));
+
+    await waitFor(() => {
+      expect(openUrlSpy).toHaveBeenCalledWith('https://kalapamedia.com/my-recordings/');
+    });
+  });
+
+  it('opens recordings page in external browser from error state', async () => {
+    const { getByTestId, getByText } = render(<RecordingsWebView onBack={onBack} />);
+    fireEvent.press(getByTestId('webview-trigger-error'));
+    fireEvent.press(getByText('Open in Browser'));
 
     await waitFor(() => {
       expect(openUrlSpy).toHaveBeenCalledWith('https://kalapamedia.com/my-recordings/');
@@ -64,5 +117,32 @@ describe('RecordingsWebView', () => {
 
     expect(queryByText('Could not load recordings.')).toBeNull();
     expect(getByTestId('webview-mock')).toBeTruthy();
+  });
+
+  it('enables and disables in-webview nav controls based on navigation state', () => {
+    const { getByTestId, queryByTestId } = render(<RecordingsWebView onBack={onBack} />);
+
+    expect(getByTestId('webview-control-back').props.accessibilityState.disabled).toBe(true);
+    expect(getByTestId('webview-control-forward').props.accessibilityState.disabled).toBe(true);
+    expect(getByTestId('recordings-login-hint')).toBeTruthy();
+
+    fireEvent.press(getByTestId('webview-nav-recordings'));
+
+    expect(getByTestId('webview-control-back').props.accessibilityState.disabled).toBe(false);
+    expect(getByTestId('webview-control-forward').props.accessibilityState.disabled).toBe(false);
+    expect(queryByTestId('recordings-login-hint')).toBeNull();
+  });
+
+  it('hooks controls to webview actions', () => {
+    const { getByTestId } = render(<RecordingsWebView onBack={onBack} />);
+    fireEvent.press(getByTestId('webview-nav-recordings'));
+
+    fireEvent.press(getByTestId('webview-control-back'));
+    fireEvent.press(getByTestId('webview-control-forward'));
+    fireEvent.press(getByTestId('webview-control-refresh'));
+
+    expect(mockWebViewMethodMocks.goBack).toHaveBeenCalledTimes(1);
+    expect(mockWebViewMethodMocks.goForward).toHaveBeenCalledTimes(1);
+    expect(mockWebViewMethodMocks.reload).toHaveBeenCalledTimes(1);
   });
 });
