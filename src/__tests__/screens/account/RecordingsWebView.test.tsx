@@ -58,7 +58,7 @@ jest.mock('react-native-webview', () => {
 
 describe('RecordingsWebView', () => {
   const onBack = jest.fn();
-  const openUrlSpy = jest.spyOn(Linking, 'openURL').mockResolvedValue();
+  const openUrlSpy = jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
 
   beforeEach(() => {
     jest.clearAllMocks();

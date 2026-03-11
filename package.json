@@ -8,6 +8,8 @@
     "android": "npm run sync:events && expo start --android",
     "ios": "npm run sync:events && expo start --ios",
     "web": "npm run sync:events && expo start --web",
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "typecheck": "tsc --noEmit",
     "test": "npm run sync:events && jest",
     "test:watch": "npm run sync:events && jest --watch",
     "test:coverage": "npm run sync:events && jest --coverage"
@@ -31,6 +33,8 @@
     "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
+    "eslint": "^9.36.0",
+    "eslint-config-expo": "^10.0.0",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",

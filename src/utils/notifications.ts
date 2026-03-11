@@ -18,6 +18,8 @@ export const initializeNotifications = async (): Promise<void> => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
       shouldPlaySound: true,
       shouldSetBadge: false,
     }),
@@ -101,7 +103,6 @@ const scheduleEventReminder = async (
         title: event.title || 'Upcoming event',
         body: event.isAllDay ? 'All day event' : 'Starting soon',
         sound: true,
-        channelId: Platform.OS === 'android' ? 'default' : undefined,
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -125,12 +126,10 @@ const scheduleDailyQuoteReminder = async (): Promise<void> => {
       title: 'Daily Quote',
       body: getRandomQuote(),
       sound: true,
-      channelId: Platform.OS === 'android' ? 'default' : undefined,
     },
     trigger: {
       hour: DAILY_QUOTE_HOUR,
       minute: 0,
-      repeats: true,
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       channelId: Platform.OS === 'android' ? 'default' : undefined,
     },

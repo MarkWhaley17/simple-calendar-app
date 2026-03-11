@@ -22,7 +22,7 @@ export function AnimatedPressable({
   onPressOut,
   ...rest
 }: AnimatedPressableProps) {
-  const scale = useSharedValue(motion.scale.active);
+  const scale = useSharedValue<number>(motion.scale.active);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
