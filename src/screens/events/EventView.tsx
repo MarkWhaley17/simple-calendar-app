@@ -1,29 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, ImageBackground, Image } from 'react-native';
 import { CalendarEvent } from '../../types';
-import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { GlassSurface } from '../../components/ui/GlassSurface';
+import { isPreloadedEvent } from '../../utils/eventEditability';
+import { formatFullDate, isSameDay } from '../../utils/dateHelpers';
 
 interface EventViewProps {
   event: CalendarEvent;
   onBack: () => void;
   onEdit?: () => void;
+  onAddNotes?: () => void;
 }
 
-const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
+const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit, onAddNotes }) => {
   // Support both new and legacy event structures
   const eventDate = event.fromDate || event.date || new Date();
+  const eventEndDate = event.toDate || eventDate;
   const eventTime = event.fromTime || event.startTime;
-
-  const monthName = MONTH_NAMES[eventDate.getMonth()];
-  const dayNumber = eventDate.getDate();
-  const year = eventDate.getFullYear();
 
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const headerBackground = require('../../../assets/day-bg.jpg');
   const detailsBackground = require('../../../assets/day-view-pattern.png');
+  const isPreloaded = isPreloadedEvent(event);
+  const showsDateRange = !isSameDay(eventDate, eventEndDate);
+  const eventDateLabel = showsDateRange
+    ? `${formatFullDate(eventDate)} - ${formatFullDate(eventEndDate)}`
+    : formatFullDate(eventDate);
+  const actionLabel = isPreloaded ? 'Add Notes' : 'Edit';
+  const actionHandler = isPreloaded ? onAddNotes : onEdit;
 
   const renderSection = (title: string, content: React.ReactNode) => {
     if (useIosNativePilot) {
@@ -58,13 +64,13 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
             >
               <Text style={styles.backButtonText}>‹ Back</Text>
             </TouchableOpacity>
-            {onEdit && (
+            {actionHandler && (
               <TouchableOpacity
                 style={styles.editButton}
-                onPress={onEdit}
+                onPress={actionHandler}
                 activeOpacity={0.7}
               >
-                <Text style={styles.editButtonText}>Edit</Text>
+                <Text style={styles.editButtonText}>{actionLabel}</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -72,8 +78,8 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
           <View style={styles.eventInfo}>
             <Text style={styles.eventTitle}>{event.title}</Text>
             <Text style={styles.eventDate}>
-              {monthName} {dayNumber}, {year}
-              {eventTime && ` • ${eventTime}`}
+              {eventDateLabel}
+              {!showsDateRange && eventTime && ` • ${eventTime}`}
             </Text>
           </View>
         </View>

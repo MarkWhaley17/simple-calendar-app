@@ -20,6 +20,7 @@ import { initializeNotifications, scheduleNotifications } from './src/utils/noti
 import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
 import {
   EditableEventUpdate,
+  isPreloadedEvent,
   sanitizeEventUpdateForEditability,
 } from './src/utils/eventEditability';
 
@@ -868,7 +869,12 @@ export default function App() {
           defaultAllDayReminderHours={notificationSettings.allDayReminderHours}
         />
       ) : viewMode === 'event' && selectedEvent ? (
-        <EventView event={selectedEvent} onBack={handleBackToDay} onEdit={handleEditEvent} />
+        <EventView
+          event={selectedEvent}
+          onBack={handleBackToDay}
+          onEdit={!isPreloadedEvent(selectedEvent) ? handleEditEvent : undefined}
+          onAddNotes={isPreloadedEvent(selectedEvent) ? handleEditEvent : undefined}
+        />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />
       ) : viewMode === 'privacyPolicy' ? (

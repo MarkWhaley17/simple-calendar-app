@@ -6,6 +6,7 @@ import { CalendarEvent } from '../../../types';
 describe('EventView', () => {
   const mockOnBack = jest.fn();
   const mockOnEdit = jest.fn();
+  const mockOnAddNotes = jest.fn();
 
   const mockEvent: CalendarEvent = {
     id: '1',
@@ -89,6 +90,45 @@ describe('EventView', () => {
     expect(queryByText('Edit')).toBeNull();
   });
 
+  it('shows Add Notes button for preloaded events when onAddNotes is provided', () => {
+    const preloadedEvent: CalendarEvent = {
+      ...mockEvent,
+      id: 'pre-added-123',
+    };
+
+    const { getByText, queryByText } = render(
+      <EventView
+        event={preloadedEvent}
+        onBack={mockOnBack}
+        onEdit={mockOnEdit}
+        onAddNotes={mockOnAddNotes}
+      />
+    );
+
+    expect(getByText('Add Notes')).toBeTruthy();
+    expect(queryByText('Edit')).toBeNull();
+  });
+
+  it('calls onAddNotes for preloaded event action button', () => {
+    const preloadedEvent: CalendarEvent = {
+      ...mockEvent,
+      id: 'pre-member-55',
+    };
+
+    const { getByText } = render(
+      <EventView
+        event={preloadedEvent}
+        onBack={mockOnBack}
+        onEdit={mockOnEdit}
+        onAddNotes={mockOnAddNotes}
+      />
+    );
+
+    fireEvent.press(getByText('Add Notes'));
+    expect(mockOnAddNotes).toHaveBeenCalledTimes(1);
+    expect(mockOnEdit).not.toHaveBeenCalled();
+  });
+
   it('should show "No description available" when description is missing', () => {
     const eventNoDescription: CalendarEvent = {
       ...mockEvent,
@@ -157,5 +197,39 @@ describe('EventView', () => {
 
     expect(getByText(/March 15, 2026/)).toBeTruthy();
     expect(getByText(/10:00 AM/)).toBeTruthy();
+  });
+
+  it('shows a date range in subtitle for preloaded multi-day events', () => {
+    const preloadedMultiDayEvent: CalendarEvent = {
+      ...mockEvent,
+      id: 'pre-added-77',
+      fromDate: new Date(2026, 2, 3),
+      toDate: new Date(2026, 2, 5),
+      fromTime: undefined,
+      startTime: undefined,
+    };
+
+    const { getByText } = render(
+      <EventView event={preloadedMultiDayEvent} onBack={mockOnBack} onAddNotes={mockOnAddNotes} />
+    );
+
+    expect(getByText('March 3, 2026 - March 5, 2026')).toBeTruthy();
+  });
+
+  it('shows a date range in subtitle for user-created multi-day events', () => {
+    const userMultiDayEvent: CalendarEvent = {
+      ...mockEvent,
+      id: '1234',
+      fromDate: new Date(2026, 2, 3),
+      toDate: new Date(2026, 2, 5),
+      fromTime: '9:00 AM',
+    };
+
+    const { getByText, queryByText } = render(
+      <EventView event={userMultiDayEvent} onBack={mockOnBack} onEdit={mockOnEdit} />
+    );
+
+    expect(getByText('March 3, 2026 - March 5, 2026')).toBeTruthy();
+    expect(queryByText('March 3, 2026 • 9:00 AM')).toBeNull();
   });
 });
