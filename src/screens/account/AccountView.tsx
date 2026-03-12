@@ -362,6 +362,8 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.xl,
     paddingHorizontal: spacing.lg + spacing.xs,
+    minHeight: 144,
+    justifyContent: 'flex-end',
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,

@@ -89,8 +89,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.xl,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    minHeight: 128,
     backgroundColor: colors.brandPrimary,
   },
   navButton: {
@@ -122,9 +124,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   glassOuter: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    paddingTop: spacing.lg + spacing.xs,
+    paddingBottom: spacing.xl,
   },
   glassContainer: {
     backgroundColor: colors.surfaceStrong,
@@ -133,8 +135,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
+    minHeight: 84,
   },
   glassNavButton: {
     backgroundColor: colors.surfaceStrong,

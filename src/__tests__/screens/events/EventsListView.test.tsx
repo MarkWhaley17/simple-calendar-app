@@ -1,32 +1,53 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import EventsListView from '../../../screens/events/EventsListView';
 import { CalendarEvent } from '../../../types';
+import { MONTH_NAMES } from '../../../constants/dates';
 
 describe('EventsListView', () => {
   const mockOnEventPress = jest.fn();
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const previousMonthDate = new Date(currentYear, currentMonth - 1, 5);
+  const nextMonthDate = new Date(currentYear, currentMonth + 1, 8);
+  const currentMonthName = MONTH_NAMES[currentMonth];
+  const previousMonthName = MONTH_NAMES[previousMonthDate.getMonth()];
+  const nextMonthName = MONTH_NAMES[nextMonthDate.getMonth()];
 
   const mockEvents: CalendarEvent[] = [
     {
       id: '1',
       title: 'First Event',
-      fromDate: new Date(2026, 0, 15),
+      fromDate: new Date(currentYear, currentMonth, 15),
       fromTime: '9:00 AM',
       description: 'First event description',
     },
     {
       id: '2',
       title: 'Second Event',
-      fromDate: new Date(2026, 0, 20),
+      fromDate: new Date(currentYear, currentMonth, 20),
       fromTime: '2:00 PM',
       description: 'Second event description',
     },
     {
       id: '3',
       title: 'Third Event',
-      fromDate: new Date(2026, 0, 10),
+      fromDate: new Date(currentYear, currentMonth, 10),
       isAllDay: true,
       description: 'All day event',
+    },
+    {
+      id: '4',
+      title: 'Previous Month Event',
+      fromDate: previousMonthDate,
+      fromTime: '10:00 AM',
+    },
+    {
+      id: '5',
+      title: 'Next Month Event',
+      fromDate: nextMonthDate,
+      fromTime: '11:00 AM',
     },
   ];
 
@@ -34,28 +55,22 @@ describe('EventsListView', () => {
     jest.clearAllMocks();
   });
 
-  it('should render header with current year and event count', () => {
-    const currentYear = new Date().getFullYear();
+  it('should render header with current month and event count', () => {
     const { getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText(`${currentYear} Events`)).toBeTruthy();
+    expect(getByText(`${currentMonthName} ${currentYear}`)).toBeTruthy();
     expect(getByText('3 events')).toBeTruthy();
   });
 
-  it('should only show events from the current year', () => {
-    const lastYearEvent: CalendarEvent = {
-      id: '99',
-      title: 'Last Year Event',
-      fromDate: new Date(new Date().getFullYear() - 1, 5, 15),
-      isAllDay: true,
-    };
+  it('should only show events from the visible month by default', () => {
     const { queryByText } = render(
-      <EventsListView events={[...mockEvents, lastYearEvent]} onEventPress={mockOnEventPress} />
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(queryByText('Last Year Event')).toBeNull();
+    expect(queryByText('Previous Month Event')).toBeNull();
+    expect(queryByText('Next Month Event')).toBeNull();
   });
 
   it('should render singular "event" when only one event', () => {
@@ -93,8 +108,8 @@ describe('EventsListView', () => {
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText(/January 15, 2026 • 9:00 AM/)).toBeTruthy();
-    expect(getByText(/January 20, 2026 • 2:00 PM/)).toBeTruthy();
+    expect(getByText(new RegExp(`${currentMonthName} 15, ${currentYear} • 9:00 AM`))).toBeTruthy();
+    expect(getByText(new RegExp(`${currentMonthName} 20, ${currentYear} • 2:00 PM`))).toBeTruthy();
   });
 
   it('should display "All Day" for all-day events', () => {
@@ -102,7 +117,7 @@ describe('EventsListView', () => {
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText(/January 10, 2026 • All Day/)).toBeTruthy();
+    expect(getByText(new RegExp(`${currentMonthName} 10, ${currentYear} • All Day`))).toBeTruthy();
   });
 
   it('should call onEventPress when event bar is pressed', () => {
@@ -123,13 +138,13 @@ describe('EventsListView', () => {
     expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[1]);
   });
 
-  it('should show empty state when no events', () => {
+  it('should show empty state when visible month has no events', () => {
     const { getByText } = render(
-      <EventsListView events={[]} onEventPress={mockOnEventPress} />
+      <EventsListView events={[{ ...mockEvents[4], id: 'only-next-month' }]} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText('No events yet')).toBeTruthy();
-    expect(getByText('Add an event to get started')).toBeTruthy();
+    expect(getByText('No events this month')).toBeTruthy();
+    expect(getByText('Swipe left or right to change months')).toBeTruthy();
   });
 
   it('should display 0 events in header when empty', () => {
@@ -144,16 +159,48 @@ describe('EventsListView', () => {
     const legacyEvent: CalendarEvent = {
       id: '4',
       title: 'Legacy Event',
-      date: new Date(2026, 2, 15),
+      date: new Date(currentYear, currentMonth, 15),
       startTime: '10:00 AM',
-      fromDate: new Date(2026, 2, 15),
+      fromDate: new Date(currentYear, currentMonth, 15),
     };
 
     const { getByText } = render(
       <EventsListView events={[legacyEvent]} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText(/March 15, 2026 • 10:00 AM/)).toBeTruthy();
+    expect(getByText(new RegExp(`${currentMonthName} 15, ${currentYear} • 10:00 AM`))).toBeTruthy();
+  });
+
+  it('should swipe left to next month', async () => {
+    const { getByTestId, getByText, queryByText } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+    const swipeArea = getByTestId('events-list-swipe-area');
+
+    fireEvent(swipeArea, 'touchStart', { nativeEvent: { pageX: 240, pageY: 300 } });
+    fireEvent(swipeArea, 'touchEnd', { nativeEvent: { pageX: 120, pageY: 305 } });
+
+    await waitFor(() => {
+      expect(getByText(`${nextMonthName} ${nextMonthDate.getFullYear()}`)).toBeTruthy();
+      expect(getByText('Next Month Event')).toBeTruthy();
+      expect(queryByText('First Event')).toBeNull();
+    });
+  });
+
+  it('should swipe right to previous month', async () => {
+    const { getByTestId, getByText, queryByText } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+    const swipeArea = getByTestId('events-list-swipe-area');
+
+    fireEvent(swipeArea, 'touchStart', { nativeEvent: { pageX: 120, pageY: 280 } });
+    fireEvent(swipeArea, 'touchEnd', { nativeEvent: { pageX: 240, pageY: 285 } });
+
+    await waitFor(() => {
+      expect(getByText(`${previousMonthName} ${previousMonthDate.getFullYear()}`)).toBeTruthy();
+      expect(getByText('Previous Month Event')).toBeTruthy();
+      expect(queryByText('First Event')).toBeNull();
+    });
   });
 
   it('should not mutate original events array', () => {

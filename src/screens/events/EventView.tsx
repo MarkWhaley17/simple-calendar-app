@@ -83,12 +83,6 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
           </Text>
         ))}
 
-        {event.accumulations !== undefined && (
-          renderSection('Accumulations', (
-            <Text style={styles.notesText}>{event.accumulations}</Text>
-          ))
-        )}
-
         {event.links && event.links.length > 0 && (
           renderSection('Notes', (
             <>
@@ -98,6 +92,12 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
               </Text>
             ))}
             </>
+          ))
+        )}
+
+        {event.accumulations !== undefined && (
+          renderSection('Accumulations', (
+            <Text style={styles.notesText}>{event.accumulations}</Text>
           ))
         )}
       </ScrollView>
@@ -115,6 +115,8 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.xl,
     paddingHorizontal: spacing.lg + spacing.xs,
+    minHeight: 144,
+    justifyContent: 'flex-end',
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
