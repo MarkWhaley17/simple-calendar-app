@@ -42,6 +42,7 @@ describe('EditEventView pre-loaded lock behavior', () => {
     expect(getByTestId('edit-repeat-button').props.accessibilityState.disabled).toBe(true);
     expect(getByTestId('edit-description-input').props.editable).toBe(false);
     expect(getByTestId('edit-links-input').props.editable).not.toBe(false);
+    expect(queryByText('Accumulations')).toBeNull();
     expect(queryByText('Delete Event')).toBeNull();
   });
 
@@ -64,6 +65,7 @@ describe('EditEventView pre-loaded lock behavior', () => {
     expect(getByTestId('edit-from-date-button').props.accessibilityState.disabled).toBe(false);
     expect(getByTestId('edit-to-date-button').props.accessibilityState.disabled).toBe(false);
     expect(getByTestId('edit-repeat-button').props.accessibilityState.disabled).toBe(false);
+    expect(getByTestId('edit-accumulations-input')).toBeTruthy();
     expect(queryByText('Delete Event')).toBeTruthy();
   });
 

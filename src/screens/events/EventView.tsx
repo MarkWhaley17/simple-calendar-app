@@ -83,6 +83,12 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
           </Text>
         ))}
 
+        {event.accumulations !== undefined && (
+          renderSection('Accumulations', (
+            <Text style={styles.notesText}>{event.accumulations}</Text>
+          ))
+        )}
+
         {event.links && event.links.length > 0 && (
           renderSection('Notes', (
             <>

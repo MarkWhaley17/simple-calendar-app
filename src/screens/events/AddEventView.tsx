@@ -17,6 +17,7 @@ interface AddEventViewProps {
     toDate: Date;
     toTime: string;
     links: string[];
+    accumulations?: number;
     isAllDay: boolean;
     recurrence?: RecurrenceRule;
     reminderEnabled?: boolean;
@@ -42,6 +43,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
   const [toDate, setToDate] = useState(initialDate || new Date());
   const [toTime, setToTime] = useState('10:00 AM');
   const [links, setLinks] = useState('');
+  const [accumulationsInput, setAccumulationsInput] = useState('');
   const [isAllDay, setIsAllDay] = useState(false);
   const [recurrence, setRecurrence] = useState<RecurrenceRule>({ frequency: 'none', interval: 1 });
   const [reminderEnabled, setReminderEnabled] = useState(true);
@@ -91,6 +93,13 @@ const AddEventView: React.FC<AddEventViewProps> = ({
     return true;
   };
 
+  const parseAccumulations = (value: string): number | undefined | null => {
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+    if (!/^\d+$/.test(trimmed)) return null;
+    return Number.parseInt(trimmed, 10);
+  };
+
   const handleSave = () => {
     if (!title.trim()) {
       Alert.alert('Missing title', 'Please enter a title for the event.');
@@ -105,6 +114,11 @@ const AddEventView: React.FC<AddEventViewProps> = ({
       .split('\n')
       .map(link => link.trim())
       .filter(link => link.length > 0);
+    const accumulations = parseAccumulations(accumulationsInput);
+    if (accumulations === null) {
+      Alert.alert('Invalid accumulations', 'Please enter a non-negative whole number.');
+      return;
+    }
 
     onSave({
       title: title.trim(),
@@ -114,6 +128,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
       toDate,
       toTime: isAllDay ? '11:59 PM' : toTime,
       links: linkArray,
+      accumulations,
       isAllDay,
       recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
       reminderEnabled,
@@ -138,7 +153,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
           >
             <Text style={styles.cancelButtonText}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>New Event</Text>
+          <Text style={styles.headerTitle}>New Session</Text>
           <TouchableOpacity
             style={styles.saveButton}
             onPress={handleSave}
@@ -174,6 +189,34 @@ const AddEventView: React.FC<AddEventViewProps> = ({
             onChangeText={setDescription}
             multiline
             numberOfLines={4}
+          />
+        </View>
+
+        {/* Notes */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Notes</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Add your notes and comments here"
+            placeholderTextColor={colors.placeholder}
+            value={links}
+            onChangeText={setLinks}
+            multiline
+            numberOfLines={3}
+          />
+        </View>
+
+        {/* Accumulations */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Accumulations</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter a whole number"
+            placeholderTextColor={colors.placeholder}
+            value={accumulationsInput}
+            onChangeText={setAccumulationsInput}
+            keyboardType="number-pad"
+            testID="add-accumulations-input"
           />
         </View>
 
@@ -329,19 +372,6 @@ const AddEventView: React.FC<AddEventViewProps> = ({
           )}
         </View>
 
-        {/* Links */}
-        <View style={styles.section}>
-          <Text style={styles.label}>Links</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Add links (one per line)"
-            placeholderTextColor={colors.placeholder}
-            value={links}
-            onChangeText={setLinks}
-            multiline
-            numberOfLines={3}
-          />
-        </View>
       </ScrollView>
 
       {/* Recurrence Picker Modal */}

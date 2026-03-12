@@ -364,6 +364,7 @@ export default function App() {
     toDate: Date;
     toTime: string;
     links: string[];
+    accumulations?: number;
     isAllDay: boolean;
     recurrence?: import('./src/types').RecurrenceRule;
     reminderEnabled?: boolean;
@@ -379,6 +380,7 @@ export default function App() {
       toDate: eventData.toDate,
       toTime: eventData.toTime,
       links: eventData.links,
+      accumulations: eventData.accumulations,
       isAllDay: eventData.isAllDay,
       recurrence: eventData.recurrence,
       recurrenceId: eventData.recurrence ? Date.now().toString() : undefined,
@@ -487,6 +489,7 @@ export default function App() {
             toDate: sanitizedEventData.toDate,
             toTime: sanitizedEventData.toTime,
             links: sanitizedEventData.links,
+            accumulations: sanitizedEventData.accumulations,
             isAllDay: sanitizedEventData.isAllDay,
             reminderEnabled: sanitizedEventData.reminderEnabled,
             reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
@@ -514,6 +517,7 @@ export default function App() {
         toDate: sanitizedEventData.toDate,
         toTime: sanitizedEventData.toTime,
         links: sanitizedEventData.links,
+        accumulations: sanitizedEventData.accumulations,
         isAllDay: sanitizedEventData.isAllDay,
         reminderEnabled: sanitizedEventData.reminderEnabled,
         reminderMinutesBefore: sanitizedEventData.reminderMinutesBefore,
@@ -538,6 +542,7 @@ export default function App() {
               toDate: eventToEdit?.isRecurringInstance ? event.toDate : sanitizedEventData.toDate,
               toTime: sanitizedEventData.toTime,
               links: sanitizedEventData.links,
+              accumulations: sanitizedEventData.accumulations,
               isAllDay: sanitizedEventData.isAllDay,
               recurrence: sanitizedEventData.recurrence,
               recurrenceId: sanitizedEventData.recurrence ? (event.recurrenceId || event.id) : undefined,
@@ -562,6 +567,7 @@ export default function App() {
             toDate: shouldKeepInstanceDate ? eventToEdit.toDate : sanitizedEventData.toDate,
             toTime: sanitizedEventData.toTime,
             links: sanitizedEventData.links,
+            accumulations: sanitizedEventData.accumulations,
             isAllDay: sanitizedEventData.isAllDay,
             recurrence: sanitizedEventData.recurrence,
             reminderEnabled: sanitizedEventData.reminderEnabled,

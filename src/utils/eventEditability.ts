@@ -9,6 +9,7 @@ export interface EditableEventUpdate {
   toDate: Date;
   toTime: string;
   links: string[];
+  accumulations?: number;
   isAllDay: boolean;
   recurrence?: RecurrenceRule;
   reminderEnabled?: boolean;
@@ -35,6 +36,7 @@ export const sanitizeEventUpdateForEditability = (
     fromTime: originalEvent.fromTime || originalEvent.startTime || incomingUpdate.fromTime,
     toDate: originalEvent.toDate || originalEvent.date || incomingUpdate.toDate,
     toTime: originalEvent.toTime || originalEvent.endTime || incomingUpdate.toTime,
+    accumulations: originalEvent.accumulations,
     isAllDay: originalEvent.isAllDay ?? incomingUpdate.isAllDay,
     recurrence: originalEvent.recurrence,
     reminderEnabled: originalEvent.reminderEnabled,

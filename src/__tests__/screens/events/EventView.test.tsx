@@ -115,6 +115,33 @@ describe('EventView', () => {
     expect(queryByText('Notes')).toBeNull();
   });
 
+  it('shows accumulations when provided', () => {
+    const withAccumulations: CalendarEvent = {
+      ...mockEvent,
+      accumulations: 108,
+    };
+
+    const { getByText } = render(
+      <EventView event={withAccumulations} onBack={mockOnBack} />
+    );
+
+    expect(getByText('Accumulations')).toBeTruthy();
+    expect(getByText('108')).toBeTruthy();
+  });
+
+  it('does not show accumulations section when missing', () => {
+    const withoutAccumulations: CalendarEvent = {
+      ...mockEvent,
+      accumulations: undefined,
+    };
+
+    const { queryByText } = render(
+      <EventView event={withoutAccumulations} onBack={mockOnBack} />
+    );
+
+    expect(queryByText('Accumulations')).toBeNull();
+  });
+
   it('should handle legacy date field', () => {
     const legacyEvent: CalendarEvent = {
       id: '2',

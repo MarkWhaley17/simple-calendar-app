@@ -22,6 +22,7 @@ interface EditEventViewProps {
     toDate: Date;
     toTime: string;
     links: string[];
+    accumulations?: number;
     isAllDay: boolean;
     recurrence?: RecurrenceRule;
     reminderEnabled?: boolean;
@@ -73,6 +74,9 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   const [toDate, setToDate] = useState(event.toDate || event.date || new Date());
   const [toTime, setToTime] = useState(event.toTime || event.endTime || '10:00 AM');
   const [links, setLinks] = useState((event.links || []).join('\n'));
+  const [accumulationsInput, setAccumulationsInput] = useState(
+    event.accumulations === undefined ? '' : `${event.accumulations}`
+  );
   const [isAllDay, setIsAllDay] = useState(event.isAllDay || false);
   const [recurrence, setRecurrence] = useState<RecurrenceRule>(
     event.recurrence || { frequency: 'none', interval: 1 }
@@ -130,6 +134,13 @@ const EditEventView: React.FC<EditEventViewProps> = ({
     return true;
   };
 
+  const parseAccumulations = (value: string): number | undefined | null => {
+    const trimmed = value.trim();
+    if (!trimmed) return undefined;
+    if (!/^\d+$/.test(trimmed)) return null;
+    return Number.parseInt(trimmed, 10);
+  };
+
   const handleSave = () => {
     if (!title.trim()) {
       return; // Could add validation UI here
@@ -143,6 +154,11 @@ const EditEventView: React.FC<EditEventViewProps> = ({
       .split('\n')
       .map(link => link.trim())
       .filter(link => link.length > 0);
+    const accumulations = parseAccumulations(accumulationsInput);
+    if (accumulations === null) {
+      Alert.alert('Invalid accumulations', 'Please enter a non-negative whole number.');
+      return;
+    }
 
     onSave({
       id: event.id,
@@ -153,6 +169,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
       toDate,
       toTime: isAllDay ? '11:59 PM' : toTime,
       links: linkArray,
+      accumulations,
       isAllDay,
       recurrence: recurrence.frequency !== 'none' ? recurrence : undefined,
       reminderEnabled,
@@ -267,6 +284,39 @@ const EditEventView: React.FC<EditEventViewProps> = ({
             testID="edit-description-input"
           />
         </SectionContainer>
+
+        {/* Notes */}
+        <SectionContainer useIosPilot={useIosPilot}>
+          <Text style={styles.label}>Notes</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Add your notes and comments here"
+            placeholderTextColor={colors.placeholder}
+            value={links}
+            onChangeText={setLinks}
+            multiline
+            numberOfLines={3}
+            blurOnSubmit={false}
+            returnKeyType="default"
+            submitBehavior="newline"
+            testID="edit-links-input"
+          />
+        </SectionContainer>
+
+        {!isLockedEvent && (
+          <SectionContainer useIosPilot={useIosPilot}>
+            <Text style={styles.label}>Accumulations</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter a whole number"
+              placeholderTextColor={colors.placeholder}
+              value={accumulationsInput}
+              onChangeText={setAccumulationsInput}
+              keyboardType="number-pad"
+              testID="edit-accumulations-input"
+            />
+          </SectionContainer>
+        )}
 
         {/* All Day Toggle */}
         <SectionContainer useIosPilot={useIosPilot}>
@@ -436,24 +486,6 @@ const EditEventView: React.FC<EditEventViewProps> = ({
               )}
             </>
           )}
-        </SectionContainer>
-
-        {/* Links */}
-        <SectionContainer useIosPilot={useIosPilot}>
-          <Text style={styles.label}>Notes</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Add your notes and comments here"
-            placeholderTextColor={colors.placeholder}
-            value={links}
-            onChangeText={setLinks}
-            multiline
-            numberOfLines={3}
-            blurOnSubmit={false}
-            returnKeyType="default"
-            submitBehavior="newline"
-            testID="edit-links-input"
-          />
         </SectionContainer>
 
         {/* Delete Button */}

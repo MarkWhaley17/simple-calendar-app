@@ -243,7 +243,7 @@ const DayView: React.FC<DayViewProps> = ({
         activeOpacity={0.8}
         onPress={onAddEvent}
       >
-        <Text style={styles.addButtonText}>+ Add Event</Text>
+        <Text style={styles.addButtonText}>+ Add Practice Session</Text>
       </TouchableOpacity>
     </View>
   );
