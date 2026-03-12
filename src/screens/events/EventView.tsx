@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, ImageBackground, Image } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
@@ -22,6 +22,8 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
   const year = eventDate.getFullYear();
 
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
+  const headerBackground = require('../../../assets/day-bg.jpg');
+  const detailsBackground = require('../../../assets/day-view-pattern.png');
 
   const renderSection = (title: string, content: React.ReactNode) => {
     if (useIosNativePilot) {
@@ -46,61 +48,66 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit }) => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBack}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.backButtonText}>‹ Back</Text>
-          </TouchableOpacity>
-          {onEdit && (
+      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+        <View style={styles.header}>
+          <View style={styles.headerTop}>
             <TouchableOpacity
-              style={styles.editButton}
-              onPress={onEdit}
+              style={styles.backButton}
+              onPress={onBack}
               activeOpacity={0.7}
             >
-              <Text style={styles.editButtonText}>Edit</Text>
+              <Text style={styles.backButtonText}>‹ Back</Text>
             </TouchableOpacity>
-          )}
-        </View>
+            {onEdit && (
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={onEdit}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>
+            )}
+          </View>
 
-        <View style={styles.eventInfo}>
-          <Text style={styles.eventTitle}>{event.title}</Text>
-          <Text style={styles.eventDate}>
-            {monthName} {dayNumber}, {year}
-            {eventTime && ` • ${eventTime}`}
-          </Text>
+          <View style={styles.eventInfo}>
+            <Text style={styles.eventTitle}>{event.title}</Text>
+            <Text style={styles.eventDate}>
+              {monthName} {dayNumber}, {year}
+              {eventTime && ` • ${eventTime}`}
+            </Text>
+          </View>
         </View>
-      </View>
+      </ImageBackground>
 
       {/* Event Details */}
-      <ScrollView style={styles.content}>
-        {renderSection('Description', (
-          <Text style={styles.descriptionText}>
-            {event.description || 'No description available'}
-          </Text>
-        ))}
+      <View style={styles.detailsBackground}>
+        <Image source={detailsBackground} style={styles.detailsPatternImage} resizeMode="cover" />
+        <ScrollView style={styles.content}>
+          {renderSection('Description', (
+            <Text style={styles.descriptionText}>
+              {event.description || 'No description available'}
+            </Text>
+          ))}
 
-        {event.links && event.links.length > 0 && (
-          renderSection('Notes', (
-            <>
-            {event.links.map((link, index) => (
-              <Text key={index} style={styles.notesText}>
-                {link}
-              </Text>
-            ))}
-            </>
-          ))
-        )}
+          {event.links && event.links.length > 0 && (
+            renderSection('Notes', (
+              <>
+              {event.links.map((link, index) => (
+                <Text key={index} style={styles.notesText}>
+                  {link}
+                </Text>
+              ))}
+              </>
+            ))
+          )}
 
-        {event.accumulations !== undefined && (
-          renderSection('Accumulations', (
-            <Text style={styles.notesText}>{event.accumulations}</Text>
-          ))
-        )}
-      </ScrollView>
+          {event.accumulations !== undefined && (
+            renderSection('Accumulations', (
+              <Text style={styles.notesText}>{event.accumulations}</Text>
+            ))
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -110,8 +117,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgSubtle,
   },
+  headerBackground: {
+    width: '100%',
+  },
   header: {
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.brandOverlay,
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.xl,
     paddingHorizontal: spacing.lg + spacing.xs,
@@ -165,6 +175,15 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  detailsBackground: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  detailsPatternImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   section: {
     backgroundColor: colors.surfaceSolid,
