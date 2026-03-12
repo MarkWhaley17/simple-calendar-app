@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
+import { AnimatedPressable } from '../../components/ui/AnimatedPressable';
 import { colors, elevation, spacing } from '../../theme/tokens';
+import { isPreloadedEvent } from '../../utils/eventEditability';
 
 interface DayViewProps {
   selectedDate: Date;
@@ -148,13 +151,64 @@ const DayView: React.FC<DayViewProps> = ({
                 const eventTime = isMultiDayAllDay
                   ? formatDateRange(start, end)
                   : (event.isAllDay ? 'All Day' : (event.fromTime || event.startTime || ''));
+                const isPreloaded = isPreloadedEvent(event);
+
+                if (isPreloaded) {
+                  return (
+                    <AnimatedPressable
+                      key={event.id}
+                      style={styles.preloadedEventTouchable}
+                      onPress={() => onEventPress && onEventPress(event)}
+                      hapticOnPress
+                      scaleTo={0.985}
+                      testID={`day-event-preloaded-${event.id}`}
+                    >
+                      {useIosPilot ? (
+                        <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
+                          <LinearGradient
+                            colors={['rgba(37, 99, 235, 0.1)', 'rgba(191, 219, 254, 0.14)']}
+                            locations={[0, 1]}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                            style={styles.preloadedEventGradient}
+                          />
+                          <View style={styles.preloadedEventTextColumn}>
+                            <Text style={styles.eventTitle}>{event.title}</Text>
+                            {eventTime && (
+                              <Text style={styles.eventTime}>{eventTime}</Text>
+                            )}
+                          </View>
+                          <Text style={styles.preloadedEventChevron}>›</Text>
+                        </GlassSurface>
+                      ) : (
+                        <View style={styles.preloadedEventRowFallback}>
+                          <LinearGradient
+                            colors={['rgba(37, 99, 235, 0.09)', 'rgba(191, 219, 254, 0.12)']}
+                            locations={[0, 1]}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                            style={styles.preloadedEventGradient}
+                          />
+                          <View style={styles.preloadedEventTextColumn}>
+                            <Text style={styles.eventTitle}>{event.title}</Text>
+                            {eventTime && (
+                              <Text style={styles.eventTime}>{eventTime}</Text>
+                            )}
+                          </View>
+                          <Text style={styles.preloadedEventChevron}>›</Text>
+                        </View>
+                      )}
+                    </AnimatedPressable>
+                  );
+                }
 
                 return (
                   <TouchableOpacity
                     key={event.id}
-                    style={styles.eventCardTouchable}
+                    style={styles.userEventCardTouchable}
                     onPress={() => onEventPress && onEventPress(event)}
                     activeOpacity={0.8}
+                    testID={`day-event-user-${event.id}`}
                   >
                     {useIosPilot ? (
                       <GlassSurface style={styles.eventCard} intensity={38}>
@@ -253,7 +307,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   eventsList: {
-    padding: spacing.lg + spacing.xs,
+    paddingVertical: spacing.lg + spacing.xs,
   },
   eventCard: {
     backgroundColor: colors.surfaceSolid,
@@ -264,8 +318,55 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.danger,
     ...elevation.card,
   },
-  eventCardTouchable: {
+  userEventCardTouchable: {
+    marginHorizontal: spacing.lg + spacing.xs,
     marginBottom: 14,
+  },
+  preloadedEventTouchable: {
+    marginBottom: 14,
+  },
+  preloadedEventRowGlass: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.borderSubtle,
+  },
+  preloadedEventRowContent: {
+    position: 'relative',
+    minHeight: 84,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: spacing.lg + spacing.xs,
+    paddingRight: spacing.lg + spacing.xs,
+    paddingVertical: 18,
+  },
+  preloadedEventRowFallback: {
+    position: 'relative',
+    minHeight: 84,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: spacing.lg + spacing.xs,
+    paddingRight: spacing.lg + spacing.xs,
+    paddingVertical: 18,
+    backgroundColor: colors.brandSurface,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.borderSubtle,
+  },
+  preloadedEventGradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  preloadedEventTextColumn: {
+    flex: 1,
+  },
+  preloadedEventChevron: {
+    fontSize: 24,
+    lineHeight: 24,
+    color: colors.brandPrimary,
+    marginLeft: spacing.md,
+    opacity: 0.9,
+    fontWeight: '700',
   },
   eventTitle: {
     fontSize: 17,

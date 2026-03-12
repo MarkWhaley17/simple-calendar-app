@@ -249,4 +249,30 @@ describe('DayView', () => {
     expect(tree.indexOf('Medicine Buddha Day')).toBeGreaterThan(-1);
     expect(tree.indexOf('Protector Day')).toBeLessThan(tree.indexOf('Medicine Buddha Day'));
   });
+
+  it('renders pre-loaded events as full-width rows and user events as cards', () => {
+    const preloadedEvent: CalendarEvent = {
+      id: 'pre-added-1',
+      title: 'Preloaded Event',
+      fromDate: new Date(2026, 2, 10),
+      isAllDay: true,
+    };
+    const userEvent: CalendarEvent = {
+      id: 'user-1',
+      title: 'User Event',
+      fromDate: new Date(2026, 2, 10),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 10)}
+        onBack={jest.fn()}
+        events={[preloadedEvent, userEvent]}
+      />
+    );
+
+    expect(getByTestId('day-event-preloaded-pre-added-1')).toHaveStyle({ marginBottom: 14 });
+    expect(getByTestId('day-event-user-user-1')).toHaveStyle({ marginHorizontal: 20, marginBottom: 14 });
+  });
 });
