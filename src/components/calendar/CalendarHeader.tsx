@@ -1,12 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_MOTION_UI } from '../../theme/flags';
-import { colors, radius, spacing } from '../../theme/tokens';
+import { ENABLE_MOTION_UI } from '../../theme/flags';
+import { colors, spacing } from '../../theme/tokens';
 import { AnimatedPressable } from '../ui/AnimatedPressable';
 import { AnimatedMonthTitle } from './AnimatedMonthTitle';
-import { GlassSurface } from '../ui/GlassSurface';
-import { glassStyles } from '../ui/glassStyles';
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -23,68 +21,54 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 }) => {
   const monthName = MONTH_NAMES[currentDate.getMonth()];
   const year = currentDate.getFullYear();
-
-  const content = (
-    <>
-      <AnimatedPressable
-        style={[styles.navButton, ENABLE_GLASS_UI && styles.glassNavButton]}
-        onPress={onPreviousMonth}
-        scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
-        hapticOnPress={ENABLE_MOTION_UI}
-      >
-        <Text style={[styles.navButtonText, ENABLE_GLASS_UI && styles.glassNavButtonText]}>‹</Text>
-      </AnimatedPressable>
-
-      <AnimatedPressable
-        style={styles.dateContainer}
-        onPress={onDatePress}
-        scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
-        disabled={!onDatePress}
-      >
-        {ENABLE_MOTION_UI ? (
-          <AnimatedMonthTitle
-            title={monthName}
-            style={[styles.monthText, ENABLE_GLASS_UI && styles.glassMonthText]}
-          />
-        ) : (
-          <Text style={[styles.monthText, ENABLE_GLASS_UI && styles.glassMonthText]}>{monthName}</Text>
-        )}
-        <Text style={[styles.yearText, ENABLE_GLASS_UI && styles.glassYearText]}>{year} ▼</Text>
-      </AnimatedPressable>
-
-      <AnimatedPressable
-        style={[styles.navButton, ENABLE_GLASS_UI && styles.glassNavButton]}
-        onPress={onNextMonth}
-        scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
-        hapticOnPress={ENABLE_MOTION_UI}
-      >
-        <Text style={[styles.navButtonText, ENABLE_GLASS_UI && styles.glassNavButtonText]}>›</Text>
-      </AnimatedPressable>
-    </>
-  );
-
-  if (ENABLE_GLASS_UI) {
-    return (
-      <View style={styles.glassOuter}>
-        <GlassSurface
-          style={[styles.glassContainer, glassStyles.card]}
-          intensity={32}
-          contentStyle={styles.glassContent}
-        >
-          {content}
-        </GlassSurface>
-      </View>
-    );
-  }
+  const headerBackground = require('../../../assets/day-bg.jpg');
 
   return (
-    <View style={styles.container}>
-      {content}
-    </View>
+    <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+      <View style={styles.container}>
+        <AnimatedPressable
+          style={styles.navButton}
+          onPress={onPreviousMonth}
+          scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
+          hapticOnPress={ENABLE_MOTION_UI}
+        >
+          <Text style={styles.navButtonText}>‹</Text>
+        </AnimatedPressable>
+
+        <AnimatedPressable
+          style={styles.dateContainer}
+          onPress={onDatePress}
+          scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
+          disabled={!onDatePress}
+        >
+          {ENABLE_MOTION_UI ? (
+            <AnimatedMonthTitle
+              title={monthName}
+              style={styles.monthText}
+            />
+          ) : (
+            <Text style={styles.monthText}>{monthName}</Text>
+          )}
+          <Text style={styles.yearText}>{year} ▼</Text>
+        </AnimatedPressable>
+
+        <AnimatedPressable
+          style={styles.navButton}
+          onPress={onNextMonth}
+          scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
+          hapticOnPress={ENABLE_MOTION_UI}
+        >
+          <Text style={styles.navButtonText}>›</Text>
+        </AnimatedPressable>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  headerBackground: {
+    width: '100%',
+  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -92,8 +76,8 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.xl,
     paddingHorizontal: spacing.lg + spacing.xs,
-    minHeight: 128,
-    backgroundColor: colors.brandPrimary,
+    minHeight: 144,
+    backgroundColor: colors.brandOverlay,
   },
   navButton: {
     width: 44,
@@ -101,13 +85,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 22,
-    backgroundColor: colors.accentStrong,
   },
   navButtonText: {
-    fontSize: 32,
-    fontWeight: '300',
-    color: colors.white,
-    marginTop: -4,
+    fontSize: 34,
+    lineHeight: 34,
+    fontWeight: '400',
+    color: colors.textOnBrandMuted,
+    textAlign: 'center',
+    includeFontPadding: false,
   },
   dateContainer: {
     alignItems: 'center',
@@ -120,40 +105,8 @@ const styles = StyleSheet.create({
   yearText: {
     fontSize: 16,
     fontWeight: '400',
-    color: colors.brandSurface,
+    color: colors.textOnBrandMuted,
     marginTop: 2,
-  },
-  glassOuter: {
-    paddingHorizontal: spacing.lg + spacing.xs,
-    paddingTop: spacing.lg + spacing.xs,
-    paddingBottom: spacing.xl,
-  },
-  glassContainer: {
-    backgroundColor: colors.surfaceStrong,
-  },
-  glassContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    minHeight: 84,
-  },
-  glassNavButton: {
-    backgroundColor: colors.surfaceStrong,
-    borderWidth: 1,
-    borderColor: colors.borderStrong,
-    borderRadius: radius.pill,
-  },
-  glassNavButtonText: {
-    color: colors.accent,
-    fontWeight: '400',
-  },
-  glassMonthText: {
-    color: colors.textPrimary,
-  },
-  glassYearText: {
-    color: colors.textSecondary,
   },
 });
 

@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
+    minHeight: 144,
     ...elevation.card,
   },
   headerTitle: {

@@ -523,6 +523,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.lg + spacing.xs,
     paddingHorizontal: spacing.lg + spacing.xs,
+    minHeight: 144,
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,

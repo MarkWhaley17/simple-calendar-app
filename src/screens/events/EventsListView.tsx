@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated, ImageBackground } from 'react-native';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
@@ -12,6 +12,7 @@ interface EventsListViewProps {
 }
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress }) => {
+  const headerBackground = require('../../../assets/day-bg.jpg');
   const [visibleMonthDate, setVisibleMonthDate] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
@@ -157,10 +158,34 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress })
         ]}
       >
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
-          <Text style={styles.headerSubtitle}>{sortedEvents.length} event{sortedEvents.length !== 1 ? 's' : ''}</Text>
-        </View>
+        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+          <View style={styles.header}>
+            <View style={styles.headerTopRow}>
+              <View style={styles.headerMonthBlock}>
+                <Text style={styles.headerTitle}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
+                <Text style={styles.headerSubtitle}>{sortedEvents.length} event{sortedEvents.length !== 1 ? 's' : ''}</Text>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={[styles.headerNavButton, styles.headerNavButtonLeft]}
+              onPress={() => runMonthSwipeTransition('previous')}
+              activeOpacity={0.8}
+              testID="events-header-prev-month"
+              accessibilityLabel="Previous month"
+            >
+              <Text style={styles.headerNavButtonText}>‹</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.headerNavButton, styles.headerNavButtonRight]}
+              onPress={() => runMonthSwipeTransition('next')}
+              activeOpacity={0.8}
+              testID="events-header-next-month"
+              accessibilityLabel="Next month"
+            >
+              <Text style={styles.headerNavButtonText}>›</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
 
         {/* Events list */}
         <ScrollView style={styles.eventsContainer}>
@@ -207,24 +232,61 @@ const styles = StyleSheet.create({
   animatedContent: {
     flex: 1,
   },
+  headerBackground: {
+    width: '100%',
+  },
   header: {
-    backgroundColor: colors.brandPrimary,
-    paddingTop: spacing.lg + spacing.xs,
-    paddingBottom: spacing.xl,
+    backgroundColor: colors.brandOverlay,
+    paddingTop: 0,
+    paddingBottom: 0,
     paddingHorizontal: spacing.lg + spacing.xs,
     minHeight: 144,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    position: 'relative',
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 5,
   },
+  headerTopRow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerMonthBlock: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerNavButton: {
+    position: 'absolute',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: '50%',
+    marginTop: -22,
+  },
+  headerNavButtonLeft: {
+    left: spacing.lg + spacing.xs,
+  },
+  headerNavButtonRight: {
+    right: spacing.lg + spacing.xs,
+  },
+  headerNavButtonText: {
+    fontSize: 34,
+    lineHeight: 34,
+    color: colors.textOnBrandMuted,
+    fontWeight: '400',
+    textAlign: 'center',
+    includeFontPadding: false,
+  },
   headerTitle: {
-    fontSize: 32,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '600',
     color: colors.textOnBrand,
-    letterSpacing: 0.3,
+    letterSpacing: 0,
+    textAlign: 'center',
   },
   headerSubtitle: {
     fontSize: 15,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform, ImageBackground } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
@@ -29,6 +29,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   onOpenTermsOfService,
   onOpenFeedback,
 }) => {
+  const headerBackground = require('../../../assets/day-bg.jpg');
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -134,9 +135,11 @@ const AccountView: React.FC<AccountViewProps> = ({
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Account</Text>
-      </View>
+      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Account</Text>
+        </View>
+      </ImageBackground>
 
       {/* Content */}
       <ScrollView style={styles.content}>
@@ -357,13 +360,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgSubtle,
   },
+  headerBackground: {
+    width: '100%',
+  },
   header: {
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.brandOverlay,
     paddingTop: spacing.lg + spacing.xs,
     paddingBottom: spacing.xl,
     paddingHorizontal: spacing.lg + spacing.xs,
     minHeight: 144,
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -375,6 +381,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.textOnBrand,
     letterSpacing: 0.3,
+    textAlign: 'center',
+    alignSelf: 'center',
   },
   content: {
     flex: 1,

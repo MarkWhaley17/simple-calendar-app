@@ -203,6 +203,34 @@ describe('EventsListView', () => {
     });
   });
 
+  it('should go to next month when right header arrow is pressed', async () => {
+    const { getByTestId, getByText, queryByText } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+
+    fireEvent.press(getByTestId('events-header-next-month'));
+
+    await waitFor(() => {
+      expect(getByText(`${nextMonthName} ${nextMonthDate.getFullYear()}`)).toBeTruthy();
+      expect(getByText('Next Month Event')).toBeTruthy();
+      expect(queryByText('First Event')).toBeNull();
+    });
+  });
+
+  it('should go to previous month when left header arrow is pressed', async () => {
+    const { getByTestId, getByText, queryByText } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+
+    fireEvent.press(getByTestId('events-header-prev-month'));
+
+    await waitFor(() => {
+      expect(getByText(`${previousMonthName} ${previousMonthDate.getFullYear()}`)).toBeTruthy();
+      expect(getByText('Previous Month Event')).toBeTruthy();
+      expect(queryByText('First Event')).toBeNull();
+    });
+  });
+
   it('should not mutate original events array', () => {
     const eventsCopy = [...mockEvents];
     render(
