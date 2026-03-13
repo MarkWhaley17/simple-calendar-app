@@ -113,82 +113,6 @@ const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack, user }) => {
     ],
   };
 
-  const IntroCard = () =>
-    useGlass ? (
-      <GlassSurface style={styles.card} intensity={42} contentStyle={styles.cardInner}>
-        <Text style={styles.title}>Help us improve Kalapa Calendar</Text>
-        <Text style={styles.body}>
-          Share bugs, ideas, or requests. Feedback is submitted securely to our review queue.
-        </Text>
-      </GlassSurface>
-    ) : (
-      <View style={[styles.card, styles.fallbackCard]}>
-        <Text style={styles.title}>Help us improve Kalapa Calendar</Text>
-        <Text style={styles.body}>
-          Share bugs, ideas, or requests. Feedback is submitted securely to our review queue.
-        </Text>
-      </View>
-    );
-
-  const FormCard = () =>
-    useGlass ? (
-      <GlassSurface style={styles.card} intensity={42} contentStyle={styles.cardInner}>
-        <TextInput
-          placeholder="Subject"
-          placeholderTextColor={colors.textSecondary}
-          style={styles.input}
-          value={subject}
-          onChangeText={setSubject}
-          editable={!isSubmitting}
-        />
-        <TextInput
-          placeholder="Message"
-          placeholderTextColor={colors.textSecondary}
-          style={[styles.input, styles.messageInput]}
-          value={message}
-          onChangeText={setMessage}
-          multiline
-          editable={!isSubmitting}
-        />
-        <TouchableOpacity
-          style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
-          onPress={handleSubmit}
-          testID="submit-feedback"
-          disabled={isSubmitting}
-        >
-          <Text style={styles.primaryButtonText}>{isSubmitting ? 'Sending…' : 'Submit Feedback'}</Text>
-        </TouchableOpacity>
-      </GlassSurface>
-    ) : (
-      <View style={[styles.card, styles.fallbackCard]}>
-        <TextInput
-          placeholder="Subject"
-          placeholderTextColor={colors.textSecondary}
-          style={styles.input}
-          value={subject}
-          onChangeText={setSubject}
-          editable={!isSubmitting}
-        />
-        <TextInput
-          placeholder="Message"
-          placeholderTextColor={colors.textSecondary}
-          style={[styles.input, styles.messageInput]}
-          value={message}
-          onChangeText={setMessage}
-          multiline
-          editable={!isSubmitting}
-        />
-        <TouchableOpacity
-          style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
-          onPress={handleSubmit}
-          testID="submit-feedback"
-          disabled={isSubmitting}
-        >
-          <Text style={styles.primaryButtonText}>{isSubmitting ? 'Sending…' : 'Submit Feedback'}</Text>
-        </TouchableOpacity>
-      </View>
-    );
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -226,11 +150,81 @@ const FeedbackView: React.FC<FeedbackViewProps> = ({ onBack, user }) => {
         automaticallyAdjustKeyboardInsets
       >
         <Animated.View style={introAnimStyle} testID="feedback-intro-card">
-          <IntroCard />
+          {useGlass ? (
+            <GlassSurface style={styles.card} intensity={42} contentStyle={styles.cardInner}>
+              <Text style={styles.title}>Help us improve Kalapa Calendar</Text>
+              <Text style={styles.body}>
+                Share bugs, ideas, or requests. Feedback is submitted securely to our review queue.
+              </Text>
+            </GlassSurface>
+          ) : (
+            <View style={[styles.card, styles.fallbackCard]}>
+              <Text style={styles.title}>Help us improve Kalapa Calendar</Text>
+              <Text style={styles.body}>
+                Share bugs, ideas, or requests. Feedback is submitted securely to our review queue.
+              </Text>
+            </View>
+          )}
         </Animated.View>
 
         <Animated.View style={formAnimStyle} testID="feedback-form-card">
-          <FormCard />
+          {useGlass ? (
+            <GlassSurface style={styles.card} intensity={42} contentStyle={styles.cardInner}>
+              <TextInput
+                placeholder="Subject"
+                placeholderTextColor={colors.textSecondary}
+                style={styles.input}
+                value={subject}
+                onChangeText={setSubject}
+                editable={!isSubmitting}
+              />
+              <TextInput
+                placeholder="Message"
+                placeholderTextColor={colors.textSecondary}
+                style={[styles.input, styles.messageInput]}
+                value={message}
+                onChangeText={setMessage}
+                multiline
+                editable={!isSubmitting}
+              />
+              <TouchableOpacity
+                style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
+                onPress={handleSubmit}
+                testID="submit-feedback"
+                disabled={isSubmitting}
+              >
+                <Text style={styles.primaryButtonText}>{isSubmitting ? 'Sending…' : 'Submit Feedback'}</Text>
+              </TouchableOpacity>
+            </GlassSurface>
+          ) : (
+            <View style={[styles.card, styles.fallbackCard]}>
+              <TextInput
+                placeholder="Subject"
+                placeholderTextColor={colors.textSecondary}
+                style={styles.input}
+                value={subject}
+                onChangeText={setSubject}
+                editable={!isSubmitting}
+              />
+              <TextInput
+                placeholder="Message"
+                placeholderTextColor={colors.textSecondary}
+                style={[styles.input, styles.messageInput]}
+                value={message}
+                onChangeText={setMessage}
+                multiline
+                editable={!isSubmitting}
+              />
+              <TouchableOpacity
+                style={[styles.primaryButton, isSubmitting && styles.primaryButtonDisabled]}
+                onPress={handleSubmit}
+                testID="submit-feedback"
+                disabled={isSubmitting}
+              >
+                <Text style={styles.primaryButtonText}>{isSubmitting ? 'Sending…' : 'Submit Feedback'}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </Animated.View>
       </ScrollView>
     </KeyboardAvoidingView>

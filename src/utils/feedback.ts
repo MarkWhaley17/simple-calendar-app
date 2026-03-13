@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { AuthUser } from '../types';
@@ -25,10 +26,11 @@ const createInstallationId = () => {
 const getAppMetadata = () => {
   const expoConfig = Constants.expoConfig;
   const appVersion = expoConfig?.version ?? 'unknown';
-  const appBuild =
+  const configuredBuild =
     (Platform.OS === 'ios'
       ? expoConfig?.ios?.buildNumber
       : expoConfig?.android?.versionCode?.toString()) ?? 'unknown';
+  const appBuild = Application.nativeBuildVersion ?? configuredBuild;
 
   return { appBuild, appVersion };
 };
