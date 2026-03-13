@@ -42,7 +42,7 @@ describe('AddEventView', () => {
       />
     );
 
-    fireEvent.changeText(getByPlaceholderText('Event title'), 'New Event');
+    fireEvent.changeText(getByPlaceholderText('Practice Session Title'), 'New Event');
     fireEvent.press(getByText('Save'));
 
     expect(Alert.alert).not.toHaveBeenCalled();

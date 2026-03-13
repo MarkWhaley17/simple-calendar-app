@@ -171,7 +171,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
           <Text style={styles.label}>Title *</Text>
           <TextInput
             style={styles.input}
-            placeholder="Event title"
+            placeholder="Practice Session Title"
             placeholderTextColor={colors.placeholder}
             value={title}
             onChangeText={setTitle}
@@ -197,7 +197,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
           <Text style={styles.label}>Notes</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="Add your notes and comments here"
+            placeholder="Add your reflections, experiences and inspirations here"
             placeholderTextColor={colors.placeholder}
             value={links}
             onChangeText={setLinks}
