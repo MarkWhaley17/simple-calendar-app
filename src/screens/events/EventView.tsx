@@ -70,7 +70,7 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit, onAddNotes
                 onPress={actionHandler}
                 activeOpacity={0.7}
               >
-                <Text style={styles.editButtonText}>{actionLabel}</Text>
+                <Text style={styles.backButtonText}>{actionLabel}</Text>
               </TouchableOpacity>
             )}
           </View>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
+import { Asset } from 'expo-asset';
 import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
 import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
@@ -23,6 +24,18 @@ import {
   isPreloadedEvent,
   sanitizeEventUpdateForEditability,
 } from './src/utils/eventEditability';
+
+const PRELOADED_BANNER_ASSETS = [
+  require('./assets/day-bg.jpg'),
+  require('./assets/day-view-pattern.png'),
+  require('./assets/medicine-buddha.jpg'),
+  require('./assets/protector-day.jpg'),
+  require('./assets/guru-rinpoche.jpg'),
+  require('./assets/full-moon.png'),
+  require('./assets/new-moon.png'),
+  require('./assets/dakini.jpg'),
+  require('./assets/jambhala.jpg'),
+];
 
 export default function App() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -48,6 +61,14 @@ export default function App() {
   const dayViewTranslateY = useRef(new Animated.Value(0)).current;
   const dayViewTranslateX = useRef(new Animated.Value(0)).current;
   const dayViewOpacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    // Warm banner images so transitions don't show a color-first flash.
+    void Asset.loadAsync(PRELOADED_BANNER_ASSETS).catch((error) => {
+      console.warn('Failed to preload banner assets', error);
+    });
+  }, []);
+
   const dayViewPanResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,

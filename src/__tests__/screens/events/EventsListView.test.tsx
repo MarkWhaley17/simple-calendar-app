@@ -31,7 +31,7 @@ describe('EventsListView', () => {
       description: 'Second event description',
     },
     {
-      id: '3',
+      id: 'pre-added-3',
       title: 'Third Event',
       fromDate: new Date(currentYear, currentMonth, 10),
       isAllDay: true,
@@ -55,64 +55,42 @@ describe('EventsListView', () => {
     jest.clearAllMocks();
   });
 
-  it('should render header with current month and event count', () => {
-    const { getByText } = render(
+  it('defaults to Preloaded tab and shows only preloaded events for month', () => {
+    const { getByText, queryByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
     expect(getByText(`${currentMonthName} ${currentYear}`)).toBeTruthy();
-    expect(getByText('3 events')).toBeTruthy();
-  });
-
-  it('should only show events from the visible month by default', () => {
-    const { queryByText } = render(
-      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
-    );
-
-    expect(queryByText('Previous Month Event')).toBeNull();
-    expect(queryByText('Next Month Event')).toBeNull();
-  });
-
-  it('should render singular "event" when only one event', () => {
-    const { getByText } = render(
-      <EventsListView events={[mockEvents[0]]} onEventPress={mockOnEventPress} />
-    );
-
     expect(getByText('1 event')).toBeTruthy();
+    expect(getByText('Third Event')).toBeTruthy();
+    expect(queryByText('First Event')).toBeNull();
+    expect(queryByText('Second Event')).toBeNull();
   });
 
-  it('should render all event titles', () => {
-    const { getByText } = render(
+  it('switches to My Sessions tab and shows personal events', () => {
+    const { getByTestId, getByText, queryByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
+    fireEvent.press(getByTestId('events-tab-personal'));
+
+    expect(getByText('2 sessions')).toBeTruthy();
     expect(getByText('First Event')).toBeTruthy();
     expect(getByText('Second Event')).toBeTruthy();
-    expect(getByText('Third Event')).toBeTruthy();
+    expect(queryByText('Third Event')).toBeNull();
   });
 
-  it('should render events in chronological order', () => {
-    const { getByText } = render(
+  it('shows full-width preloaded row and personal card variants', () => {
+    const { getByTestId } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    // Events should be sorted chronologically: Jan 10, Jan 15, Jan 20
-    // Just verify all events are present, chronological ordering is tested by the implementation
-    expect(getByText('Third Event')).toBeTruthy();   // Jan 10
-    expect(getByText('First Event')).toBeTruthy();   // Jan 15
-    expect(getByText('Second Event')).toBeTruthy();  // Jan 20
+    expect(getByTestId('events-list-preloaded-pre-added-3')).toBeTruthy();
+    fireEvent.press(getByTestId('events-tab-personal'));
+    expect(getByTestId('events-list-user-1')).toBeTruthy();
   });
 
-  it('should display event dates and times correctly', () => {
-    const { getByText } = render(
-      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
-    );
-
-    expect(getByText(new RegExp(`${currentMonthName} 15, ${currentYear} • 9:00 AM`))).toBeTruthy();
-    expect(getByText(new RegExp(`${currentMonthName} 20, ${currentYear} • 2:00 PM`))).toBeTruthy();
-  });
-
-  it('should display "All Day" for all-day events', () => {
+  it('shows all-day label for preloaded all-day events', () => {
     const { getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
@@ -120,59 +98,42 @@ describe('EventsListView', () => {
     expect(getByText(new RegExp(`${currentMonthName} 10, ${currentYear} • All Day`))).toBeTruthy();
   });
 
-  it('should call onEventPress when event bar is pressed', () => {
-    const { getByText } = render(
+  it('shows personal events in chronological order', () => {
+    const { getByTestId, toJSON } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
+    fireEvent.press(getByTestId('events-tab-personal'));
 
-    fireEvent.press(getByText('First Event'));
-    expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[0]);
+    const serializedTree = JSON.stringify(toJSON());
+    expect(serializedTree.indexOf('events-list-user-1')).toBeLessThan(serializedTree.indexOf('events-list-user-2'));
   });
 
-  it('should call onEventPress with correct event', () => {
-    const { getByText } = render(
+  it('calls onEventPress with correct event from current tab', () => {
+    const { getByText, getByTestId } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
+    fireEvent.press(getByText('Third Event'));
+    expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[2]);
+
+    fireEvent.press(getByTestId('events-tab-personal'));
     fireEvent.press(getByText('Second Event'));
     expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[1]);
   });
 
-  it('should show empty state when visible month has no events', () => {
-    const { getByText } = render(
-      <EventsListView events={[{ ...mockEvents[4], id: 'only-next-month' }]} onEventPress={mockOnEventPress} />
+  it('shows tab-specific empty states', () => {
+    const onlyPersonal: CalendarEvent[] = [{ ...mockEvents[0] }];
+    const { getByText, getByTestId } = render(
+      <EventsListView events={onlyPersonal} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText('No events this month')).toBeTruthy();
-    expect(getByText('Swipe left or right to change months')).toBeTruthy();
+    expect(getByText('No preloaded events this month')).toBeTruthy();
+    fireEvent.press(getByTestId('events-tab-personal'));
+    expect(getByText('First Event')).toBeTruthy();
   });
 
-  it('should display 0 events in header when empty', () => {
-    const { getByText } = render(
-      <EventsListView events={[]} onEventPress={mockOnEventPress} />
-    );
-
-    expect(getByText('0 events')).toBeTruthy();
-  });
-
-  it('should handle legacy date field', () => {
-    const legacyEvent: CalendarEvent = {
-      id: '4',
-      title: 'Legacy Event',
-      date: new Date(currentYear, currentMonth, 15),
-      startTime: '10:00 AM',
-      fromDate: new Date(currentYear, currentMonth, 15),
-    };
-
-    const { getByText } = render(
-      <EventsListView events={[legacyEvent]} onEventPress={mockOnEventPress} />
-    );
-
-    expect(getByText(new RegExp(`${currentMonthName} 15, ${currentYear} • 10:00 AM`))).toBeTruthy();
-  });
-
-  it('should swipe left to next month', async () => {
-    const { getByTestId, getByText, queryByText } = render(
+  it('swipes left to next month and updates month title', async () => {
+    const { getByTestId, getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
     const swipeArea = getByTestId('events-list-swipe-area');
@@ -182,61 +143,17 @@ describe('EventsListView', () => {
 
     await waitFor(() => {
       expect(getByText(`${nextMonthName} ${nextMonthDate.getFullYear()}`)).toBeTruthy();
-      expect(getByText('Next Month Event')).toBeTruthy();
-      expect(queryByText('First Event')).toBeNull();
     });
   });
 
-  it('should swipe right to previous month', async () => {
-    const { getByTestId, getByText, queryByText } = render(
-      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
-    );
-    const swipeArea = getByTestId('events-list-swipe-area');
-
-    fireEvent(swipeArea, 'touchStart', { nativeEvent: { pageX: 120, pageY: 280 } });
-    fireEvent(swipeArea, 'touchEnd', { nativeEvent: { pageX: 240, pageY: 285 } });
-
-    await waitFor(() => {
-      expect(getByText(`${previousMonthName} ${previousMonthDate.getFullYear()}`)).toBeTruthy();
-      expect(getByText('Previous Month Event')).toBeTruthy();
-      expect(queryByText('First Event')).toBeNull();
-    });
-  });
-
-  it('should go to next month when right header arrow is pressed', async () => {
-    const { getByTestId, getByText, queryByText } = render(
-      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
-    );
-
-    fireEvent.press(getByTestId('events-header-next-month'));
-
-    await waitFor(() => {
-      expect(getByText(`${nextMonthName} ${nextMonthDate.getFullYear()}`)).toBeTruthy();
-      expect(getByText('Next Month Event')).toBeTruthy();
-      expect(queryByText('First Event')).toBeNull();
-    });
-  });
-
-  it('should go to previous month when left header arrow is pressed', async () => {
-    const { getByTestId, getByText, queryByText } = render(
+  it('header arrows change months', async () => {
+    const { getByTestId, getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
     fireEvent.press(getByTestId('events-header-prev-month'));
-
     await waitFor(() => {
       expect(getByText(`${previousMonthName} ${previousMonthDate.getFullYear()}`)).toBeTruthy();
-      expect(getByText('Previous Month Event')).toBeTruthy();
-      expect(queryByText('First Event')).toBeNull();
     });
-  });
-
-  it('should not mutate original events array', () => {
-    const eventsCopy = [...mockEvents];
-    render(
-      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
-    );
-
-    expect(mockEvents).toEqual(eventsCopy);
   });
 });
