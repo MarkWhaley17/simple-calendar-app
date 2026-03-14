@@ -57,10 +57,11 @@ describe('EventsListView', () => {
   });
 
   it('defaults to Preloaded tab and shows only preloaded events for month', () => {
-    const { getByText, queryByText } = render(
+    const { getByText, queryByText, getByTestId } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
+    expect(getByTestId('events-list-background-pattern')).toBeTruthy();
     expect(getByText(`${currentMonthName} ${currentYear}`)).toBeTruthy();
     expect(getByText('1 event')).toBeTruthy();
     expect(getByText('Third Event')).toBeTruthy();

@@ -250,7 +250,7 @@ describe('DayView', () => {
     expect(tree.indexOf('Protector Day')).toBeLessThan(tree.indexOf('Medicine Buddha Day'));
   });
 
-  it('renders pre-loaded events as full-width rows and user events as cards', () => {
+  it('renders pre-loaded and user events as full-width rows', () => {
     const preloadedEvent: CalendarEvent = {
       id: 'pre-added-1',
       title: 'Preloaded Event',
@@ -273,6 +273,6 @@ describe('DayView', () => {
     );
 
     expect(getByTestId('day-event-preloaded-pre-added-1')).toHaveStyle({ marginBottom: 14 });
-    expect(getByTestId('day-event-user-user-1')).toHaveStyle({ marginHorizontal: 20, marginBottom: 14 });
+    expect(getByTestId('day-event-user-user-1')).toHaveStyle({ marginBottom: 14 });
   });
 });

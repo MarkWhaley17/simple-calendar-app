@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated, ImageBackground, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
-import { colors, elevation, radius, spacing } from '../../theme/tokens';
+import { colors, elevation, spacing } from '../../theme/tokens';
 import { isPreloadedEvent } from '../../utils/eventEditability';
 
 interface EventsListViewProps {
@@ -18,6 +18,7 @@ type EventsTab = 'preloaded' | 'personal';
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, onAddEvent }) => {
   const headerBackground = require('../../../assets/day-bg.jpg');
+  const eventsBackground = require('../../../assets/day-view-pattern.png');
   const [visibleMonthDate, setVisibleMonthDate] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
@@ -226,52 +227,60 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
           </View>
         </View>
 
-        {/* Events list */}
-        <ScrollView style={styles.eventsContainer}>
-          {activeEvents.length > 0 ? (
-            <View style={styles.eventsList}>
-              {activeEvents.map((event) => (
-                isPreloadedEvent(event) ? (
-                  <TouchableOpacity
-                    key={event.id}
-                    style={styles.preloadedEventTouchable}
-                    onPress={() => onEventPress(event)}
-                    activeOpacity={0.8}
-                    testID={`events-list-preloaded-${event.id}`}
-                  >
-                    {useIosPilot ? (
-                      <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
-                        <LinearGradient
-                          colors={['rgba(37, 99, 235, 0.1)', 'rgba(191, 219, 254, 0.14)']}
-                          locations={[0, 1]}
-                          start={{ x: 0, y: 0.5 }}
-                          end={{ x: 1, y: 0.5 }}
-                          style={styles.preloadedEventGradient}
-                        />
-                        <View style={styles.preloadedEventTextColumn}>
-                          <Text style={styles.eventTitle}>{event.title}</Text>
-                          <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+        <View style={styles.eventsBackground}>
+          <Image
+            source={eventsBackground}
+            style={styles.eventsPatternImage}
+            resizeMode="cover"
+            testID="events-list-background-pattern"
+          />
+
+          {/* Events list */}
+          <ScrollView style={styles.eventsContainer}>
+            {activeEvents.length > 0 ? (
+              <View style={styles.eventsList}>
+                {activeEvents.map((event) => (
+                  isPreloadedEvent(event) ? (
+                    <TouchableOpacity
+                      key={event.id}
+                      style={styles.preloadedEventTouchable}
+                      onPress={() => onEventPress(event)}
+                      activeOpacity={0.8}
+                      testID={`events-list-preloaded-${event.id}`}
+                    >
+                      {useIosPilot ? (
+                        <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
+                          <LinearGradient
+                            colors={['rgba(245, 158, 11, 0.1)', 'rgba(254, 243, 199, 0.2)']}
+                            locations={[0, 1]}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                            style={styles.preloadedEventGradient}
+                          />
+                          <View style={styles.preloadedEventTextColumn}>
+                            <Text style={styles.eventTitle}>{event.title}</Text>
+                            <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                          </View>
+                          <Text style={styles.preloadedEventChevron}>›</Text>
+                        </GlassSurface>
+                      ) : (
+                        <View style={styles.preloadedEventRowFallback}>
+                          <LinearGradient
+                            colors={['rgba(245, 158, 11, 0.09)', 'rgba(254, 243, 199, 0.16)']}
+                            locations={[0, 1]}
+                            start={{ x: 0, y: 0.5 }}
+                            end={{ x: 1, y: 0.5 }}
+                            style={styles.preloadedEventGradient}
+                          />
+                          <View style={styles.preloadedEventTextColumn}>
+                            <Text style={styles.eventTitle}>{event.title}</Text>
+                            <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                          </View>
+                          <Text style={styles.preloadedEventChevron}>›</Text>
                         </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
-                      </GlassSurface>
-                    ) : (
-                      <View style={styles.preloadedEventRowFallback}>
-                        <LinearGradient
-                          colors={['rgba(37, 99, 235, 0.09)', 'rgba(191, 219, 254, 0.12)']}
-                          locations={[0, 1]}
-                          start={{ x: 0, y: 0.5 }}
-                          end={{ x: 1, y: 0.5 }}
-                          style={styles.preloadedEventGradient}
-                        />
-                        <View style={styles.preloadedEventTextColumn}>
-                          <Text style={styles.eventTitle}>{event.title}</Text>
-                          <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
-                        </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                ) : (
+                      )}
+                    </TouchableOpacity>
+                  ) : (
                   <TouchableOpacity
                     key={event.id}
                     style={styles.eventBarTouchable}
@@ -280,40 +289,47 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
                     testID={`events-list-user-${event.id}`}
                   >
                     {useIosPilot ? (
-                      <GlassSurface style={styles.eventBar} intensity={40}>
-                        <Text style={styles.eventTitle}>{event.title}</Text>
-                        <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                      <GlassSurface style={styles.eventBar} contentStyle={styles.userEventRowContent} intensity={40}>
+                        <View style={styles.userEventTextColumn}>
+                          <Text style={styles.eventTitle}>{event.title}</Text>
+                          <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                        </View>
+                        <Text style={styles.preloadedEventChevron}>›</Text>
                       </GlassSurface>
                     ) : (
                       <View style={styles.eventBar}>
-                        <Text style={styles.eventTitle}>{event.title}</Text>
-                        <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                        <View style={styles.userEventTextColumn}>
+                          <Text style={styles.eventTitle}>{event.title}</Text>
+                          <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
+                        </View>
+                        <Text style={styles.preloadedEventChevron}>›</Text>
                       </View>
                     )}
                   </TouchableOpacity>
                 )
-              ))}
-            </View>
-          ) : (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>
-                {activeTab === 'preloaded' ? 'No preloaded events this month' : 'No personal sessions this month'}
-              </Text>
-              <Text style={styles.emptyStateSubtext}>Swipe left or right to change months</Text>
-            </View>
-          )}
-        </ScrollView>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyStateText}>
+                  {activeTab === 'preloaded' ? 'No preloaded events this month' : 'No personal sessions this month'}
+                </Text>
+                <Text style={styles.emptyStateSubtext}>Swipe left or right to change months</Text>
+              </View>
+            )}
+          </ScrollView>
 
-        {activeTab === 'personal' && (
-          <TouchableOpacity
-            style={styles.addButton}
-            activeOpacity={0.8}
-            onPress={onAddEvent}
-            testID="events-list-add-session"
-          >
-            <Text style={styles.addButtonText}>+ Add Practice Session</Text>
-          </TouchableOpacity>
-        )}
+          {activeTab === 'personal' && (
+            <TouchableOpacity
+              style={styles.addButton}
+              activeOpacity={0.8}
+              onPress={onAddEvent}
+              testID="events-list-add-session"
+            >
+              <Text style={styles.addButtonText}>+ Add Practice Session</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </Animated.View>
     </View>
   );
@@ -392,6 +408,15 @@ const styles = StyleSheet.create({
   eventsContainer: {
     flex: 1,
   },
+  eventsBackground: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  eventsPatternImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
+  },
   tabBarContainer: {
     paddingHorizontal: spacing.lg + spacing.xs,
     paddingTop: spacing.sm,
@@ -428,30 +453,35 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.lg + spacing.xs,
   },
   eventBar: {
-    backgroundColor: colors.surfaceSolid,
-    paddingVertical: 20,
-    paddingHorizontal: 22,
-    borderRadius: radius.md,
+    backgroundColor: 'rgba(37, 99, 235, 0.08)',
+    minHeight: 84,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: spacing.lg + spacing.xs,
+    paddingRight: spacing.lg + spacing.xs,
+    paddingVertical: 18,
+    borderRadius: 0,
     marginBottom: 0,
-    borderLeftWidth: 5,
-    borderLeftColor: colors.danger,
     borderWidth: 1,
-    borderColor: colors.borderSubtle,
-    ...elevation.card,
+    borderColor: colors.borderInput,
+  },
+  userEventTextColumn: {
+    flex: 1,
+  },
+  userEventRowContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   eventBarTouchable: {
-    marginHorizontal: spacing.lg + spacing.xs,
-    marginBottom: 16,
+    marginBottom: 14,
   },
   preloadedEventTouchable: {
     marginBottom: 14,
   },
   preloadedEventRowGlass: {
     borderRadius: 0,
-    borderWidth: 0,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
   },
   preloadedEventRowContent: {
     position: 'relative',
@@ -470,10 +500,9 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.lg + spacing.xs,
     paddingRight: spacing.lg + spacing.xs,
     paddingVertical: 18,
-    backgroundColor: colors.brandSurface,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.borderSubtle,
+    backgroundColor: colors.warningSurface,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
   },
   preloadedEventGradient: {
     ...StyleSheet.absoluteFillObject,

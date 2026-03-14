@@ -166,7 +166,7 @@ const DayView: React.FC<DayViewProps> = ({
                       {useIosPilot ? (
                         <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
                           <LinearGradient
-                            colors={['rgba(37, 99, 235, 0.1)', 'rgba(191, 219, 254, 0.14)']}
+                            colors={['rgba(245, 158, 11, 0.1)', 'rgba(254, 243, 199, 0.2)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
@@ -183,7 +183,7 @@ const DayView: React.FC<DayViewProps> = ({
                       ) : (
                         <View style={styles.preloadedEventRowFallback}>
                           <LinearGradient
-                            colors={['rgba(37, 99, 235, 0.09)', 'rgba(191, 219, 254, 0.12)']}
+                            colors={['rgba(245, 158, 11, 0.09)', 'rgba(254, 243, 199, 0.16)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
@@ -211,18 +211,24 @@ const DayView: React.FC<DayViewProps> = ({
                     testID={`day-event-user-${event.id}`}
                   >
                     {useIosPilot ? (
-                      <GlassSurface style={styles.eventCard} intensity={38}>
-                        <Text style={styles.eventTitle}>{event.title}</Text>
-                        {eventTime && (
-                          <Text style={styles.eventTime}>{eventTime}</Text>
-                        )}
+                      <GlassSurface style={styles.eventCard} contentStyle={styles.userEventRowContent} intensity={38}>
+                        <View style={styles.userEventTextColumn}>
+                          <Text style={styles.eventTitle}>{event.title}</Text>
+                          {eventTime && (
+                            <Text style={styles.eventTime}>{eventTime}</Text>
+                          )}
+                        </View>
+                        <Text style={styles.preloadedEventChevron}>›</Text>
                       </GlassSurface>
                     ) : (
                       <View style={styles.eventCard}>
-                        <Text style={styles.eventTitle}>{event.title}</Text>
-                        {eventTime && (
-                          <Text style={styles.eventTime}>{eventTime}</Text>
-                        )}
+                        <View style={styles.userEventTextColumn}>
+                          <Text style={styles.eventTitle}>{event.title}</Text>
+                          {eventTime && (
+                            <Text style={styles.eventTime}>{eventTime}</Text>
+                          )}
+                        </View>
+                        <Text style={styles.preloadedEventChevron}>›</Text>
                       </View>
                     )}
                   </TouchableOpacity>
@@ -311,16 +317,25 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.lg + spacing.xs,
   },
   eventCard: {
-    backgroundColor: colors.surfaceSolid,
-    padding: 18,
-    borderRadius: 16,
-    marginBottom: 0,
-    borderLeftWidth: 4,
-    borderLeftColor: colors.danger,
-    ...elevation.card,
+    backgroundColor: 'rgba(37, 99, 235, 0.08)',
+    minHeight: 84,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: spacing.lg + spacing.xs,
+    paddingRight: spacing.lg + spacing.xs,
+    paddingVertical: 18,
+    borderRadius: 0,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+  },
+  userEventTextColumn: {
+    flex: 1,
+  },
+  userEventRowContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userEventCardTouchable: {
-    marginHorizontal: spacing.lg + spacing.xs,
     marginBottom: 14,
   },
   preloadedEventTouchable: {
@@ -328,10 +343,8 @@ const styles = StyleSheet.create({
   },
   preloadedEventRowGlass: {
     borderRadius: 0,
-    borderWidth: 0,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.borderSubtle,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
   },
   preloadedEventRowContent: {
     position: 'relative',
@@ -350,10 +363,9 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.lg + spacing.xs,
     paddingRight: spacing.lg + spacing.xs,
     paddingVertical: 18,
-    backgroundColor: colors.brandSurface,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.borderSubtle,
+    backgroundColor: colors.warningSurface,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
   },
   preloadedEventGradient: {
     ...StyleSheet.absoluteFillObject,
