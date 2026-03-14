@@ -321,7 +321,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       const progress = remainingSec / target;
       return (
         <View style={styles.detailPanel}>
-          <Text style={styles.detailTitle}>Timed Meditation</Text>
           <View style={styles.countdownRingWrapper}>
             <PracticeCountdownRing progress={progress} />
           </View>
@@ -812,7 +811,7 @@ const styles = StyleSheet.create({
     fontSize: 56,
     lineHeight: 66,
     color: colors.brandPrimaryDark,
-    fontWeight: '700',
+    fontWeight: '500',
     textAlign: 'center',
     marginBottom: spacing.lg,
   },
