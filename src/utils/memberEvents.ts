@@ -169,7 +169,7 @@ export function getMemberEvents(): CalendarEvent[] {
     }
 
     return {
-      id: `pre-member-${index}`,
+      id: `event-member-${index}`,
       title: event.title,
       description: event.description,
       fromDate,

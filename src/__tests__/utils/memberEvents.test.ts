@@ -6,10 +6,10 @@ describe('getMemberEvents', () => {
     expect(events.length).toBeGreaterThan(0);
   });
 
-  it('all events have IDs prefixed with pre-member-', () => {
+  it('all events have IDs prefixed with event-member-', () => {
     const events = getMemberEvents();
     events.forEach(event => {
-      expect(event.id).toMatch(/^pre-member-/);
+      expect(event.id).toMatch(/^event-member-/);
     });
   });
 

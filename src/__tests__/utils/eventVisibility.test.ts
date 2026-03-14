@@ -11,8 +11,8 @@ const baseEvent: CalendarEvent = {
 };
 
 describe('eventVisibility', () => {
-  it('treats pre-member-* IDs as member-only', () => {
-    expect(isMemberOnlyEvent({ ...baseEvent, id: 'pre-member-1' })).toBe(true);
+  it('treats event-member-* IDs as member-only', () => {
+    expect(isMemberOnlyEvent({ ...baseEvent, id: 'event-member-1' })).toBe(true);
   });
 
   it('treats explicit isMembersOnly as member-only', () => {
@@ -20,24 +20,24 @@ describe('eventVisibility', () => {
   });
 
   it('does not treat normal events as member-only', () => {
-    expect(isMemberOnlyEvent({ ...baseEvent, id: 'pre-added-1' })).toBe(false);
+    expect(isMemberOnlyEvent({ ...baseEvent, id: 'event-public-1' })).toBe(false);
   });
 
   it('filters out member events when signed out', () => {
     const events: CalendarEvent[] = [
-      { ...baseEvent, id: 'pre-added-1' },
-      { ...baseEvent, id: 'pre-member-1' },
+      { ...baseEvent, id: 'event-public-1' },
+      { ...baseEvent, id: 'event-member-1' },
       { ...baseEvent, id: 'custom', isMembersOnly: true },
     ];
 
     const visible = filterVisibleEvents(events, false);
-    expect(visible.map(event => event.id)).toEqual(['pre-added-1']);
+    expect(visible.map(event => event.id)).toEqual(['event-public-1']);
   });
 
   it('returns all events when signed in', () => {
     const events: CalendarEvent[] = [
-      { ...baseEvent, id: 'pre-added-1' },
-      { ...baseEvent, id: 'pre-member-1' },
+      { ...baseEvent, id: 'event-public-1' },
+      { ...baseEvent, id: 'event-member-1' },
     ];
 
     const visible = filterVisibleEvents(events, true);

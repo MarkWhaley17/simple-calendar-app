@@ -1,6 +1,6 @@
 const {
   parseMarkdownEvents,
-  renderPreAddedTs,
+  renderEventsTs,
   renderMemberTs,
 } = require('../../../scripts/sync-events-from-md.js');
 
@@ -66,12 +66,12 @@ Description: Retreat description.
       { title: 'A', date: '2027-01-01', description: 'd', image: undefined, toDate: undefined },
     ];
 
-    const preAdded = renderPreAddedTs(events);
+    const appEvents = renderEventsTs(events);
     const member = renderMemberTs(events);
 
-    expect(preAdded).toContain('getPreAddedEvents');
-    expect(preAdded).toContain('id: `pre-added-${index}`');
+    expect(appEvents).toContain('getEvents');
+    expect(appEvents).toContain('id: `event-public-${index}`');
     expect(member).toContain('getMemberEvents');
-    expect(member).toContain('id: `pre-member-${index}`');
+    expect(member).toContain('id: `event-member-${index}`');
   });
 });

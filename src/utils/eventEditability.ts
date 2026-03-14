@@ -17,14 +17,22 @@ export interface EditableEventUpdate {
   reminderHoursBefore?: number;
 }
 
-export const isPreloadedEvent = (event: CalendarEvent): boolean =>
-  event.id.startsWith('pre-added-') || event.id.startsWith('pre-member-');
+const EVENT_PREFIXES = ['event-public-', 'event-member-', 'pre-added-', 'pre-member-'];
+
+export const isEventItem = (event: CalendarEvent): boolean =>
+  EVENT_PREFIXES.some(prefix => event.id.startsWith(prefix));
+
+export const isSessionItem = (event: CalendarEvent): boolean =>
+  !isEventItem(event);
+
+// Temporary alias during Events/Sessions terminology migration.
+export const isPreloadedEvent = isEventItem;
 
 export const sanitizeEventUpdateForEditability = (
   originalEvent: CalendarEvent,
   incomingUpdate: EditableEventUpdate
 ): EditableEventUpdate => {
-  if (!isPreloadedEvent(originalEvent)) {
+  if (!isEventItem(originalEvent)) {
     return incomingUpdate;
   }
 

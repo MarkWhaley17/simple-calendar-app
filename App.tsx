@@ -9,7 +9,7 @@ import { EventView, AddEventView, EditEventView, EventsListView } from './src/sc
 import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
-import { getPreAddedEvents } from './src/utils/preAddedEvents';
+import { getEvents } from './src/utils/events';
 import { getMemberEvents } from './src/utils/memberEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
 import { isAuthenticated, getUser } from './src/utils/auth';
@@ -21,11 +21,12 @@ import { initializeNotifications, scheduleNotifications } from './src/utils/noti
 import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
 import {
   EditableEventUpdate,
-  isPreloadedEvent,
+  isEventItem,
+  isSessionItem,
   sanitizeEventUpdateForEditability,
 } from './src/utils/eventEditability';
 
-const PRELOADED_BANNER_ASSETS = [
+const EVENT_BANNER_ASSETS = [
   require('./assets/day-bg.jpg'),
   require('./assets/day-view-pattern.png'),
   require('./assets/medicine-buddha.jpg'),
@@ -64,7 +65,7 @@ export default function App() {
 
   useEffect(() => {
     // Warm banner images so transitions don't show a color-first flash.
-    void Asset.loadAsync(PRELOADED_BANNER_ASSETS).catch((error) => {
+    void Asset.loadAsync(EVENT_BANNER_ASSETS).catch((error) => {
       console.warn('Failed to preload banner assets', error);
     });
   }, []);
@@ -182,35 +183,34 @@ export default function App() {
     });
   }, []);
 
-  // Events state - initialized with pre-added events from EVENTS.md
+  // Events state - initialized with app events from EVENTS.md
   // This stores master events (including recurring event definitions)
-  const [masterEvents, setMasterEvents] = useState<CalendarEvent[]>(getPreAddedEvents());
+  const [masterEvents, setMasterEvents] = useState<CalendarEvent[]>(getEvents());
 
   // Expanded events include all recurring instances for display
   const events = expandRecurringEvents(masterEvents);
   const visibleEvents = filterVisibleEvents(events, Boolean(user));
 
-  // Load user events from storage on mount and merge with pre-added events
+  // Load session items from storage on mount and merge with app events
   useEffect(() => {
-    const loadUserEvents = async () => {
+    const loadSessionEvents = async () => {
       try {
         const storedEvents = await loadEvents();
-        const preAddedEvents = getPreAddedEvents();
+        const appEvents = getEvents();
 
-        // Merge stored events with pre-added events
-        // Pre-added events have IDs starting with 'pre-', so we can filter them out from stored events
-        const userEvents = storedEvents.filter(
-          event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+        // Merge stored events with app events.
+        const sessionEvents = storedEvents.filter(
+          event => isSessionItem(event) && !isMemberOnlyEvent(event)
         );
 
-        setMasterEvents([...preAddedEvents, ...userEvents]);
+        setMasterEvents([...appEvents, ...sessionEvents]);
       } catch (error) {
         console.error('Failed to load events from storage:', error);
-        // If loading fails, keep the pre-added events
+        // If loading fails, keep the app events
       }
     };
 
-    loadUserEvents();
+    loadSessionEvents();
   }, []);
 
   // Restore auth session on mount
@@ -417,12 +417,12 @@ export default function App() {
     const updatedEvents = [...masterEvents, newEvent];
     setMasterEvents(updatedEvents);
 
-    // Save only user events (not pre-added events) to storage
+    // Save only session events to storage
     try {
-      const userEvents = updatedEvents.filter(
-        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      const sessionEvents = updatedEvents.filter(
+        event => isSessionItem(event) && !isMemberOnlyEvent(event)
       );
-      await saveEvents(userEvents);
+      await saveEvents(sessionEvents);
     } catch (error) {
       console.error('Failed to save event to storage:', error);
     }
@@ -604,12 +604,12 @@ export default function App() {
     setMasterEvents(updatedEvents);
     setSelectedEvent(nextSelectedEvent);
 
-    // Save only user events (not pre-added events) to storage
+    // Save only session events to storage
     try {
-      const userEvents = updatedEvents.filter(
-        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      const sessionEvents = updatedEvents.filter(
+        event => isSessionItem(event) && !isMemberOnlyEvent(event)
       );
-      await saveEvents(userEvents);
+      await saveEvents(sessionEvents);
     } catch (error) {
       console.error('Failed to update event in storage:', error);
     }
@@ -661,12 +661,12 @@ export default function App() {
     }
     setMasterEvents(updatedEvents);
 
-    // Save only user events (not pre-added events) to storage
+    // Save only session events to storage
     try {
-      const userEvents = updatedEvents.filter(
-        event => !event.id.startsWith('pre-') && !isMemberOnlyEvent(event)
+      const sessionEvents = updatedEvents.filter(
+        event => isSessionItem(event) && !isMemberOnlyEvent(event)
       );
-      await saveEvents(userEvents);
+      await saveEvents(sessionEvents);
     } catch (error) {
       console.error('Failed to delete event from storage:', error);
     }
@@ -893,8 +893,8 @@ export default function App() {
         <EventView
           event={selectedEvent}
           onBack={handleBackToDay}
-          onEdit={!isPreloadedEvent(selectedEvent) ? handleEditEvent : undefined}
-          onAddNotes={isPreloadedEvent(selectedEvent) ? handleEditEvent : undefined}
+          onEdit={!isEventItem(selectedEvent) ? handleEditEvent : undefined}
+          onAddNotes={isEventItem(selectedEvent) ? handleEditEvent : undefined}
         />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />

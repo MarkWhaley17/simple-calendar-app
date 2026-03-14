@@ -6,7 +6,7 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const eventsMdPath = path.join(root, 'EVENTS.md');
 const memberEventsMdPath = path.join(root, 'MEMBER_EVENTS.md');
-const preAddedTsPath = path.join(root, 'src', 'utils', 'preAddedEvents.ts');
+const eventsTsPath = path.join(root, 'src', 'utils', 'events.ts');
 const memberTsPath = path.join(root, 'src', 'utils', 'memberEvents.ts');
 
 function parseMarkdownEvents(markdownText) {
@@ -81,9 +81,9 @@ function renderObject(event) {
   return lines.join('\n');
 }
 
-function renderPreAddedTs(events) {
+function renderEventsTs(events) {
   const objects = events.map(renderObject).join('\n');
-  return `// Pre-added events for the calendar app
+  return `// Calendar events for the app
 // AUTO-GENERATED from EVENTS.md by scripts/sync-events-from-md.js
 
 import { CalendarEvent } from '../types';
@@ -92,7 +92,7 @@ const eventData: { title: string; date: string; toDate?: string; description: st
 ${objects}
 ];
 
-export const getPreAddedEvents = (): CalendarEvent[] => {
+export const getEvents = (): CalendarEvent[] => {
   return eventData.map((event, index) => {
     const [year, month, day] = event.date.split('-').map(Number);
     const eventDate = new Date(year, month - 1, day);
@@ -104,7 +104,7 @@ export const getPreAddedEvents = (): CalendarEvent[] => {
     }
 
     return {
-      id: \`pre-added-\${index}\`,
+      id: \`event-public-\${index}\`,
       title: event.title,
       fromDate: eventDate,
       toDate,
@@ -144,7 +144,7 @@ export function getMemberEvents(): CalendarEvent[] {
     }
 
     return {
-      id: \`pre-member-\${index}\`,
+      id: \`event-member-\${index}\`,
       title: event.title,
       description: event.description,
       fromDate,
@@ -165,7 +165,7 @@ function main() {
   const events = parseMarkdownEvents(eventsMd);
   const memberEvents = parseMarkdownEvents(memberEventsMd);
 
-  fs.writeFileSync(preAddedTsPath, renderPreAddedTs(events));
+  fs.writeFileSync(eventsTsPath, renderEventsTs(events));
   fs.writeFileSync(memberTsPath, renderMemberTs(memberEvents));
 
   console.log(
@@ -179,6 +179,6 @@ if (require.main === module) {
 
 module.exports = {
   parseMarkdownEvents,
-  renderPreAddedTs,
+  renderEventsTs,
   renderMemberTs,
 };

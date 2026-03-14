@@ -1,4 +1,4 @@
-// Pre-added events for the calendar app
+// Calendar events for the app
 // AUTO-GENERATED from EVENTS.md by scripts/sync-events-from-md.js
 
 import { CalendarEvent } from '../types';
@@ -816,7 +816,7 @@ const eventData: { title: string; date: string; toDate?: string; description: st
   },
 ];
 
-export const getPreAddedEvents = (): CalendarEvent[] => {
+export const getEvents = (): CalendarEvent[] => {
   return eventData.map((event, index) => {
     const [year, month, day] = event.date.split('-').map(Number);
     const eventDate = new Date(year, month - 1, day);
@@ -828,7 +828,7 @@ export const getPreAddedEvents = (): CalendarEvent[] => {
     }
 
     return {
-      id: `pre-added-${index}`,
+      id: `event-public-${index}`,
       title: event.title,
       fromDate: eventDate,
       toDate,

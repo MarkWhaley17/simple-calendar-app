@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { CalendarEvent, NotificationSettings } from '../types';
+import { isEventItem, isSessionItem } from './eventEditability';
 import { getRandomQuote } from './quotes';
 
 const DAILY_QUOTE_HOUR = 8;
@@ -69,13 +70,13 @@ export const scheduleNotifications = async (
   });
 
   if (settings.practiceDayReminders) {
-    const practiceEvents = upcomingEvents.filter(event => event.id.startsWith('pre-'));
-    await Promise.all(practiceEvents.map(event => scheduleEventReminder(event, settings)));
+    const eventItems = upcomingEvents.filter(isEventItem);
+    await Promise.all(eventItems.map(event => scheduleEventReminder(event, settings)));
   }
 
   if (settings.eventReminders) {
-    const userEvents = upcomingEvents.filter(event => !event.id.startsWith('pre-'));
-    await Promise.all(userEvents.map(event => scheduleEventReminder(event, settings)));
+    const sessions = upcomingEvents.filter(isSessionItem);
+    await Promise.all(sessions.map(event => scheduleEventReminder(event, settings)));
   }
 
   if (settings.dailyQuoteNotifications) {

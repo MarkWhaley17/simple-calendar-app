@@ -1,6 +1,6 @@
 import { CalendarEvent } from '../../types';
 import {
-  isPreloadedEvent,
+  isEventItem,
   sanitizeEventUpdateForEditability,
 } from '../../utils/eventEditability';
 
@@ -17,15 +17,15 @@ describe('eventEditability', () => {
     isAllDay: false,
   };
 
-  it('identifies pre-loaded event IDs', () => {
-    expect(isPreloadedEvent({ ...baseEvent, id: 'pre-added-10' })).toBe(true);
-    expect(isPreloadedEvent({ ...baseEvent, id: 'pre-member-10' })).toBe(true);
-    expect(isPreloadedEvent(baseEvent)).toBe(false);
+  it('identifies app event IDs', () => {
+    expect(isEventItem({ ...baseEvent, id: 'event-public-10' })).toBe(true);
+    expect(isEventItem({ ...baseEvent, id: 'event-member-10' })).toBe(true);
+    expect(isEventItem(baseEvent)).toBe(false);
   });
 
-  it('locks core fields for pre-loaded events and allows only links updates', () => {
+  it('locks core fields for event items and allows only links updates', () => {
     const incoming = {
-      id: 'pre-added-10',
+      id: 'event-public-10',
       title: 'Edited Title',
       description: 'Attempted new description',
       fromDate: new Date(2030, 0, 1),
@@ -37,7 +37,7 @@ describe('eventEditability', () => {
     };
 
     const result = sanitizeEventUpdateForEditability(
-      { ...baseEvent, id: 'pre-added-10' },
+      { ...baseEvent, id: 'event-public-10' },
       incoming
     );
 
