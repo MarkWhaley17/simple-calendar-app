@@ -90,15 +90,15 @@ describe('EventView', () => {
     expect(queryByText('Edit')).toBeNull();
   });
 
-  it('shows Add Notes button for preloaded events when onAddNotes is provided', () => {
-    const preloadedEvent: CalendarEvent = {
+  it('shows Add Notes button for event items when onAddNotes is provided', () => {
+    const eventItem: CalendarEvent = {
       ...mockEvent,
-      id: 'pre-added-123',
+      id: 'event-public-123',
     };
 
     const { getByText, queryByText } = render(
       <EventView
-        event={preloadedEvent}
+        event={eventItem}
         onBack={mockOnBack}
         onEdit={mockOnEdit}
         onAddNotes={mockOnAddNotes}
@@ -109,15 +109,15 @@ describe('EventView', () => {
     expect(queryByText('Edit')).toBeNull();
   });
 
-  it('calls onAddNotes for preloaded event action button', () => {
-    const preloadedEvent: CalendarEvent = {
+  it('calls onAddNotes for event-item action button', () => {
+    const eventItem: CalendarEvent = {
       ...mockEvent,
-      id: 'pre-member-55',
+      id: 'event-member-55',
     };
 
     const { getByText } = render(
       <EventView
-        event={preloadedEvent}
+        event={eventItem}
         onBack={mockOnBack}
         onEdit={mockOnEdit}
         onAddNotes={mockOnAddNotes}
@@ -199,10 +199,10 @@ describe('EventView', () => {
     expect(getByText(/10:00 AM/)).toBeTruthy();
   });
 
-  it('shows a date range in subtitle for preloaded multi-day events', () => {
-    const preloadedMultiDayEvent: CalendarEvent = {
+  it('shows a date range in subtitle for multi-day event items', () => {
+    const eventItemMultiDay: CalendarEvent = {
       ...mockEvent,
-      id: 'pre-added-77',
+      id: 'event-public-77',
       fromDate: new Date(2026, 2, 3),
       toDate: new Date(2026, 2, 5),
       fromTime: undefined,
@@ -210,23 +210,23 @@ describe('EventView', () => {
     };
 
     const { getByText } = render(
-      <EventView event={preloadedMultiDayEvent} onBack={mockOnBack} onAddNotes={mockOnAddNotes} />
+      <EventView event={eventItemMultiDay} onBack={mockOnBack} onAddNotes={mockOnAddNotes} />
     );
 
     expect(getByText('March 3, 2026 - March 5, 2026')).toBeTruthy();
   });
 
-  it('shows a date range in subtitle for user-created multi-day events', () => {
-    const userMultiDayEvent: CalendarEvent = {
+  it('shows a date range in subtitle for multi-day session items', () => {
+    const sessionItemMultiDay: CalendarEvent = {
       ...mockEvent,
-      id: '1234',
+      id: 'session-1234',
       fromDate: new Date(2026, 2, 3),
       toDate: new Date(2026, 2, 5),
       fromTime: '9:00 AM',
     };
 
     const { getByText, queryByText } = render(
-      <EventView event={userMultiDayEvent} onBack={mockOnBack} onEdit={mockOnEdit} />
+      <EventView event={sessionItemMultiDay} onBack={mockOnBack} onEdit={mockOnEdit} />
     );
 
     expect(getByText('March 3, 2026 - March 5, 2026')).toBeTruthy();

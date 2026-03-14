@@ -8,7 +8,7 @@ import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { getRecurrenceLabel } from '../../utils/recurrence';
-import { isPreloadedEvent } from '../../utils/eventEditability';
+import { isEventItem } from '../../utils/eventEditability';
 
 interface EditEventViewProps {
   event: CalendarEvent;
@@ -66,7 +66,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
   defaultAllDayReminderHours,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
-  const isLockedEvent = isPreloadedEvent(event);
+  const isLockedEvent = isEventItem(event);
   const [title, setTitle] = useState(event.title);
   const [description, setDescription] = useState(event.description || '');
   const [fromDate, setFromDate] = useState(event.fromDate || event.date || new Date());
@@ -250,7 +250,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
         {isLockedEvent && (
           <View style={styles.noticeSection}>
             <Text style={styles.noticeText}>
-              This pre-loaded event is locked. You can edit links only.
+              This event is locked. You can edit notes only.
             </Text>
           </View>
         )}

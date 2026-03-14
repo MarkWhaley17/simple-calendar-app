@@ -3,7 +3,7 @@ import { render } from '@testing-library/react-native';
 import EditEventView from '../../../screens/events/EditEventView';
 import { CalendarEvent } from '../../../types';
 
-describe('EditEventView pre-loaded lock behavior', () => {
+describe('EditEventView event-item lock behavior', () => {
   const mockOnBack = jest.fn();
   const mockOnSave = jest.fn();
   const mockOnDelete = jest.fn();
@@ -20,10 +20,10 @@ describe('EditEventView pre-loaded lock behavior', () => {
       />
     );
 
-  it('locks core fields for pre-loaded events and keeps only links editable', () => {
+  it('locks core fields for event items and keeps only notes editable', () => {
     const event: CalendarEvent = {
-      id: 'pre-added-1',
-      title: 'Preloaded Event',
+      id: 'event-public-1',
+      title: 'Event Item',
       description: 'Original',
       fromDate: new Date(2026, 2, 5),
       fromTime: '8:00 AM',
@@ -35,7 +35,7 @@ describe('EditEventView pre-loaded lock behavior', () => {
 
     const { getByTestId, getByText, queryByText } = renderView(event);
 
-    expect(getByText('This pre-loaded event is locked. You can edit links only.')).toBeTruthy();
+    expect(getByText('This event is locked. You can edit notes only.')).toBeTruthy();
     expect(getByTestId('edit-title-input').props.editable).toBe(false);
     expect(getByTestId('edit-from-date-button').props.accessibilityState.disabled).toBe(true);
     expect(getByTestId('edit-to-date-button').props.accessibilityState.disabled).toBe(true);
@@ -46,10 +46,10 @@ describe('EditEventView pre-loaded lock behavior', () => {
     expect(queryByText('Delete Event')).toBeNull();
   });
 
-  it('keeps full edit controls for user-created events', () => {
+  it('keeps full edit controls for session items', () => {
     const event: CalendarEvent = {
       id: 'custom-1',
-      title: 'User Event',
+      title: 'Session Item',
       description: '',
       fromDate: new Date(2026, 2, 5),
       fromTime: '8:00 AM',
@@ -72,7 +72,7 @@ describe('EditEventView pre-loaded lock behavior', () => {
   it('keeps notes input and scroll settings keyboard-friendly', () => {
     const event: CalendarEvent = {
       id: 'custom-2',
-      title: 'User Event',
+      title: 'Session Item',
       description: '',
       fromDate: new Date(2026, 2, 5),
       fromTime: '8:00 AM',

@@ -220,7 +220,7 @@ describe('DayView', () => {
     );
   });
 
-  it('renders Medicine Buddha Day under other pre-loaded events on conflict days', () => {
+  it('renders Medicine Buddha Day under other event items on conflict days', () => {
     const medicineEvent: CalendarEvent = {
       id: 'event-medicine',
       title: 'Medicine Buddha Day',
@@ -250,15 +250,15 @@ describe('DayView', () => {
     expect(tree.indexOf('Protector Day')).toBeLessThan(tree.indexOf('Medicine Buddha Day'));
   });
 
-  it('renders pre-loaded and user events as full-width rows', () => {
-    const preloadedEvent: CalendarEvent = {
-      id: 'pre-added-1',
+  it('renders event items and session items as full-width rows', () => {
+    const eventItem: CalendarEvent = {
+      id: 'event-public-1',
       title: 'Preloaded Event',
       fromDate: new Date(2026, 2, 10),
       isAllDay: true,
     };
-    const userEvent: CalendarEvent = {
-      id: 'user-1',
+    const sessionItem: CalendarEvent = {
+      id: 'session-1',
       title: 'User Event',
       fromDate: new Date(2026, 2, 10),
       isAllDay: true,
@@ -268,11 +268,11 @@ describe('DayView', () => {
       <DayView
         selectedDate={new Date(2026, 2, 10)}
         onBack={jest.fn()}
-        events={[preloadedEvent, userEvent]}
+        events={[eventItem, sessionItem]}
       />
     );
 
-    expect(getByTestId('day-event-preloaded-pre-added-1')).toHaveStyle({ marginBottom: 14 });
-    expect(getByTestId('day-event-user-user-1')).toHaveStyle({ marginBottom: 14 });
+    expect(getByTestId('day-event-event-event-public-1')).toHaveStyle({ marginBottom: 14 });
+    expect(getByTestId('day-event-session-session-1')).toHaveStyle({ marginBottom: 14 });
   });
 });

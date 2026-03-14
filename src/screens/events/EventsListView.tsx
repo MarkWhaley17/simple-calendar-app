@@ -6,7 +6,7 @@ import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
-import { isPreloadedEvent } from '../../utils/eventEditability';
+import { isEventItem } from '../../utils/eventEditability';
 
 interface EventsListViewProps {
   events: CalendarEvent[];
@@ -14,7 +14,7 @@ interface EventsListViewProps {
   onAddEvent?: () => void;
 }
 
-type EventsTab = 'preloaded' | 'personal';
+type EventsTab = 'events' | 'sessions';
 
 const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, onAddEvent }) => {
   const headerBackground = require('../../../assets/day-bg.jpg');
@@ -23,7 +23,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
-  const [activeTab, setActiveTab] = useState<EventsTab>('preloaded');
+  const [activeTab, setActiveTab] = useState<EventsTab>('events');
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const translateX = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
@@ -104,11 +104,11 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
       return dateA.getTime() - dateB.getTime();
     });
   const sortedEvents = visibleMonthEvents;
-  const preloadedEvents = sortedEvents.filter(isPreloadedEvent);
-  const personalEvents = sortedEvents.filter(event => !isPreloadedEvent(event));
-  const activeEvents = activeTab === 'preloaded' ? preloadedEvents : personalEvents;
+  const eventItems = sortedEvents.filter(isEventItem);
+  const sessionItems = sortedEvents.filter(event => !isEventItem(event));
+  const activeEvents = activeTab === 'events' ? eventItems : sessionItems;
   const headerCountLabel =
-    activeTab === 'preloaded'
+    activeTab === 'events'
       ? `event${activeEvents.length !== 1 ? 's' : ''}`
       : `session${activeEvents.length !== 1 ? 's' : ''}`;
 
@@ -205,22 +205,22 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
         <View style={styles.tabBarContainer}>
           <View style={styles.tabBar}>
             <TouchableOpacity
-              style={[styles.tabButton, activeTab === 'preloaded' && styles.tabButtonActive]}
-              onPress={() => setActiveTab('preloaded')}
+              style={[styles.tabButton, activeTab === 'events' && styles.tabButtonActive]}
+              onPress={() => setActiveTab('events')}
               activeOpacity={0.85}
-              testID="events-tab-preloaded"
+              testID="events-tab-events"
             >
-              <Text style={[styles.tabButtonText, activeTab === 'preloaded' && styles.tabButtonTextActive]}>
+              <Text style={[styles.tabButtonText, activeTab === 'events' && styles.tabButtonTextActive]}>
                 Events
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.tabButton, activeTab === 'personal' && styles.tabButtonActive]}
-              onPress={() => setActiveTab('personal')}
+              style={[styles.tabButton, activeTab === 'sessions' && styles.tabButtonActive]}
+              onPress={() => setActiveTab('sessions')}
               activeOpacity={0.85}
-              testID="events-tab-personal"
+              testID="events-tab-sessions"
             >
-              <Text style={[styles.tabButtonText, activeTab === 'personal' && styles.tabButtonTextActive]}>
+              <Text style={[styles.tabButtonText, activeTab === 'sessions' && styles.tabButtonTextActive]}>
                 My Sessions
               </Text>
             </TouchableOpacity>
@@ -240,43 +240,43 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
             {activeEvents.length > 0 ? (
               <View style={styles.eventsList}>
                 {activeEvents.map((event) => (
-                  isPreloadedEvent(event) ? (
+                  isEventItem(event) ? (
                     <TouchableOpacity
                       key={event.id}
-                      style={styles.preloadedEventTouchable}
+                      style={styles.eventRowTouchable}
                       onPress={() => onEventPress(event)}
                       activeOpacity={0.8}
-                      testID={`events-list-preloaded-${event.id}`}
+                      testID={`events-list-event-${event.id}`}
                     >
                       {useIosPilot ? (
-                        <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
+                        <GlassSurface style={styles.eventRowGlass} contentStyle={styles.eventRowContent} intensity={28}>
                           <LinearGradient
                             colors={['rgba(245, 158, 11, 0.1)', 'rgba(254, 243, 199, 0.2)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            style={styles.preloadedEventGradient}
+                            style={styles.eventRowGradient}
                           />
-                          <View style={styles.preloadedEventTextColumn}>
+                          <View style={styles.eventRowTextColumn}>
                             <Text style={styles.eventTitle}>{event.title}</Text>
                             <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
                           </View>
-                          <Text style={styles.preloadedEventChevron}>›</Text>
+                          <Text style={styles.eventRowChevron}>›</Text>
                         </GlassSurface>
                       ) : (
-                        <View style={styles.preloadedEventRowFallback}>
+                        <View style={styles.eventRowFallback}>
                           <LinearGradient
                             colors={['rgba(245, 158, 11, 0.09)', 'rgba(254, 243, 199, 0.16)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            style={styles.preloadedEventGradient}
+                            style={styles.eventRowGradient}
                           />
-                          <View style={styles.preloadedEventTextColumn}>
+                          <View style={styles.eventRowTextColumn}>
                             <Text style={styles.eventTitle}>{event.title}</Text>
                             <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
                           </View>
-                          <Text style={styles.preloadedEventChevron}>›</Text>
+                          <Text style={styles.eventRowChevron}>›</Text>
                         </View>
                       )}
                     </TouchableOpacity>
@@ -286,23 +286,23 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
                     style={styles.eventBarTouchable}
                     onPress={() => onEventPress(event)}
                     activeOpacity={0.8}
-                    testID={`events-list-user-${event.id}`}
+                    testID={`events-list-session-${event.id}`}
                   >
                     {useIosPilot ? (
-                      <GlassSurface style={styles.eventBar} contentStyle={styles.userEventRowContent} intensity={40}>
-                        <View style={styles.userEventTextColumn}>
+                      <GlassSurface style={styles.eventBar} contentStyle={styles.sessionRowContent} intensity={40}>
+                        <View style={styles.sessionRowTextColumn}>
                           <Text style={styles.eventTitle}>{event.title}</Text>
                           <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
                         </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
+                        <Text style={styles.eventRowChevron}>›</Text>
                       </GlassSurface>
                     ) : (
                       <View style={styles.eventBar}>
-                        <View style={styles.userEventTextColumn}>
+                        <View style={styles.sessionRowTextColumn}>
                           <Text style={styles.eventTitle}>{event.title}</Text>
                           <Text style={styles.eventDate}>{formatEventDate(event)}</Text>
                         </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
+                        <Text style={styles.eventRowChevron}>›</Text>
                       </View>
                     )}
                   </TouchableOpacity>
@@ -312,14 +312,14 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
             ) : (
               <View style={styles.emptyState}>
                 <Text style={styles.emptyStateText}>
-                  {activeTab === 'preloaded' ? 'No preloaded events this month' : 'No personal sessions this month'}
+                  {activeTab === 'events' ? 'No events this month' : 'No sessions this month'}
                 </Text>
                 <Text style={styles.emptyStateSubtext}>Swipe left or right to change months</Text>
               </View>
             )}
           </ScrollView>
 
-          {activeTab === 'personal' && (
+          {activeTab === 'sessions' && (
             <TouchableOpacity
               style={styles.addButton}
               activeOpacity={0.8}
@@ -465,25 +465,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  userEventTextColumn: {
+  sessionRowTextColumn: {
     flex: 1,
   },
-  userEventRowContent: {
+  sessionRowContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   eventBarTouchable: {
     marginBottom: 14,
   },
-  preloadedEventTouchable: {
+  eventRowTouchable: {
     marginBottom: 14,
   },
-  preloadedEventRowGlass: {
+  eventRowGlass: {
     borderRadius: 0,
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  preloadedEventRowContent: {
+  eventRowContent: {
     position: 'relative',
     minHeight: 84,
     flexDirection: 'row',
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.lg + spacing.xs,
     paddingVertical: 18,
   },
-  preloadedEventRowFallback: {
+  eventRowFallback: {
     position: 'relative',
     minHeight: 84,
     flexDirection: 'row',
@@ -504,13 +504,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  preloadedEventGradient: {
+  eventRowGradient: {
     ...StyleSheet.absoluteFillObject,
   },
-  preloadedEventTextColumn: {
+  eventRowTextColumn: {
     flex: 1,
   },
-  preloadedEventChevron: {
+  eventRowChevron: {
     fontSize: 24,
     lineHeight: 24,
     color: colors.brandPrimary,

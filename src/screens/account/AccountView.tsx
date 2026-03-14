@@ -233,7 +233,7 @@ const AccountView: React.FC<AccountViewProps> = ({
               <View style={styles.settingInfo}>
                 <Text style={styles.settingLabel}>Event Reminders</Text>
                 <Text style={styles.settingDescription}>
-                  Get notified before your personal events
+                  Get notified before your sessions
                 </Text>
               </View>
               <Switch
@@ -344,7 +344,7 @@ const AccountView: React.FC<AccountViewProps> = ({
         {/* Footer info */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            A calendar app for Buddhist practice days and personal events
+            A calendar app for Buddhist practice days and sessions
           </Text>
           <Text style={styles.footerSubtext}>
             Made with dedication to the dharma

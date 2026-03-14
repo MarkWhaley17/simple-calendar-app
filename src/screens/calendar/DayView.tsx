@@ -7,7 +7,7 @@ import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { AnimatedPressable } from '../../components/ui/AnimatedPressable';
 import { colors, elevation, spacing } from '../../theme/tokens';
-import { isPreloadedEvent } from '../../utils/eventEditability';
+import { isEventItem } from '../../utils/eventEditability';
 
 interface DayViewProps {
   selectedDate: Date;
@@ -151,51 +151,51 @@ const DayView: React.FC<DayViewProps> = ({
                 const eventTime = isMultiDayAllDay
                   ? formatDateRange(start, end)
                   : (event.isAllDay ? 'All Day' : (event.fromTime || event.startTime || ''));
-                const isPreloaded = isPreloadedEvent(event);
+                const isEvent = isEventItem(event);
 
-                if (isPreloaded) {
+                if (isEvent) {
                   return (
                     <AnimatedPressable
                       key={event.id}
-                      style={styles.preloadedEventTouchable}
+                      style={styles.eventRowTouchable}
                       onPress={() => onEventPress && onEventPress(event)}
                       hapticOnPress
                       scaleTo={0.985}
-                      testID={`day-event-preloaded-${event.id}`}
+                      testID={`day-event-event-${event.id}`}
                     >
                       {useIosPilot ? (
-                        <GlassSurface style={styles.preloadedEventRowGlass} contentStyle={styles.preloadedEventRowContent} intensity={28}>
+                        <GlassSurface style={styles.eventRowGlass} contentStyle={styles.eventRowContent} intensity={28}>
                           <LinearGradient
                             colors={['rgba(245, 158, 11, 0.1)', 'rgba(254, 243, 199, 0.2)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            style={styles.preloadedEventGradient}
+                            style={styles.eventRowGradient}
                           />
-                          <View style={styles.preloadedEventTextColumn}>
+                          <View style={styles.eventRowTextColumn}>
                             <Text style={styles.eventTitle}>{event.title}</Text>
                             {eventTime && (
                               <Text style={styles.eventTime}>{eventTime}</Text>
                             )}
                           </View>
-                          <Text style={styles.preloadedEventChevron}>›</Text>
+                          <Text style={styles.eventRowChevron}>›</Text>
                         </GlassSurface>
                       ) : (
-                        <View style={styles.preloadedEventRowFallback}>
+                        <View style={styles.eventRowFallback}>
                           <LinearGradient
                             colors={['rgba(245, 158, 11, 0.09)', 'rgba(254, 243, 199, 0.16)']}
                             locations={[0, 1]}
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            style={styles.preloadedEventGradient}
+                            style={styles.eventRowGradient}
                           />
-                          <View style={styles.preloadedEventTextColumn}>
+                          <View style={styles.eventRowTextColumn}>
                             <Text style={styles.eventTitle}>{event.title}</Text>
                             {eventTime && (
                               <Text style={styles.eventTime}>{eventTime}</Text>
                             )}
                           </View>
-                          <Text style={styles.preloadedEventChevron}>›</Text>
+                          <Text style={styles.eventRowChevron}>›</Text>
                         </View>
                       )}
                     </AnimatedPressable>
@@ -205,30 +205,30 @@ const DayView: React.FC<DayViewProps> = ({
                 return (
                   <TouchableOpacity
                     key={event.id}
-                    style={styles.userEventCardTouchable}
+                    style={styles.sessionRowTouchable}
                     onPress={() => onEventPress && onEventPress(event)}
                     activeOpacity={0.8}
-                    testID={`day-event-user-${event.id}`}
+                    testID={`day-event-session-${event.id}`}
                   >
                     {useIosPilot ? (
-                      <GlassSurface style={styles.eventCard} contentStyle={styles.userEventRowContent} intensity={38}>
-                        <View style={styles.userEventTextColumn}>
+                      <GlassSurface style={styles.eventCard} contentStyle={styles.sessionRowContent} intensity={38}>
+                        <View style={styles.sessionRowTextColumn}>
                           <Text style={styles.eventTitle}>{event.title}</Text>
                           {eventTime && (
                             <Text style={styles.eventTime}>{eventTime}</Text>
                           )}
                         </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
+                        <Text style={styles.eventRowChevron}>›</Text>
                       </GlassSurface>
                     ) : (
                       <View style={styles.eventCard}>
-                        <View style={styles.userEventTextColumn}>
+                        <View style={styles.sessionRowTextColumn}>
                           <Text style={styles.eventTitle}>{event.title}</Text>
                           {eventTime && (
                             <Text style={styles.eventTime}>{eventTime}</Text>
                           )}
                         </View>
-                        <Text style={styles.preloadedEventChevron}>›</Text>
+                        <Text style={styles.eventRowChevron}>›</Text>
                       </View>
                     )}
                   </TouchableOpacity>
@@ -328,25 +328,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  userEventTextColumn: {
+  sessionRowTextColumn: {
     flex: 1,
   },
-  userEventRowContent: {
+  sessionRowContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  userEventCardTouchable: {
+  sessionRowTouchable: {
     marginBottom: 14,
   },
-  preloadedEventTouchable: {
+  eventRowTouchable: {
     marginBottom: 14,
   },
-  preloadedEventRowGlass: {
+  eventRowGlass: {
     borderRadius: 0,
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  preloadedEventRowContent: {
+  eventRowContent: {
     position: 'relative',
     minHeight: 84,
     flexDirection: 'row',
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     paddingRight: spacing.lg + spacing.xs,
     paddingVertical: 18,
   },
-  preloadedEventRowFallback: {
+  eventRowFallback: {
     position: 'relative',
     minHeight: 84,
     flexDirection: 'row',
@@ -367,13 +367,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderInput,
   },
-  preloadedEventGradient: {
+  eventRowGradient: {
     ...StyleSheet.absoluteFillObject,
   },
-  preloadedEventTextColumn: {
+  eventRowTextColumn: {
     flex: 1,
   },
-  preloadedEventChevron: {
+  eventRowChevron: {
     fontSize: 24,
     lineHeight: 24,
     color: colors.brandPrimary,

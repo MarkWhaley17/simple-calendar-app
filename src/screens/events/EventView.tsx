@@ -4,7 +4,7 @@ import { CalendarEvent } from '../../types';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { GlassSurface } from '../../components/ui/GlassSurface';
-import { isPreloadedEvent } from '../../utils/eventEditability';
+import { isEventItem } from '../../utils/eventEditability';
 import { formatFullDate, isSameDay } from '../../utils/dateHelpers';
 
 interface EventViewProps {
@@ -23,13 +23,13 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit, onAddNotes
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const headerBackground = require('../../../assets/day-bg.jpg');
   const detailsBackground = require('../../../assets/day-view-pattern.png');
-  const isPreloaded = isPreloadedEvent(event);
+  const isEvent = isEventItem(event);
   const showsDateRange = !isSameDay(eventDate, eventEndDate);
   const eventDateLabel = showsDateRange
     ? `${formatFullDate(eventDate)} - ${formatFullDate(eventEndDate)}`
     : formatFullDate(eventDate);
-  const actionLabel = isPreloaded ? 'Add Notes' : 'Edit';
-  const actionHandler = isPreloaded ? onAddNotes : onEdit;
+  const actionLabel = isEvent ? 'Add Notes' : 'Edit';
+  const actionHandler = isEvent ? onAddNotes : onEdit;
 
   const renderSection = (title: string, content: React.ReactNode) => {
     if (useIosNativePilot) {

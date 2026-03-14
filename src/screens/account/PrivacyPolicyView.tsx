@@ -16,7 +16,7 @@ const PrivacyPolicyView: React.FC<PrivacyPolicyViewProps> = ({ onBack }) => {
     () => [
       {
         title: 'What we store',
-        body: 'The app stores your account session token and local calendar preferences on your device. Notification settings and your personal calendar events are saved locally unless synced through your account.',
+        body: 'The app stores your account session token and local calendar preferences on your device. Notification settings and your sessions are saved locally unless synced through your account.',
       },
       {
         title: 'How we use data',

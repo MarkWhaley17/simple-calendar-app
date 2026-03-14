@@ -25,9 +25,6 @@ export const isEventItem = (event: CalendarEvent): boolean =>
 export const isSessionItem = (event: CalendarEvent): boolean =>
   !isEventItem(event);
 
-// Temporary alias during Events/Sessions terminology migration.
-export const isPreloadedEvent = isEventItem;
-
 export const sanitizeEventUpdateForEditability = (
   originalEvent: CalendarEvent,
   incomingUpdate: EditableEventUpdate

@@ -32,7 +32,7 @@ describe('EventsListView', () => {
       description: 'Second event description',
     },
     {
-      id: 'pre-added-3',
+      id: 'event-public-3',
       title: 'Third Event',
       fromDate: new Date(currentYear, currentMonth, 10),
       isAllDay: true,
@@ -56,7 +56,7 @@ describe('EventsListView', () => {
     jest.clearAllMocks();
   });
 
-  it('defaults to Preloaded tab and shows only preloaded events for month', () => {
+  it('defaults to Events tab and shows only event items for month', () => {
     const { getByText, queryByText, getByTestId } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
@@ -69,12 +69,12 @@ describe('EventsListView', () => {
     expect(queryByText('Second Event')).toBeNull();
   });
 
-  it('switches to My Sessions tab and shows personal events', () => {
+  it('switches to My Sessions tab and shows session items', () => {
     const { getByTestId, getByText, queryByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    fireEvent.press(getByTestId('events-tab-personal'));
+    fireEvent.press(getByTestId('events-tab-sessions'));
 
     expect(getByText('2 sessions')).toBeTruthy();
     expect(getByText('First Event')).toBeTruthy();
@@ -82,17 +82,17 @@ describe('EventsListView', () => {
     expect(queryByText('Third Event')).toBeNull();
   });
 
-  it('shows full-width preloaded row and personal card variants', () => {
+  it('shows full-width event row and session row variants', () => {
     const { getByTestId } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByTestId('events-list-preloaded-pre-added-3')).toBeTruthy();
-    fireEvent.press(getByTestId('events-tab-personal'));
-    expect(getByTestId('events-list-user-1')).toBeTruthy();
+    expect(getByTestId('events-list-event-event-public-3')).toBeTruthy();
+    fireEvent.press(getByTestId('events-tab-sessions'));
+    expect(getByTestId('events-list-session-1')).toBeTruthy();
   });
 
-  it('shows all-day label for preloaded all-day events', () => {
+  it('shows all-day label for event all-day items', () => {
     const { getByText } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
@@ -100,14 +100,14 @@ describe('EventsListView', () => {
     expect(getByText(new RegExp(`${currentMonthName} 10, ${currentYear} • All Day`))).toBeTruthy();
   });
 
-  it('shows personal events in chronological order', () => {
+  it('shows session items in chronological order', () => {
     const { getByTestId, toJSON } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
     );
-    fireEvent.press(getByTestId('events-tab-personal'));
+    fireEvent.press(getByTestId('events-tab-sessions'));
 
     const serializedTree = JSON.stringify(toJSON());
-    expect(serializedTree.indexOf('events-list-user-1')).toBeLessThan(serializedTree.indexOf('events-list-user-2'));
+    expect(serializedTree.indexOf('events-list-session-1')).toBeLessThan(serializedTree.indexOf('events-list-session-2'));
   });
 
   it('calls onEventPress with correct event from current tab', () => {
@@ -118,7 +118,7 @@ describe('EventsListView', () => {
     fireEvent.press(getByText('Third Event'));
     expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[2]);
 
-    fireEvent.press(getByTestId('events-tab-personal'));
+    fireEvent.press(getByTestId('events-tab-sessions'));
     fireEvent.press(getByText('Second Event'));
     expect(mockOnEventPress).toHaveBeenCalledWith(mockEvents[1]);
   });
@@ -129,8 +129,8 @@ describe('EventsListView', () => {
       <EventsListView events={onlyPersonal} onEventPress={mockOnEventPress} />
     );
 
-    expect(getByText('No preloaded events this month')).toBeTruthy();
-    fireEvent.press(getByTestId('events-tab-personal'));
+    expect(getByText('No events this month')).toBeTruthy();
+    fireEvent.press(getByTestId('events-tab-sessions'));
     expect(getByText('First Event')).toBeTruthy();
   });
 
@@ -169,7 +169,7 @@ describe('EventsListView', () => {
     );
 
     expect(queryByTestId('events-list-add-session')).toBeNull();
-    fireEvent.press(getByTestId('events-tab-personal'));
+    fireEvent.press(getByTestId('events-tab-sessions'));
     fireEvent.press(getByTestId('events-list-add-session'));
     expect(mockOnAddEvent).toHaveBeenCalledTimes(1);
   });
