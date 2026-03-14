@@ -21,7 +21,42 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit, onAddNotes
   const eventTime = event.fromTime || event.startTime;
 
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
-  const headerBackground = require('../../../assets/day-bg.jpg');
+  const imageMap: Record<string, any> = {
+    'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
+    'protector-day.jpg': require('../../../assets/protector-day.jpg'),
+    'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
+    'green-tara.jpg': require('../../../assets/green-tara.jpg'),
+    'full-moon.png': require('../../../assets/full-moon.png'),
+    'new-moon.png': require('../../../assets/new-moon.png'),
+    'dakini.jpg': require('../../../assets/dakini.jpg'),
+    'jambhala.jpg': require('../../../assets/jambhala.jpg'),
+  };
+
+  const titleLower = event.title.toLowerCase();
+  let resolvedImageKey: string | undefined;
+  if (event.image && imageMap[event.image]) {
+    resolvedImageKey = event.image;
+  } else if (titleLower.includes('full moon')) {
+    resolvedImageKey = 'full-moon.png';
+  } else if (titleLower.includes('new moon')) {
+    resolvedImageKey = 'new-moon.png';
+  } else if (titleLower.includes('dakini day')) {
+    resolvedImageKey = 'dakini.jpg';
+  } else if (titleLower.includes('jambhala day')) {
+    resolvedImageKey = 'jambhala.jpg';
+  } else if (titleLower.includes('guru rinpoche day')) {
+    resolvedImageKey = 'guru-rinpoche.jpg';
+  } else if (titleLower.includes('medicine buddha day')) {
+    resolvedImageKey = 'medicine-buddha.jpg';
+  } else if (titleLower.includes('tara day')) {
+    resolvedImageKey = 'green-tara.jpg';
+  } else if (titleLower.includes('protector day')) {
+    resolvedImageKey = 'protector-day.jpg';
+  }
+
+  const headerBackground = resolvedImageKey
+    ? imageMap[resolvedImageKey]
+    : require('../../../assets/day-bg.jpg');
   const detailsBackground = require('../../../assets/day-view-pattern.png');
   const isEvent = isEventItem(event);
   const showsDateRange = !isSameDay(eventDate, eventEndDate);
@@ -54,7 +89,12 @@ const EventView: React.FC<EventViewProps> = ({ event, onBack, onEdit, onAddNotes
   return (
     <View style={styles.container}>
       {/* Header */}
-      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+      <ImageBackground
+        source={headerBackground}
+        style={styles.headerBackground}
+        resizeMode="cover"
+        testID="event-view-header-image"
+      >
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <TouchableOpacity

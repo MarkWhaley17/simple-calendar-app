@@ -38,6 +38,7 @@ const EVENT_BANNER_ASSETS = [
   require('./assets/medicine-buddha.jpg'),
   require('./assets/protector-day.jpg'),
   require('./assets/guru-rinpoche.jpg'),
+  require('./assets/green-tara.jpg'),
   require('./assets/full-moon.png'),
   require('./assets/new-moon.png'),
   require('./assets/dakini.jpg'),

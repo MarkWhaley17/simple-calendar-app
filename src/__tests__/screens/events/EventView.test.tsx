@@ -232,4 +232,20 @@ describe('EventView', () => {
     expect(getByText('March 3, 2026 - March 5, 2026')).toBeTruthy();
     expect(queryByText('March 3, 2026 • 9:00 AM')).toBeNull();
   });
+
+  it('uses Guru Rinpoche image in header for Guru Rinpoche Day events', () => {
+    const guruEvent: CalendarEvent = {
+      ...mockEvent,
+      id: 'event-public-guru',
+      title: 'Guru Rinpoche Day',
+    };
+
+    const { getByTestId } = render(
+      <EventView event={guruEvent} onBack={mockOnBack} onAddNotes={mockOnAddNotes} />
+    );
+
+    expect(getByTestId('event-view-header-image').props.source).toBe(
+      require('../../../../assets/guru-rinpoche.jpg')
+    );
+  });
 });

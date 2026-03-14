@@ -65,6 +65,7 @@ const DayView: React.FC<DayViewProps> = ({
     'medicine-buddha.jpg': require('../../../assets/medicine-buddha.jpg'),
     'protector-day.jpg': require('../../../assets/protector-day.jpg'),
     'guru-rinpoche.jpg': require('../../../assets/guru-rinpoche.jpg'),
+    'green-tara.jpg': require('../../../assets/green-tara.jpg'),
     'full-moon.png': require('../../../assets/full-moon.png'),
     'new-moon.png': require('../../../assets/new-moon.png'),
     'dakini.jpg': require('../../../assets/dakini.jpg'),
@@ -87,6 +88,9 @@ const DayView: React.FC<DayViewProps> = ({
     }
     if (event.title.toLowerCase().includes('jambhala day')) {
       return 'jambhala.jpg';
+    }
+    if (event.title.toLowerCase().includes('tara day')) {
+      return 'green-tara.jpg';
     }
     return undefined;
   };

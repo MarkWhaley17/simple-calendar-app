@@ -98,6 +98,90 @@ Description: Observed on the 8th lunar day, Medicine Buddha Day honors Bhaisajya
 
 ---
 
+Title: Tara Day
+Date: 2026-01-06
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-02-24
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-03-26
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-04-24
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-05-23
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-06-22
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-07-21
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-08-19
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-09-17
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-10-17
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-11-15
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
+Title: Tara Day
+Date: 2026-12-15
+Image: green-tara.jpg
+Description: Tara, the beloved bodhisattva of compassion and swift protection, is revered in Tibetan Buddhism as the one who responds immediately to the suffering of beings. Her lunar days are considered especially auspicious for prayer, mantra recitation, and acts of compassion, as the blessings of her enlightened activity are said to be particularly accessible. Practicing on Tara's days, especially through the recitation of her mantra Om Tare Tuttare Ture Soha, is believed to remove obstacles, cultivate courage, and accelerate the path to awakening.
+
+---
+
 
 Title: Protector Day
 Date: 2026-01-07 (lunar day 19)
