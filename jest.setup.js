@@ -13,8 +13,39 @@ jest.mock('expo-status-bar', () => ({
 jest.mock('expo-haptics', () => ({
   selectionAsync: jest.fn(() => Promise.resolve()),
   impactAsync: jest.fn(() => Promise.resolve()),
+  notificationAsync: jest.fn(() => Promise.resolve()),
   ImpactFeedbackStyle: {
     Light: 'Light',
+  },
+  NotificationFeedbackType: {
+    Success: 'Success',
+  },
+}));
+jest.mock('expo-av', () => ({
+  InterruptionModeIOS: {
+    DoNotMix: 'DoNotMix',
+  },
+  Audio: {
+    setAudioModeAsync: jest.fn(() => Promise.resolve()),
+    Sound: {
+      createAsync: jest.fn(() => {
+        let statusCallCount = 0;
+        return Promise.resolve({
+          sound: {
+            setOnPlaybackStatusUpdate: jest.fn(),
+            playAsync: jest.fn(() => Promise.resolve()),
+            getStatusAsync: jest.fn(() => {
+              statusCallCount += 1;
+              if (statusCallCount < 2) {
+                return Promise.resolve({ isLoaded: true, isPlaying: true, didJustFinish: false, positionMillis: 250 });
+              }
+              return Promise.resolve({ isLoaded: true, isPlaying: false, didJustFinish: true, positionMillis: 10000 });
+            }),
+            unloadAsync: jest.fn(() => Promise.resolve()),
+          },
+        });
+      }),
+    },
   },
 }));
 

@@ -15,7 +15,11 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { CalendarEvent } from '../../types';
-import { PRACTICE_DURATION_PRESETS_MINUTES, PRACTICE_INTENTION_TEXT } from '../../constants/practice';
+import {
+  PRACTICE_DEDICATION_TEXT,
+  PRACTICE_DURATION_PRESETS_MINUTES,
+  PRACTICE_INTENTION_TEXT,
+} from '../../constants/practice';
 import {
   PracticeRunningSnapshot,
   PracticeStage,
@@ -30,6 +34,7 @@ import {
   loadPracticeRunningSnapshot,
   savePracticeRunningSnapshot,
 } from '../../utils/practice';
+import { playPracticeCompletionFeedback } from '../../utils/practiceCompletion';
 import { colors, spacing } from '../../theme/tokens';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
@@ -179,7 +184,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       const nextRemaining = getRemainingSeconds(runningSnapshot, nowMs);
       setRemainingSec(nextRemaining);
       if (nextRemaining <= 0) {
-        void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         completeRunningSession(true);
       }
     };
@@ -229,7 +233,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     });
   };
 
-  const completeRunningSession = (fromCountdownCompletion = false) => {
+  const completeRunningSession = (_fromCountdownCompletion = false) => {
     if (!runningSnapshot) return;
     const endedAt = new Date();
     const startedAt = new Date(runningSnapshot.startedAt);
@@ -241,10 +245,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     setSessionEndedAt(endedAt);
     setRunningSnapshot(null);
     setStage('done');
-    setShowAccumulationsModal(true);
-    if (!fromCountdownCompletion) {
-      void Haptics.selectionAsync();
-    }
+    void playPracticeCompletionFeedback();
   };
 
   const resetAfterSave = () => {
@@ -354,14 +355,17 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'done') {
       return (
         <View style={styles.detailPanel}>
-          <Text style={styles.detailTitle}>Session Complete</Text>
+          <Text style={styles.detailTitle}>Dedication</Text>
+          <View style={styles.intentionCard}>
+            <Text style={styles.intentionText}>{PRACTICE_DEDICATION_TEXT}</Text>
+          </View>
           <Text style={styles.doneSubtext}>Duration {formatDurationMmSs(completedDurationSec)}</Text>
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => setShowAccumulationsModal(true)}
-            testID="practice-save-session"
+            testID="practice-dedication-return"
           >
-            <Text style={styles.primaryButtonText}>Save Session</Text>
+            <Text style={styles.primaryButtonText}>Return</Text>
           </TouchableOpacity>
         </View>
       );
@@ -803,7 +807,7 @@ const styles = StyleSheet.create({
     fontSize: 44,
     lineHeight: 52,
     color: colors.brandPrimaryDark,
-    fontWeight: '700',
+    fontWeight: '500',
     textAlign: 'center',
     marginBottom: spacing.md,
   },

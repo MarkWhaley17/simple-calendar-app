@@ -65,6 +65,9 @@ describe('PracticeView', () => {
     expect(getByTestId('practice-end')).toBeTruthy();
     fireEvent.press(getByTestId('practice-end'));
 
+    expect(getByText('Dedication')).toBeTruthy();
+    fireEvent.press(getByTestId('practice-dedication-return'));
+
     expect(getByTestId('practice-accumulations-input')).toBeTruthy();
     fireEvent.changeText(getByTestId('practice-accumulations-input'), '5');
     fireEvent.press(getByTestId('practice-accumulations-save'));
