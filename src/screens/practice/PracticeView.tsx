@@ -46,7 +46,6 @@ const SESSION_TITLE_PLACEHOLDER = 'Add a Session Title (optional)';
 
 interface PracticeViewProps {
   sessions: CalendarEvent[];
-  onSessionPress: (session: CalendarEvent) => void;
   onSaveTimedSession: (input: Omit<TimedPracticeSaveInput, 'sessions'>) => Promise<void>;
   onRunningStateChange?: (isRunning: boolean) => void;
 }
@@ -98,7 +97,6 @@ const PracticeCountdownRing: React.FC<{ progress: number }> = ({ progress }) => 
 
 const PracticeView: React.FC<PracticeViewProps> = ({
   sessions,
-  onSessionPress,
   onSaveTimedSession,
   onRunningStateChange,
 }) => {
@@ -120,15 +118,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [isSaving, setIsSaving] = useState(false);
 
   const stats: PracticeStats = useMemo(() => calculatePracticeStats(sessions), [sessions]);
-  const historyItems = useMemo(
-    () =>
-      [...sessions].sort(
-        (a, b) =>
-          (b.toDate || b.fromDate || b.date || new Date()).getTime() -
-          (a.toDate || a.fromDate || a.date || new Date()).getTime()
-      ),
-    [sessions]
-  );
   const linkableSessions = useMemo(() => getLinkableSessions(sessions), [sessions]);
   const linkedSession = useMemo(
     () => linkableSessions.find((session) => session.id === linkedSessionId),
@@ -298,26 +287,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     }
   };
 
-  const formatHistoryDate = (session: CalendarEvent): string => {
-    const anchor = session.toDate || session.fromDate || session.date || new Date();
-    return anchor.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
-
-  const getHistoryDurationLabel = (session: CalendarEvent): string => {
-    if (typeof session.durationSeconds === 'number') {
-      return formatDurationMmSs(session.durationSeconds);
-    }
-    if (session.fromDate && session.toDate) {
-      const diffSec = Math.floor((session.toDate.getTime() - session.fromDate.getTime()) / 1000);
-      if (diffSec > 0) return formatDurationMmSs(diffSec);
-    }
-    return '--:--';
-  };
-
   const renderDetailContent = () => {
     if (stage === 'intention') {
       return (
@@ -476,7 +445,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               }, 120);
             }}
             placeholder={SESSION_TITLE_PLACEHOLDER}
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={colors.placeholder}
             autoCapitalize="sentences"
             autoCorrect={false}
             returnKeyType="done"
@@ -508,73 +477,55 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           },
         ]}
       >
-        <ScrollView style={styles.page} contentContainerStyle={styles.homeContent}>
-          <View style={styles.statsRow}>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.todayMinutes}</Text>
-              <Text style={styles.statLabel}>Today (min)</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.sevenDayMinutes}</Text>
-              <Text style={styles.statLabel}>7-day (min)</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statValue}>{stats.streakDays}</Text>
-              <Text style={styles.statLabel}>Streak</Text>
-            </View>
-          </View>
-
-          <View style={styles.cardsSection}>
-            <TouchableOpacity style={styles.featureCard} onPress={openTimerDetail} testID="practice-card-timed">
-              <Text style={styles.featureCardTitle}>Timed Meditation</Text>
-              <Text style={styles.featureCardSubtitle}>Set duration, intention, and begin</Text>
-            </TouchableOpacity>
-
-            <View style={[styles.featureCard, styles.featureCardDisabled]}>
-              <View style={styles.comingSoonBadge}>
-                <Text style={styles.comingSoonText}>Coming Soon</Text>
+        <View style={styles.page}>
+          <View style={styles.homeBackground}>
+            <Image
+              source={detailBackground}
+              style={styles.homePatternImage}
+              resizeMode="cover"
+              testID="practice-home-background-pattern"
+            />
+            <ScrollView style={styles.page} contentContainerStyle={styles.homeContent}>
+              <View style={styles.statsRow}>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{stats.todayMinutes}</Text>
+                  <Text style={styles.statLabel}>Today (min)</Text>
+                </View>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{stats.sevenDayMinutes}</Text>
+                  <Text style={styles.statLabel}>7-day (min)</Text>
+                </View>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{stats.streakDays}</Text>
+                  <Text style={styles.statLabel}>Streak</Text>
+                </View>
               </View>
-              <Text style={styles.featureCardTitle}>Mantra Counter</Text>
-              <Text style={styles.featureCardSubtitle}>Track repetitions and streaks</Text>
-            </View>
 
-            <View style={[styles.featureCard, styles.featureCardDisabled]}>
-              <View style={styles.comingSoonBadge}>
-                <Text style={styles.comingSoonText}>Coming Soon</Text>
-              </View>
-              <Text style={styles.featureCardTitle}>Sadhana Tracker</Text>
-              <Text style={styles.featureCardSubtitle}>Keep continuity with structured sessions</Text>
-            </View>
-          </View>
-
-          <View style={styles.historySection}>
-            <Text style={styles.historyTitle}>Session History</Text>
-            {historyItems.length === 0 ? (
-              <Text style={styles.historyEmptyText}>No sessions yet.</Text>
-            ) : (
-              historyItems.map((session) => (
-                <TouchableOpacity
-                  key={session.id}
-                  style={styles.historyRow}
-                  onPress={() => onSessionPress(session)}
-                  activeOpacity={0.8}
-                  testID={`practice-history-${session.id}`}
-                >
-                  <View style={styles.historyMeta}>
-                    <Text style={styles.historyRowTitle}>{session.title}</Text>
-                    <Text style={styles.historyRowDate}>{formatHistoryDate(session)}</Text>
-                  </View>
-                  <View style={styles.historyStats}>
-                    <Text style={styles.historyDuration}>{getHistoryDurationLabel(session)}</Text>
-                    <Text style={styles.historyAccumulations}>
-                      A: {typeof session.accumulations === 'number' ? session.accumulations : '-'}
-                    </Text>
-                  </View>
+              <View style={styles.cardsSection}>
+                <TouchableOpacity style={styles.featureCard} onPress={openTimerDetail} testID="practice-card-timed">
+                  <Text style={styles.featureCardTitle}>Timed Meditation</Text>
+                  <Text style={styles.featureCardSubtitle}>Set duration, intention, and begin</Text>
                 </TouchableOpacity>
-              ))
-            )}
+
+                <View style={[styles.featureCard, styles.featureCardDisabled]}>
+                  <View style={styles.comingSoonBadge}>
+                    <Text style={styles.comingSoonText}>Coming Soon</Text>
+                  </View>
+                  <Text style={styles.featureCardTitle}>Mantra Counter</Text>
+                  <Text style={styles.featureCardSubtitle}>Track repetitions and streaks</Text>
+                </View>
+
+                <View style={[styles.featureCard, styles.featureCardDisabled]}>
+                  <View style={styles.comingSoonBadge}>
+                    <Text style={styles.comingSoonText}>Coming Soon</Text>
+                  </View>
+                  <Text style={styles.featureCardTitle}>Sadhana Tracker</Text>
+                  <Text style={styles.featureCardSubtitle}>Keep continuity with structured sessions</Text>
+                </View>
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
+        </View>
 
         <View style={styles.page}>
           <KeyboardAvoidingView
@@ -660,6 +611,16 @@ const styles = StyleSheet.create({
     width: screenWidth,
     flex: 1,
   },
+  homeBackground: {
+    flex: 1,
+    backgroundColor: colors.bgSubtle,
+    overflow: 'hidden',
+  },
+  homePatternImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
+  },
   homeContent: {
     paddingBottom: spacing.xl + spacing.xl,
   },
@@ -730,58 +691,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.warningText,
   },
-  historySection: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  historyTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.brandInk,
-    marginBottom: spacing.sm,
-  },
-  historyEmptyText: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    fontStyle: 'italic',
-  },
-  historyRow: {
-    backgroundColor: colors.surfaceStrong,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.borderInput,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.sm,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  historyMeta: {
-    flex: 1,
-  },
-  historyRowTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.brandInk,
-    marginBottom: 6,
-  },
-  historyRowDate: {
-    fontSize: 13,
-    color: colors.textSecondary,
-  },
-  historyStats: {
-    alignItems: 'flex-end',
-  },
-  historyDuration: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.brandPrimaryDark,
-    marginBottom: 4,
-  },
-  historyAccumulations: {
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
   detailBackground: {
     flex: 1,
     backgroundColor: colors.bgSubtle,
@@ -793,9 +702,14 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   backButton: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 4,
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
     paddingBottom: spacing.sm,
+    backgroundColor: 'transparent',
   },
   backButtonText: {
     fontSize: 18,
@@ -805,6 +719,7 @@ const styles = StyleSheet.create({
   },
   detailPanel: {
     paddingHorizontal: spacing.lg,
+    paddingTop: spacing.xl + spacing.sm,
     paddingBottom: spacing.xl,
   },
   detailTitle: {
@@ -927,7 +842,7 @@ const styles = StyleSheet.create({
   },
   linkButtonText: {
     fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.placeholder,
     fontWeight: '600',
   },
   linkList: {

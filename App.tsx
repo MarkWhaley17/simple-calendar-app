@@ -782,14 +782,6 @@ export default function App() {
     }
   };
 
-  const handlePracticeSessionPress = (session: CalendarEvent) => {
-    setPreviousView('practice');
-    setSelectedEvent(session);
-    setEditScope(null);
-    setEditOccurrenceKey(null);
-    setViewMode('event');
-  };
-
   const handlePracticeRunningStateChange = (isRunning: boolean) => {
     setHasActivePracticeTimer(isRunning);
   };
@@ -1013,7 +1005,6 @@ export default function App() {
               sessions={masterEvents.filter(
                 event => isSessionItem(event) && !isMemberOnlyEvent(event)
               )}
-              onSessionPress={handlePracticeSessionPress}
               onSaveTimedSession={handleSaveTimedPracticeSession}
               onRunningStateChange={handlePracticeRunningStateChange}
             />

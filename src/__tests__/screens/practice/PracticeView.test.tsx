@@ -16,29 +16,25 @@ describe('PracticeView', () => {
   };
 
   const setup = (sessions: CalendarEvent[] = [baseSession]) => {
-    const onSessionPress = jest.fn();
     const onSaveTimedSession = jest.fn().mockResolvedValue(undefined);
     const view = render(
       <PracticeView
         sessions={sessions}
-        onSessionPress={onSessionPress}
         onSaveTimedSession={onSaveTimedSession}
       />
     );
     return {
       ...view,
-      onSessionPress,
       onSaveTimedSession,
     };
   };
 
-  it('renders dashboard, cards, and history list', () => {
-    const { getByText, getByTestId, getAllByText } = setup();
+  it('renders dashboard and practice cards', () => {
+    const { getByText, getAllByText } = setup();
 
     expect(getByText('Practice')).toBeTruthy();
     expect(getAllByText('Timed Meditation').length).toBeGreaterThan(0);
-    expect(getByText('Session History')).toBeTruthy();
-    expect(getByTestId('practice-history-session-1')).toBeTruthy();
+    expect(() => getByText('Session History')).toThrow();
   });
 
   it('opens timer detail from card and updates time using preset and +/- controls', () => {
@@ -85,7 +81,7 @@ describe('PracticeView', () => {
         accumulations: 5,
       })
     );
-    expect(getByText('Session History')).toBeTruthy();
+    expect(getByText('Practice')).toBeTruthy();
   });
 
   it('passes a custom session title for unlinked timed sessions', async () => {
@@ -120,10 +116,4 @@ describe('PracticeView', () => {
     expect(Audio.Sound.createAsync).toHaveBeenCalled();
   });
 
-  it('opens existing session detail when history row is pressed', () => {
-    const { getByTestId, onSessionPress } = setup();
-
-    fireEvent.press(getByTestId('practice-history-session-1'));
-    expect(onSessionPress).toHaveBeenCalledWith(baseSession);
-  });
 });
