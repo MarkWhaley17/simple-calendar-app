@@ -3,6 +3,7 @@ import {
   Alert,
   Animated,
   Dimensions,
+  Image,
   ImageBackground,
   Modal,
   ScrollView,
@@ -42,6 +43,49 @@ interface PracticeViewProps {
 }
 
 const screenWidth = Dimensions.get('window').width;
+const COUNTDOWN_RING_SIZE = 200;
+const COUNTDOWN_RING_SEGMENTS = 72;
+const COUNTDOWN_RING_RADIUS = 88;
+const COUNTDOWN_SEGMENT_WIDTH = 2;
+const COUNTDOWN_SEGMENT_HEIGHT = 8;
+
+const PracticeCountdownRing: React.FC<{ progress: number }> = ({ progress }) => {
+  const clampedProgress = Math.max(0, Math.min(1, progress));
+  const activeCount = Math.floor(COUNTDOWN_RING_SEGMENTS * clampedProgress);
+  const centerX = COUNTDOWN_RING_SIZE / 2;
+  const centerY = COUNTDOWN_RING_SIZE / 2;
+  const segmentAngle = 360 / COUNTDOWN_RING_SEGMENTS;
+  const removedCount = COUNTDOWN_RING_SEGMENTS - activeCount;
+  const ringSegments = Array.from({ length: COUNTDOWN_RING_SEGMENTS }, (_, index) => {
+    // Depletion starts at 12 o'clock and proceeds counterclockwise (to the left).
+    const isActive = index >= removedCount;
+    const angleDeg = -90 - index * segmentAngle;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    const x = centerX + COUNTDOWN_RING_RADIUS * Math.cos(angleRad) - COUNTDOWN_SEGMENT_WIDTH / 2;
+    const y = centerY + COUNTDOWN_RING_RADIUS * Math.sin(angleRad) - COUNTDOWN_SEGMENT_HEIGHT / 2;
+    return (
+      <View
+        key={`ring-segment-${index}`}
+        style={[
+          styles.countdownRingSegment,
+          {
+            left: x,
+            top: y,
+            opacity: isActive ? 1 : 0.18,
+            transform: [{ rotate: `${angleDeg}deg` }],
+          },
+        ]}
+      />
+    );
+  });
+
+  return (
+    <View style={styles.countdownRing} testID="practice-countdown-ring">
+      {ringSegments}
+      <View style={styles.countdownSun} />
+    </View>
+  );
+};
 
 const PracticeView: React.FC<PracticeViewProps> = ({
   sessions,
@@ -273,28 +317,37 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     }
 
     if (stage === 'running') {
+      const target = runningSnapshot?.targetDurationSec || 1;
+      const progress = remainingSec / target;
       return (
         <View style={styles.detailPanel}>
           <Text style={styles.detailTitle}>Timed Meditation</Text>
-          <Text style={styles.runningClock} testID="practice-running-clock">{formatDurationMmSs(remainingSec)}</Text>
-          <View style={styles.runningButtonsRow}>
-            <TouchableOpacity
-              style={[styles.secondaryButton, styles.runningAction]}
-              onPress={togglePauseResume}
-              testID="practice-pause-resume"
-            >
-              <Text style={styles.secondaryButtonText}>
-                {runningSnapshot?.pausedAt ? 'Resume' : 'Pause'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.primaryButton, styles.runningAction]}
-              onPress={() => completeRunningSession(false)}
-              testID="practice-end"
-            >
-              <Text style={styles.primaryButtonText}>End</Text>
-            </TouchableOpacity>
+          <View style={styles.countdownRingWrapper}>
+            <PracticeCountdownRing progress={progress} />
           </View>
+          <Text style={styles.runningClock} testID="practice-running-clock">{formatDurationMmSs(remainingSec)}</Text>
+          <TouchableOpacity
+            style={styles.playPauseButton}
+            onPress={togglePauseResume}
+            testID="practice-pause-resume"
+            accessibilityLabel="Playback toggle"
+          >
+            {runningSnapshot?.pausedAt ? (
+              <View style={styles.playIcon} />
+            ) : (
+              <View style={styles.pauseIcon}>
+                <View style={styles.pauseBar} />
+                <View style={styles.pauseBar} />
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.primaryButton, styles.runningEndButton]}
+            onPress={() => completeRunningSession(false)}
+            testID="practice-end"
+          >
+            <Text style={styles.primaryButtonText}>End</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -317,7 +370,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
 
     return (
       <ScrollView contentContainerStyle={styles.detailPanel}>
-        <Text style={styles.detailTitle}>Timed Meditation</Text>
+        <Text style={styles.selectDurationTitle}>Select Duration</Text>
         <View style={styles.pillsWrap}>
           {PRACTICE_DURATION_PRESETS_MINUTES.map((minute) => {
             const isSelected = selectedDurationSec === minute * 60;
@@ -351,7 +404,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           testID="practice-link-toggle"
         >
           <Text style={styles.linkButtonText}>
-            {linkedSession ? `Linked: ${linkedSession.title}` : 'Link session (optional)'}
+            {linkedSession ? `Linked: ${linkedSession.title}` : 'Link Calendar Session (optional)'}
           </Text>
         </TouchableOpacity>
 
@@ -476,12 +529,18 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         </ScrollView>
 
         <View style={styles.page}>
-          <ImageBackground source={detailBackground} style={styles.detailBackground} resizeMode="cover">
+          <View style={styles.detailBackground}>
+            <Image
+              source={detailBackground}
+              style={styles.detailPatternImage}
+              resizeMode="cover"
+              testID="practice-detail-background-pattern"
+            />
             <TouchableOpacity style={styles.backButton} onPress={returnHome} testID="practice-back">
               <Text style={styles.backButtonText}>‹ Back</Text>
             </TouchableOpacity>
             {renderDetailContent()}
-          </ImageBackground>
+          </View>
         </View>
       </Animated.View>
 
@@ -673,6 +732,13 @@ const styles = StyleSheet.create({
   },
   detailBackground: {
     flex: 1,
+    backgroundColor: colors.bgSubtle,
+    overflow: 'hidden',
+  },
+  detailPatternImage: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   backButton: {
     paddingHorizontal: spacing.lg,
@@ -680,9 +746,10 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.sm,
   },
   backButtonText: {
-    fontSize: 17,
-    color: colors.brandPrimaryDark,
+    fontSize: 18,
+    color: colors.accentStrong,
     fontWeight: '600',
+    letterSpacing: 0.3,
   },
   detailPanel: {
     paddingHorizontal: spacing.lg,
@@ -694,21 +761,32 @@ const styles = StyleSheet.create({
     color: colors.brandInk,
     marginBottom: spacing.md,
   },
+  selectDurationTitle: {
+    fontSize: 22,
+    fontWeight: '500',
+    color: colors.brandInk,
+    marginBottom: spacing.md,
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  },
   pillsWrap: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    justifyContent: 'space-between',
     marginBottom: spacing.lg,
   },
   minutePill: {
-    minWidth: 52,
-    paddingVertical: 8,
+    width: '23%',
+    minHeight: 54,
+    paddingVertical: 10,
     paddingHorizontal: spacing.sm,
-    borderRadius: 999,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.borderInput,
     backgroundColor: colors.surfaceStrong,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.sm,
   },
   minutePillSelected: {
     backgroundColor: colors.brandPrimary,
@@ -737,6 +815,32 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginBottom: spacing.lg,
+  },
+  countdownRingWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.md,
+  },
+  countdownRing: {
+    width: COUNTDOWN_RING_SIZE,
+    height: COUNTDOWN_RING_SIZE,
+    position: 'relative',
+  },
+  countdownRingSegment: {
+    position: 'absolute',
+    width: COUNTDOWN_SEGMENT_WIDTH,
+    height: COUNTDOWN_SEGMENT_HEIGHT,
+    borderRadius: 2,
+    backgroundColor: colors.accentStrong,
+  },
+  countdownSun: {
+    position: 'absolute',
+    width: 74,
+    height: 74,
+    borderRadius: 37,
+    top: (COUNTDOWN_RING_SIZE - 74) / 2,
+    left: (COUNTDOWN_RING_SIZE - 74) / 2,
+    backgroundColor: '#FACC15',
   },
   adjustRow: {
     flexDirection: 'row',
@@ -811,14 +915,40 @@ const styles = StyleSheet.create({
     color: colors.brandPrimaryDark,
     marginBottom: spacing.lg,
   },
-  runningButtonsRow: {
-    flexDirection: 'row',
-    gap: spacing.md,
+  runningEndButton: {
+    marginTop: spacing.md,
+  },
+  playPauseButton: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  runningAction: {
-    flex: 1,
-    marginHorizontal: 0,
+  playIcon: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 12,
+    borderBottomWidth: 12,
+    borderLeftWidth: 18,
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: colors.brandPrimaryDark,
+    marginLeft: 3,
+  },
+  pauseIcon: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  pauseBar: {
+    width: 3,
+    height: 24,
+    borderRadius: 2,
+    backgroundColor: colors.brandPrimaryDark,
   },
   primaryButton: {
     backgroundColor: colors.accentStrong,
