@@ -17,7 +17,7 @@ export interface EditableEventUpdate {
   reminderHoursBefore?: number;
 }
 
-const EVENT_PREFIXES = ['event-public-', 'event-member-', 'pre-added-', 'pre-member-'];
+const EVENT_PREFIXES = ['event-public-', 'event-member-'];
 
 export const isEventItem = (event: CalendarEvent): boolean =>
   EVENT_PREFIXES.some(prefix => event.id.startsWith(prefix));

@@ -1,7 +1,7 @@
-# Pre-Added Events
+# Events
 
 <!--
-This file contains all pre-added events that appear in the calendar app.
+This file contains all app events that appear in the calendar app.
 Events are separated by `---` and use the following format:
 
 Title: Event title

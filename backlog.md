@@ -46,9 +46,9 @@ Items with clear scope/acceptance criteria.
 ## Done
 
 - [x] Change sign-in message to: "Sign in to see member-level events." (Date: 2026-03-07)
-- [x] Make pre-loaded events (member and non-member) uneditable, with links-only notes editing and locked core fields. (Date: 2026-03-09)
-- [x] Add Medicine Buddha Days to 2026 in pre-loaded events. (Date: 2026-03-09)
-- [x] Update core lunar-day event descriptions in pre-loaded events (Guru Rinpoche, Jambhala, Protector, Dakini, New Moon, Full Moon, Vaisakha, Losar, Medicine Buddha). (Date: 2026-03-09)
+- [x] Make Events (member and non-member) uneditable, with notes-only editing and locked core fields. (Date: 2026-03-09)
+- [x] Add Medicine Buddha Days to 2026 in Events. (Date: 2026-03-09)
+- [x] Update core lunar-day event descriptions in Events (Guru Rinpoche, Jambhala, Protector, Dakini, New Moon, Full Moon, Vaisakha, Losar, Medicine Buddha). (Date: 2026-03-09)
 - [x] Motion + glass UX uplift for Privacy Policy and Terms of Service screens. (Date: 2026-03-10)
 - [x] Match Privacy Policy and Terms of Service backgrounds to Day View pattern styling. (Date: 2026-03-10)
 - [x] Motion + glass UX uplift for Send Feedback screen with tests. (Date: 2026-03-10)
