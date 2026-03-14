@@ -922,6 +922,7 @@ export default function App() {
             <EventsListView
               events={visibleEvents}
               onEventPress={handleEventPress}
+              onAddEvent={handleAddEvent}
             />
           ) : viewMode === 'day' && selectedDate ? (
             <Animated.View

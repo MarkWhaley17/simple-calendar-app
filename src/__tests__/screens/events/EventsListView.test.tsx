@@ -6,6 +6,7 @@ import { MONTH_NAMES } from '../../../constants/dates';
 
 describe('EventsListView', () => {
   const mockOnEventPress = jest.fn();
+  const mockOnAddEvent = jest.fn();
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
@@ -155,5 +156,20 @@ describe('EventsListView', () => {
     await waitFor(() => {
       expect(getByText(`${previousMonthName} ${previousMonthDate.getFullYear()}`)).toBeTruthy();
     });
+  });
+
+  it('calls onAddEvent when add practice session button is pressed', () => {
+    const { getByTestId, queryByTestId } = render(
+      <EventsListView
+        events={mockEvents}
+        onEventPress={mockOnEventPress}
+        onAddEvent={mockOnAddEvent}
+      />
+    );
+
+    expect(queryByTestId('events-list-add-session')).toBeNull();
+    fireEvent.press(getByTestId('events-tab-personal'));
+    fireEvent.press(getByTestId('events-list-add-session'));
+    expect(mockOnAddEvent).toHaveBeenCalledTimes(1);
   });
 });

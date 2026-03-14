@@ -11,11 +11,12 @@ import { isPreloadedEvent } from '../../utils/eventEditability';
 interface EventsListViewProps {
   events: CalendarEvent[];
   onEventPress: (event: CalendarEvent) => void;
+  onAddEvent?: () => void;
 }
 
 type EventsTab = 'preloaded' | 'personal';
 
-const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress }) => {
+const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, onAddEvent }) => {
   const headerBackground = require('../../../assets/day-bg.jpg');
   const [visibleMonthDate, setVisibleMonthDate] = useState(() => {
     const now = new Date();
@@ -302,6 +303,17 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress })
             </View>
           )}
         </ScrollView>
+
+        {activeTab === 'personal' && (
+          <TouchableOpacity
+            style={styles.addButton}
+            activeOpacity={0.8}
+            onPress={onAddEvent}
+            testID="events-list-add-session"
+          >
+            <Text style={styles.addButtonText}>+ Add Practice Session</Text>
+          </TouchableOpacity>
+        )}
       </Animated.View>
     </View>
   );
@@ -510,6 +522,24 @@ const styles = StyleSheet.create({
     color: colors.textMutedSoft,
     fontStyle: 'italic',
     letterSpacing: 0.2,
+  },
+  addButton: {
+    backgroundColor: colors.accentStrong,
+    margin: 20,
+    paddingVertical: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    shadowColor: colors.accentStrong,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  addButtonText: {
+    color: colors.white,
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0.4,
   },
 });
 
