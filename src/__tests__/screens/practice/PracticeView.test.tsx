@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react-native';
 import PracticeView from '../../../screens/practice/PracticeView';
 import { CalendarEvent } from '../../../types';
+import { Audio } from 'expo-av';
 
 describe('PracticeView', () => {
   const baseSession: CalendarEvent = {
@@ -45,6 +46,7 @@ describe('PracticeView', () => {
 
     fireEvent.press(getByTestId('practice-card-timed'));
     expect(getByTestId('practice-set-intention')).toBeTruthy();
+    expect(getByTestId('practice-session-title-input').props.placeholder).toBe('Add a Session Title (optional)');
 
     fireEvent.press(getByTestId('practice-minute-20'));
     expect(getByTestId('practice-detail-clock').props.children).toBe('20:00');
@@ -79,10 +81,43 @@ describe('PracticeView', () => {
     expect(onSaveTimedSession).toHaveBeenCalledWith(
       expect.objectContaining({
         durationSec: expect.any(Number),
+        sessionTitle: 'Timed Meditation',
         accumulations: 5,
       })
     );
     expect(getByText('Session History')).toBeTruthy();
+  });
+
+  it('passes a custom session title for unlinked timed sessions', async () => {
+    const { getByTestId, onSaveTimedSession } = setup();
+
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.changeText(getByTestId('practice-session-title-input'), 'Evening Sit');
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('practice-begin'));
+    fireEvent.press(getByTestId('practice-end'));
+    fireEvent.press(getByTestId('practice-dedication-return'));
+    fireEvent.press(getByTestId('practice-accumulations-save'));
+
+    await waitFor(() => {
+      expect(onSaveTimedSession).toHaveBeenCalledTimes(1);
+    });
+
+    expect(onSaveTimedSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sessionTitle: 'Evening Sit',
+      })
+    );
+  });
+
+  it('plays the gong when beginning a timed session', () => {
+    const { getByTestId } = setup();
+
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('practice-begin'));
+
+    expect(Audio.Sound.createAsync).toHaveBeenCalled();
   });
 
   it('opens existing session detail when history row is pressed', () => {

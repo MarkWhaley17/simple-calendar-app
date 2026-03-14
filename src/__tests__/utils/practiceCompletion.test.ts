@@ -1,10 +1,18 @@
 import * as Haptics from 'expo-haptics';
 import { Audio } from 'expo-av';
-import { playPracticeCompletionFeedback } from '../../utils/practiceCompletion';
+import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
 
-describe('playPracticeCompletionFeedback', () => {
+describe('practice completion audio feedback', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('plays gong sound without completion haptics when called directly', async () => {
+    await playPracticeGong();
+
+    expect(Audio.setAudioModeAsync).toHaveBeenCalled();
+    expect(Audio.Sound.createAsync).toHaveBeenCalled();
+    expect(Haptics.notificationAsync).not.toHaveBeenCalled();
   });
 
   it('plays gong sound when playback starts normally', async () => {

@@ -14,6 +14,7 @@ export interface PracticeRunningSnapshot {
   targetDurationSec: number;
   selectedDurationSec: number;
   linkedSessionId?: string;
+  sessionTitle?: string;
   stage: Extract<PracticeStage, 'running'>;
 }
 
@@ -30,6 +31,7 @@ export interface TimedPracticeSaveInput {
   durationSec: number;
   accumulations?: number;
   linkedSessionId?: string;
+  sessionTitle?: string;
 }
 
 export interface TimedPracticeSaveResult {
@@ -155,6 +157,7 @@ export const applyTimedPracticeSave = (input: TimedPracticeSaveInput): TimedPrac
     durationSec,
     accumulations,
     linkedSessionId,
+    sessionTitle,
   } = input;
 
   const nextCoreFields = {
@@ -190,7 +193,7 @@ export const applyTimedPracticeSave = (input: TimedPracticeSaveInput): TimedPrac
 
   const createdSession: CalendarEvent = {
     id: `session-timed-${Date.now()}`,
-    title: 'Timed Meditation Session',
+    title: sessionTitle?.trim() ? sessionTitle.trim() : 'Timed Meditation',
     description: '',
     links: [],
     ...nextCoreFields,

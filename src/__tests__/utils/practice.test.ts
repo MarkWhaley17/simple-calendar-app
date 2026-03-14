@@ -93,7 +93,20 @@ describe('practice utils', () => {
 
     expect(result.created).toBe(true);
     expect(result.sessions).toHaveLength(1);
-    expect(result.savedSession.title).toBe('Timed Meditation Session');
+    expect(result.savedSession.title).toBe('Timed Meditation');
     expect(result.savedSession.practiceSource).toBe('timed-meditation');
+  });
+
+  it('uses a custom session title when provided for unlinked timed sessions', () => {
+    const result = applyTimedPracticeSave({
+      sessions: [],
+      startedAt: new Date('2026-03-14T08:10:00'),
+      endedAt: new Date('2026-03-14T08:40:00'),
+      durationSec: 1800,
+      sessionTitle: 'Morning Tara Practice',
+    });
+
+    expect(result.created).toBe(true);
+    expect(result.savedSession.title).toBe('Morning Tara Practice');
   });
 });

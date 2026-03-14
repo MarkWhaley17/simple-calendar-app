@@ -5,7 +5,9 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -34,11 +36,13 @@ import {
   loadPracticeRunningSnapshot,
   savePracticeRunningSnapshot,
 } from '../../utils/practice';
-import { playPracticeCompletionFeedback } from '../../utils/practiceCompletion';
+import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
 import { colors, spacing } from '../../theme/tokens';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
 const detailBackground = require('../../../assets/day-view-pattern.png');
+const DEFAULT_TIMED_SESSION_TITLE = 'Timed Meditation';
+const SESSION_TITLE_PLACEHOLDER = 'Add a Session Title (optional)';
 
 interface PracticeViewProps {
   sessions: CalendarEvent[];
@@ -99,6 +103,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   onRunningStateChange,
 }) => {
   const slideX = useRef(new Animated.Value(0)).current;
+  const detailScrollRef = useRef<ScrollView | null>(null);
   const [stage, setStage] = useState<PracticeStage>('home');
   const [selectedDurationSec, setSelectedDurationSec] = useState(10 * 60);
   const [runningSnapshot, setRunningSnapshot] = useState<PracticeRunningSnapshot | null>(null);
@@ -107,6 +112,8 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [showLinkPicker, setShowLinkPicker] = useState(false);
   const [showAccumulationsModal, setShowAccumulationsModal] = useState(false);
   const [accumulationsInput, setAccumulationsInput] = useState('');
+  const [sessionTitleInput, setSessionTitleInput] = useState('');
+  const [hasTouchedSessionTitle, setHasTouchedSessionTitle] = useState(false);
   const [completedDurationSec, setCompletedDurationSec] = useState(0);
   const [sessionStartedAt, setSessionStartedAt] = useState<Date | null>(null);
   const [sessionEndedAt, setSessionEndedAt] = useState<Date | null>(null);
@@ -164,6 +171,8 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       if (!snapshot) return;
       setSelectedDurationSec(snapshot.selectedDurationSec);
       setLinkedSessionId(snapshot.linkedSessionId);
+      setSessionTitleInput(snapshot.sessionTitle || '');
+      setHasTouchedSessionTitle(Boolean(snapshot.sessionTitle?.trim()));
       setRunningSnapshot(snapshot);
       setStage('running');
       setRemainingSec(getRemainingSeconds(snapshot, Date.now()));
@@ -202,6 +211,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       targetDurationSec: selectedDurationSec,
       selectedDurationSec,
       linkedSessionId,
+      sessionTitle: hasTouchedSessionTitle ? sessionTitleInput.trim() : undefined,
       stage: 'running',
     };
     setSessionStartedAt(now);
@@ -210,6 +220,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     setRunningSnapshot(snapshot);
     setRemainingSec(selectedDurationSec);
     setStage('running');
+    void playPracticeGong();
   };
 
   const togglePauseResume = () => {
@@ -255,6 +266,8 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     setSessionStartedAt(null);
     setSessionEndedAt(null);
     setLinkedSessionId(undefined);
+    setSessionTitleInput('');
+    setHasTouchedSessionTitle(false);
     setShowLinkPicker(false);
     returnHome();
   };
@@ -273,6 +286,9 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         endedAt: sessionEndedAt,
         durationSec: completedDurationSec,
         linkedSessionId,
+        sessionTitle: linkedSessionId
+          ? undefined
+          : (hasTouchedSessionTitle ? sessionTitleInput.trim() : DEFAULT_TIMED_SESSION_TITLE),
         accumulations: accumulationsInput ? Number(accumulationsInput) : undefined,
       });
       void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -372,7 +388,13 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.detailPanel}>
+      <ScrollView
+        ref={detailScrollRef}
+        contentContainerStyle={styles.detailPanel}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
+      >
         <Text style={styles.selectDurationTitle}>Select Duration</Text>
         <View style={styles.pillsWrap}>
           {PRACTICE_DURATION_PRESETS_MINUTES.map((minute) => {
@@ -437,6 +459,29 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               </TouchableOpacity>
             ))}
           </View>
+        ) : null}
+
+        {!linkedSessionId ? (
+          <TextInput
+            style={styles.sessionTitleInput}
+            value={sessionTitleInput}
+            onChangeText={(text) => {
+              setHasTouchedSessionTitle(true);
+              setSessionTitleInput(text);
+            }}
+            onFocus={() => {
+              setHasTouchedSessionTitle(true);
+              setTimeout(() => {
+                detailScrollRef.current?.scrollToEnd({ animated: true });
+              }, 120);
+            }}
+            placeholder={SESSION_TITLE_PLACEHOLDER}
+            placeholderTextColor={colors.textSecondary}
+            autoCapitalize="sentences"
+            autoCorrect={false}
+            returnKeyType="done"
+            testID="practice-session-title-input"
+          />
         ) : null}
 
         <TouchableOpacity style={styles.primaryButton} onPress={() => setStage('intention')} testID="practice-set-intention">
@@ -532,7 +577,11 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         </ScrollView>
 
         <View style={styles.page}>
-          <View style={styles.detailBackground}>
+          <KeyboardAvoidingView
+            style={styles.detailBackground}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={0}
+          >
             <Image
               source={detailBackground}
               style={styles.detailPatternImage}
@@ -543,7 +592,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               <Text style={styles.backButtonText}>‹ Back</Text>
             </TouchableOpacity>
             {renderDetailContent()}
-          </View>
+          </KeyboardAvoidingView>
         </View>
       </Animated.View>
 
@@ -898,6 +947,18 @@ const styles = StyleSheet.create({
   linkRowText: {
     fontSize: 14,
     color: colors.brandInk,
+  },
+  sessionTitleInput: {
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+    fontSize: 14,
+    color: colors.textPrimary,
+    marginBottom: spacing.md,
+    fontWeight: '600',
   },
   intentionCard: {
     backgroundColor: colors.surfaceStrong,
