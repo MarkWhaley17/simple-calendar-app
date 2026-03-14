@@ -148,7 +148,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
             onLayout={handleLayout(tab.key)}
             onPress={() => onNavigate(tab.key)}
             hapticOnPress={ENABLE_MOTION_UI && currentView !== tab.key}
-            scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
+            scaleTo={1}
           >
             <AnimatedTabItemContent
               isActive={ENABLE_MOTION_UI ? isActive : false}

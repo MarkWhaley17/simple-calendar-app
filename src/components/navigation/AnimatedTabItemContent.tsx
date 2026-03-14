@@ -42,11 +42,6 @@ export function AnimatedTabItemContent({
       isActive ? motion.opacity.visible : motion.opacity.muted,
       { duration: motion.duration.fast }
     ),
-    transform: [
-      {
-        scale: interpolate(progress.value, [0, 1], [0.96, 1]),
-      },
-    ],
   }));
 
   return (
