@@ -290,7 +290,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
           <Text style={styles.label}>Notes</Text>
           <TextInput
             style={[styles.input, styles.textArea]}
-            placeholder="Add your reflections, experiences and inspirations here"
+            placeholder="Add your reflections, experiences, insights and inspirations here"
             placeholderTextColor={colors.placeholder}
             value={links}
             onChangeText={setLinks}

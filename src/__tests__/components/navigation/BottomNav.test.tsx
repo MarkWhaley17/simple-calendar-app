@@ -18,6 +18,7 @@ describe('BottomNav', () => {
     expect(getByText('Today')).toBeTruthy();
     expect(getByText('Month')).toBeTruthy();
     expect(getByText('Events')).toBeTruthy();
+    expect(getByText('Practice')).toBeTruthy();
   });
 
   it('should display today\'s date in day icon', () => {
@@ -55,6 +56,15 @@ describe('BottomNav', () => {
     expect(mockOnNavigate).toHaveBeenCalledWith('month');
   });
 
+  it('should call onNavigate with "practice" when Practice is pressed', () => {
+    const { getByText } = render(
+      <BottomNav currentView="month" onNavigate={mockOnNavigate} todayDate={15} />
+    );
+
+    fireEvent.press(getByText('Practice'));
+    expect(mockOnNavigate).toHaveBeenCalledWith('practice');
+  });
+
   it('should highlight active view', () => {
     const { getByText, rerender } = render(
       <BottomNav currentView="month" onNavigate={mockOnNavigate} todayDate={15} />
@@ -77,5 +87,11 @@ describe('BottomNav', () => {
     );
     const accountLabel = getByText('Account');
     expect(accountLabel).toBeTruthy();
+
+    rerender(
+      <BottomNav currentView="practice" onNavigate={mockOnNavigate} todayDate={15} />
+    );
+    const practiceLabel = getByText('Practice');
+    expect(practiceLabel).toBeTruthy();
   });
 });

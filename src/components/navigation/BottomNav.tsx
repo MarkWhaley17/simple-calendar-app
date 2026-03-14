@@ -1,17 +1,21 @@
 import React, { useMemo, useState } from 'react';
-import { LayoutChangeEvent, Platform, View, Text, StyleSheet } from 'react-native';
+import { LayoutChangeEvent, Platform, View, Text, StyleSheet, Image } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { ENABLE_GLASS_UI, ENABLE_MOTION_UI } from '../../theme/flags';
 import { colors, radius, spacing } from '../../theme/tokens';
+import { NavView } from '../../types';
 import { AnimatedPressable } from '../ui/AnimatedPressable';
 import { GlassSurface } from '../ui/GlassSurface';
 import { glassStyles } from '../ui/glassStyles';
 import { AnimatedTabIndicator } from './AnimatedTabIndicator';
 import { AnimatedTabItemContent } from './AnimatedTabItemContent';
 
+const accountIconAsset = require('../../../assets/icons/account-user.png');
+
 interface BottomNavProps {
-  currentView: 'month' | 'day' | 'events' | 'account';
-  onNavigate: (view: 'month' | 'day' | 'events' | 'account') => void;
+  currentView: NavView;
+  onNavigate: (view: NavView) => void;
   todayDate?: number;
 }
 
@@ -25,6 +29,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
     month: null,
     day: null,
     events: null,
+    practice: null,
   });
 
   const containerStyle = ENABLE_GLASS_UI
@@ -32,11 +37,12 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
     : [styles.container];
   const barStyle = ENABLE_GLASS_UI ? [styles.glassContainer, glassStyles.floating] : null;
 
-  const tabs: Array<{ key: NavItemKey; label: string }> = useMemo(() => ([
+  const tabs: { key: NavItemKey; label: string }[] = useMemo(() => ([
     { key: 'account', label: 'Account' },
     { key: 'month', label: 'Month' },
     { key: 'day', label: 'Today' },
     { key: 'events', label: 'Events' },
+    { key: 'practice', label: 'Practice' },
   ]), []);
 
   const handleLayout = (key: NavItemKey) => (event: LayoutChangeEvent) => {
@@ -50,7 +56,22 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
     if (key === 'account') {
       return (
         <View style={[styles.userIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
-          <Text style={[styles.userIconText, isActive && styles.activeIconText]}>👤</Text>
+          <LinearGradient
+            colors={
+              isActive
+                ? ['#FFFFFF', '#EAF0FF']
+                : [colors.brandPrimaryDark, '#3B82F6']
+            }
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.accountDot}
+          >
+            <Image
+              source={accountIconAsset}
+              style={[styles.userIconImage, isActive && styles.activeUserIconImage]}
+              resizeMode="contain"
+            />
+          </LinearGradient>
         </View>
       );
     }
@@ -83,6 +104,23 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigate, todayDat
           <Text style={[styles.dayIconText, isActive && styles.activeIconText]}>
             {todayDate}
           </Text>
+        </View>
+      );
+    }
+
+    if (key === 'practice') {
+      return (
+        <View style={[styles.practiceIcon, ENABLE_GLASS_UI && styles.glassIcon, isActive && styles.activeIcon]}>
+          <LinearGradient
+            colors={
+              isActive
+                ? ['#FFFFFF', '#EAF0FF']
+                : [colors.brandPrimaryDark, '#3B82F6']
+            }
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.practiceDot}
+          />
         </View>
       );
     }
@@ -172,7 +210,7 @@ const styles = StyleSheet.create({
   navItem: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 2,
   },
   glassOuter: {
     paddingHorizontal: spacing.lg,
@@ -202,7 +240,7 @@ const styles = StyleSheet.create({
   userIcon: {
     width: 32,
     height: 32,
-    borderRadius: 16,
+    borderRadius: 6,
     backgroundColor: colors.brandSurface,
     justifyContent: 'center',
     alignItems: 'center',
@@ -215,8 +253,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderStrong,
   },
-  userIconText: {
-    fontSize: 20,
+  userIconImage: {
+    width: 15,
+    height: 15,
+    tintColor: colors.white,
+  },
+  activeUserIconImage: {
+    tintColor: colors.brandPrimaryDark,
+  },
+  accountDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   activeIconText: {
     // Keep icon appearance same when active
@@ -277,7 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   navLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: colors.brandSurface,
     fontWeight: '500',
   },
@@ -287,6 +337,19 @@ const styles = StyleSheet.create({
   activeNavLabel: {
     color: colors.accentStrong,
     fontWeight: '600',
+  },
+  practiceIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: colors.brandSurface,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  practiceDot: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
 });
 

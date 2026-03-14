@@ -51,12 +51,13 @@ export type ViewMode =
   | 'addEvent'
   | 'editEvent'
   | 'account'
+  | 'practice'
   | 'eventsList'
   | 'recordingsWeb'
   | 'privacyPolicy'
   | 'termsOfService'
   | 'feedback';
-export type NavView = 'month' | 'day' | 'events' | 'account';
+export type NavView = 'month' | 'day' | 'events' | 'account' | 'practice';
 
 export interface AuthUser {
   email: string;

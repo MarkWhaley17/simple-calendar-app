@@ -50,7 +50,7 @@ export function AnimatedTabItemContent({
   }));
 
   return (
-    <View>
+    <View style={{ alignItems: 'center' }}>
       <Animated.View style={[iconContainerStyle, iconAnimatedStyle]}>
         {icon}
       </Animated.View>

@@ -7,6 +7,7 @@ import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
 import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
+import { PracticeView } from './src/screens/practice';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import { getEvents } from './src/utils/events';
@@ -713,6 +714,9 @@ export default function App() {
       setSelectedEvent(null);
     } else if (view === 'account') {
       setViewMode('account');
+    } else if (view === 'practice') {
+      setViewMode('practice');
+      setSelectedEvent(null);
     }
   };
 
@@ -848,13 +852,19 @@ export default function App() {
   // Determine which nav item is active
   const getCurrentNavView = (): NavView => {
     if (viewMode === 'account') return 'account';
+    if (viewMode === 'practice') return 'practice';
     if (viewMode === 'eventsList') return 'events';
     if (viewMode === 'day' || viewMode === 'event' || viewMode === 'addEvent' || viewMode === 'editEvent') return 'day';
     return 'month';
   };
 
   // Check if we should show bottom nav (hide on event detail screens)
-  const shouldShowBottomNav = viewMode === 'month' || viewMode === 'day' || viewMode === 'account' || viewMode === 'eventsList';
+  const shouldShowBottomNav =
+    viewMode === 'month' ||
+    viewMode === 'day' ||
+    viewMode === 'account' ||
+    viewMode === 'practice' ||
+    viewMode === 'eventsList';
 
   // Get the master event for editing if the selected event is a recurring instance
   const getEditableEvent = () => {
@@ -924,6 +934,8 @@ export default function App() {
               onEventPress={handleEventPress}
               onAddEvent={handleAddEvent}
             />
+          ) : viewMode === 'practice' ? (
+            <PracticeView />
           ) : viewMode === 'day' && selectedDate ? (
             <Animated.View
               style={[
