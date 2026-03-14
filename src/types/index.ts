@@ -20,6 +20,8 @@ export interface CalendarEvent {
   toTime?: string;
   links?: string[];
   accumulations?: number;
+  durationSeconds?: number;
+  practiceSource?: 'timed-meditation';
   isAllDay?: boolean;
   reminderEnabled?: boolean;
   reminderMinutesBefore?: number; // for timed events

@@ -21,6 +21,11 @@ import { loadNotificationSettings, saveNotificationSettings, defaultNotification
 import { initializeNotifications, scheduleNotifications } from './src/utils/notifications';
 import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibility';
 import {
+  TimedPracticeSaveInput,
+  applyTimedPracticeSave,
+  clearPracticeRunningSnapshot,
+} from './src/utils/practice';
+import {
   EditableEventUpdate,
   isEventItem,
   isSessionItem,
@@ -53,6 +58,7 @@ export default function App() {
   const [settingsReady, setSettingsReady] = useState(false);
   const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [hasActivePracticeTimer, setHasActivePracticeTimer] = useState(false);
   const previousViewModeRef = useRef<ViewMode | null>(null);
   const selectedDateRef = useRef<Date | null>(null);
 
@@ -368,6 +374,8 @@ export default function App() {
   const handleBackToDay = () => {
     if (previousView === 'eventsList') {
       setViewMode('eventsList');
+    } else if (previousView === 'practice') {
+      setViewMode('practice');
     } else {
       setViewMode('day');
     }
@@ -696,28 +704,93 @@ export default function App() {
   };
 
   const handleBottomNavigation = (view: NavView) => {
-    if (view === 'month') {
-      setViewMode('month');
-      setCurrentDate(new Date()); // Reset to current month
-      selectedDateRef.current = null;
-      setSelectedDate(null);
-      setSelectedEvent(null);
-    } else if (view === 'day') {
-      const today = new Date();
-      const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      setViewMode('day');
-      selectedDateRef.current = normalizedToday;
-      setSelectedDate(normalizedToday); // Set to today
-      setSelectedEvent(null);
-    } else if (view === 'events') {
-      setViewMode('eventsList');
-      setSelectedEvent(null);
-    } else if (view === 'account') {
-      setViewMode('account');
-    } else if (view === 'practice') {
-      setViewMode('practice');
-      setSelectedEvent(null);
+    const navigateTo = () => {
+      if (view === 'month') {
+        setViewMode('month');
+        setCurrentDate(new Date()); // Reset to current month
+        selectedDateRef.current = null;
+        setSelectedDate(null);
+        setSelectedEvent(null);
+      } else if (view === 'day') {
+        const today = new Date();
+        const normalizedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        setViewMode('day');
+        selectedDateRef.current = normalizedToday;
+        setSelectedDate(normalizedToday); // Set to today
+        setSelectedEvent(null);
+      } else if (view === 'events') {
+        setViewMode('eventsList');
+        setSelectedEvent(null);
+      } else if (view === 'account') {
+        setViewMode('account');
+      } else if (view === 'practice') {
+        setViewMode('practice');
+        setSelectedEvent(null);
+      }
+    };
+
+    if (viewMode === 'practice' && view !== 'practice' && hasActivePracticeTimer) {
+      Alert.alert(
+        'Practice Session Running',
+        'Do you want to stop and discard this running session, or keep it running?',
+        [
+          {
+            text: 'Keep Running',
+            style: 'cancel',
+            onPress: () => {
+              navigateTo();
+            },
+          },
+          {
+            text: 'Stop & Discard',
+            style: 'destructive',
+            onPress: () => {
+              void clearPracticeRunningSnapshot();
+              setHasActivePracticeTimer(false);
+              navigateTo();
+            },
+          },
+        ]
+      );
+      return;
     }
+
+    navigateTo();
+  };
+
+  const handleSaveTimedPracticeSession = async (
+    input: Omit<TimedPracticeSaveInput, 'sessions'>
+  ): Promise<void> => {
+    const existingSessions = masterEvents.filter(
+      event => isSessionItem(event) && !isMemberOnlyEvent(event)
+    );
+    const saveResult = applyTimedPracticeSave({
+      ...input,
+      sessions: existingSessions,
+    });
+
+    const nonSessionEvents = masterEvents.filter(event => !isSessionItem(event) || isMemberOnlyEvent(event));
+    const updatedEvents = [...nonSessionEvents, ...saveResult.sessions];
+
+    setMasterEvents(updatedEvents);
+
+    try {
+      await saveEvents(saveResult.sessions);
+    } catch (error) {
+      console.error('Failed to save timed practice session:', error);
+    }
+  };
+
+  const handlePracticeSessionPress = (session: CalendarEvent) => {
+    setPreviousView('practice');
+    setSelectedEvent(session);
+    setEditScope(null);
+    setEditOccurrenceKey(null);
+    setViewMode('event');
+  };
+
+  const handlePracticeRunningStateChange = (isRunning: boolean) => {
+    setHasActivePracticeTimer(isRunning);
   };
 
   const handleOpenRecordings = () => {
@@ -935,7 +1008,14 @@ export default function App() {
               onAddEvent={handleAddEvent}
             />
           ) : viewMode === 'practice' ? (
-            <PracticeView />
+            <PracticeView
+              sessions={masterEvents.filter(
+                event => isSessionItem(event) && !isMemberOnlyEvent(event)
+              )}
+              onSessionPress={handlePracticeSessionPress}
+              onSaveTimedSession={handleSaveTimedPracticeSession}
+              onRunningStateChange={handlePracticeRunningStateChange}
+            />
           ) : viewMode === 'day' && selectedDate ? (
             <Animated.View
               style={[
