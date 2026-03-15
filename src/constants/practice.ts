@@ -34,24 +34,34 @@ export const formatMantraTargetLabel = (target: number): string => {
 
 export const PRACTICE_MANTRA_LIBRARY: PracticeMantraLibraryItem[] = [
   {
-    id: 'tara',
-    title: 'Green Tara',
-    mantra: 'Om Tare Tuttare Ture Soha',
-    description:
-      'Green Tara embodies swift compassion and protection. This mantra is recited to remove fear and obstacles, and to cultivate courageous compassionate activity.',
-  },
-  {
     id: 'guru-rinpoche',
     title: 'Guru Rinpoche',
-    mantra: 'Om Ah Hung Vajra Guru Pema Siddhi Hung',
+    mantra: 'Om Ah Hum Vajra Guru Pema Siddhi Hum',
     description:
       'This mantra invokes Padmasambhava, the lotus-born guru. It is practiced to awaken wisdom, dissolve obstacles, and connect with enlightened blessing.',
   },
+
   {
-    id: 'chenrezig',
-    title: 'Chenrezig',
-    mantra: 'Om Mani Padme Hung',
+    id: 'tara',
+    title: 'Green Tara',
+    mantra: 'Om Tare Tuttare Ture Svaha',
+    description:
+      'Green Tara embodies swift compassion and protection. This mantra is recited to remove fear and obstacles, and to cultivate courageous compassionate activity.',
+  },
+
+  {
+    id: 'avalokiteshvara',
+    title: 'Avalokiteshvara',
+    mantra: 'Om Mani Padme Hum',
     description:
       'The mantra of Avalokiteshvara, the bodhisattva of compassion. It is recited to open the heart, increase loving-kindness, and benefit all beings.',
+  },
+
+  {
+    id: 'vajrasattva',
+    title: 'Vajrasattva',
+    mantra: 'Om Vajrasattva Hum',
+    description:
+      'The short Vajrasattva mantra is a powerful purification practice for all negative beliefs and harmful actions.',
   },
 ];
