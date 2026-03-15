@@ -1279,7 +1279,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                   <View style={styles.comingSoonBadge}>
                     <Text style={styles.comingSoonText}>Coming Soon</Text>
                   </View>
-                  <Text style={styles.featureCardTitle}>Sadhana Tracker</Text>
+                  <Text style={styles.featureCardTitle}>Chant Library</Text>
                   <Text style={styles.featureCardSubtitle}>Keep continuity with structured sessions</Text>
                 </View>
               </View>
