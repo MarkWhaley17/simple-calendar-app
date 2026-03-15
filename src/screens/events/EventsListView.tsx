@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animated, ImageBackground, Image, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -12,11 +12,19 @@ interface EventsListViewProps {
   events: CalendarEvent[];
   onEventPress: (event: CalendarEvent) => void;
   onAddEvent?: () => void;
+  onSessionEdit?: (event: CalendarEvent) => void;
+  onSessionDelete?: (event: CalendarEvent) => void;
 }
 
 type EventsTab = 'events' | 'sessions';
 
-const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, onAddEvent }) => {
+const EventsListView: React.FC<EventsListViewProps> = ({
+  events,
+  onEventPress,
+  onAddEvent,
+  onSessionEdit,
+  onSessionDelete,
+}) => {
   const headerBackground = require('../../../assets/day-bg.jpg');
   const eventsBackground = require('../../../assets/day-view-pattern.png');
   const [visibleMonthDate, setVisibleMonthDate] = useState(() => {
@@ -285,6 +293,33 @@ const EventsListView: React.FC<EventsListViewProps> = ({ events, onEventPress, o
                     key={event.id}
                     style={styles.eventBarTouchable}
                     onPress={() => onEventPress(event)}
+                    onLongPress={() => {
+                      Alert.alert(
+                        'Session Options',
+                        undefined,
+                        [
+                          {
+                            text: 'Edit',
+                            onPress: () => {
+                              if (onSessionEdit) {
+                                onSessionEdit(event);
+                                return;
+                              }
+                              onEventPress(event);
+                            },
+                          },
+                          {
+                            text: 'Delete',
+                            style: 'destructive',
+                            onPress: () => onSessionDelete?.(event),
+                          },
+                          {
+                            text: 'Cancel',
+                            style: 'cancel',
+                          },
+                        ]
+                      );
+                    }}
                     activeOpacity={0.8}
                     testID={`events-list-session-${event.id}`}
                   >

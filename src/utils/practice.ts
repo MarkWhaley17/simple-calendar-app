@@ -4,7 +4,16 @@ import { isSessionItem } from './eventEditability';
 
 const PRACTICE_SNAPSHOT_KEY = '@kalapa_practice_running_snapshot';
 
-export type PracticeStage = 'home' | 'timerDetail' | 'intention' | 'running' | 'done';
+export type PracticeStage =
+  | 'home'
+  | 'timerDetail'
+  | 'intention'
+  | 'running'
+  | 'done'
+  | 'mantraLibrary'
+  | 'mantraSetup'
+  | 'mantraIntention'
+  | 'mantraRunning';
 
 export interface PracticeRunningSnapshot {
   runningSessionId: string;
@@ -32,6 +41,7 @@ export interface TimedPracticeSaveInput {
   accumulations?: number;
   linkedSessionId?: string;
   sessionTitle?: string;
+  practiceSource?: 'timed-meditation' | 'mantra-counter';
 }
 
 export interface TimedPracticeSaveResult {
@@ -90,7 +100,11 @@ const getSessionDurationSeconds = (session: CalendarEvent): number => {
 
 const isTimedPracticeSession = (session: CalendarEvent): boolean =>
   isSessionItem(session) &&
-  (session.practiceSource === 'timed-meditation' || typeof session.durationSeconds === 'number');
+  (
+    session.practiceSource === 'timed-meditation' ||
+    session.practiceSource === 'mantra-counter' ||
+    typeof session.durationSeconds === 'number'
+  );
 
 export const calculatePracticeStats = (sessions: CalendarEvent[], now = new Date()): PracticeStats => {
   const timedSessions = sessions.filter(isTimedPracticeSession);
@@ -158,6 +172,7 @@ export const applyTimedPracticeSave = (input: TimedPracticeSaveInput): TimedPrac
     accumulations,
     linkedSessionId,
     sessionTitle,
+    practiceSource = 'timed-meditation',
   } = input;
 
   const nextCoreFields = {
@@ -168,7 +183,7 @@ export const applyTimedPracticeSave = (input: TimedPracticeSaveInput): TimedPrac
     durationSeconds: Math.max(0, Math.floor(durationSec)),
     accumulations,
     isAllDay: false,
-    practiceSource: 'timed-meditation' as const,
+    practiceSource,
     date: startedAt,
     startTime: formatSessionTimeLabel(startedAt),
     endTime: formatSessionTimeLabel(endedAt),

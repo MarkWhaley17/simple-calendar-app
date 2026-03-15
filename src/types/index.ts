@@ -21,7 +21,7 @@ export interface CalendarEvent {
   links?: string[];
   accumulations?: number;
   durationSeconds?: number;
-  practiceSource?: 'timed-meditation';
+  practiceSource?: 'timed-meditation' | 'mantra-counter';
   isAllDay?: boolean;
   reminderEnabled?: boolean;
   reminderMinutesBefore?: number; // for timed events

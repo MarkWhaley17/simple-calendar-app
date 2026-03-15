@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 import EventsListView from '../../../screens/events/EventsListView';
 import { CalendarEvent } from '../../../types';
 import { MONTH_NAMES } from '../../../constants/dates';
@@ -7,6 +8,8 @@ import { MONTH_NAMES } from '../../../constants/dates';
 describe('EventsListView', () => {
   const mockOnEventPress = jest.fn();
   const mockOnAddEvent = jest.fn();
+  const mockOnSessionEdit = jest.fn();
+  const mockOnSessionDelete = jest.fn();
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
@@ -172,5 +175,43 @@ describe('EventsListView', () => {
     fireEvent.press(getByTestId('events-tab-sessions'));
     fireEvent.press(getByTestId('events-list-add-session'));
     expect(mockOnAddEvent).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows session quick actions on long press and routes edit/delete actions', () => {
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
+    const { getByTestId } = render(
+      <EventsListView
+        events={mockEvents}
+        onEventPress={mockOnEventPress}
+        onSessionEdit={mockOnSessionEdit}
+        onSessionDelete={mockOnSessionDelete}
+      />
+    );
+
+    fireEvent.press(getByTestId('events-tab-sessions'));
+    fireEvent(getByTestId('events-list-session-1'), 'longPress');
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      'Session Options',
+      undefined,
+      expect.arrayContaining([
+        expect.objectContaining({ text: 'Edit' }),
+        expect.objectContaining({ text: 'Delete', style: 'destructive' }),
+        expect.objectContaining({ text: 'Cancel', style: 'cancel' }),
+      ])
+    );
+
+    const [, , actions] = (alertSpy.mock.calls[0] ?? []) as [
+      string,
+      string | undefined,
+      Array<{ text: string; onPress?: () => void }>
+    ];
+
+    actions.find(action => action.text === 'Edit')?.onPress?.();
+    actions.find(action => action.text === 'Delete')?.onPress?.();
+
+    expect(mockOnSessionEdit).toHaveBeenCalledWith(mockEvents[0]);
+    expect(mockOnSessionDelete).toHaveBeenCalledWith(mockEvents[0]);
+    alertSpy.mockRestore();
   });
 });

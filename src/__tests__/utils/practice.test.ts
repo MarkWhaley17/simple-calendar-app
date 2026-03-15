@@ -58,6 +58,32 @@ describe('practice utils', () => {
     expect(stats.streakDays).toBe(3);
   });
 
+  it('includes mantra-counter sessions in daily and streak stats', () => {
+    const sessions: CalendarEvent[] = [
+      {
+        id: 'm1',
+        title: 'Tara Session',
+        fromDate: new Date('2026-03-14T07:00:00'),
+        toDate: new Date('2026-03-14T07:10:00'),
+        durationSeconds: 600,
+        practiceSource: 'mantra-counter',
+      },
+      {
+        id: 'm2',
+        title: 'Tara Session',
+        fromDate: new Date('2026-03-13T07:00:00'),
+        toDate: new Date('2026-03-13T07:10:00'),
+        durationSeconds: 600,
+        practiceSource: 'mantra-counter',
+      },
+    ];
+
+    const stats = calculatePracticeStats(sessions, new Date('2026-03-14T16:00:00'));
+    expect(stats.todayMinutes).toBe(10);
+    expect(stats.sevenDayMinutes).toBe(20);
+    expect(stats.streakDays).toBe(2);
+  });
+
   it('updates linked session instead of creating new session', () => {
     const sessions: CalendarEvent[] = [
       {

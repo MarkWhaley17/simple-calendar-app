@@ -21,6 +21,9 @@ import {
   PRACTICE_DEDICATION_TEXT,
   PRACTICE_DURATION_PRESETS_MINUTES,
   PRACTICE_INTENTION_TEXT,
+  PRACTICE_MANTRA_LIBRARY,
+  PRACTICE_MANTRA_TARGET_OPTIONS,
+  formatMantraTargetLabel,
 } from '../../constants/practice';
 import {
   PracticeRunningSnapshot,
@@ -43,11 +46,22 @@ const headerBackground = require('../../../assets/day-bg.jpg');
 const detailBackground = require('../../../assets/day-view-pattern.png');
 const DEFAULT_TIMED_SESSION_TITLE = 'Timed Meditation';
 const SESSION_TITLE_PLACEHOLDER = 'Add a Session Title (optional)';
+const DEFAULT_MANTRA_SESSION_TITLE = 'Mantra Session';
 
 interface PracticeViewProps {
   sessions: CalendarEvent[];
   onSaveTimedSession: (input: Omit<TimedPracticeSaveInput, 'sessions'>) => Promise<void>;
   onRunningStateChange?: (isRunning: boolean) => void;
+}
+
+interface MantraInProgressState {
+  mantraId: string;
+  mantraTitle: string;
+  target: number;
+  done: number;
+  elapsedSec: number;
+  linkedSessionId?: string;
+  sessionTitle?: string;
 }
 
 const screenWidth = Dimensions.get('window').width;
@@ -110,12 +124,29 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [showLinkPicker, setShowLinkPicker] = useState(false);
   const [showAccumulationsModal, setShowAccumulationsModal] = useState(false);
   const [accumulationsInput, setAccumulationsInput] = useState('');
+  const [dedicationAccumulations, setDedicationAccumulations] = useState<number | undefined>(undefined);
   const [sessionTitleInput, setSessionTitleInput] = useState('');
   const [hasTouchedSessionTitle, setHasTouchedSessionTitle] = useState(false);
   const [completedDurationSec, setCompletedDurationSec] = useState(0);
   const [sessionStartedAt, setSessionStartedAt] = useState<Date | null>(null);
   const [sessionEndedAt, setSessionEndedAt] = useState<Date | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [expandedMantraId, setExpandedMantraId] = useState<string | null>(null);
+  const [selectedMantraId, setSelectedMantraId] = useState<string | null>(null);
+  const [selectedMantraTarget, setSelectedMantraTarget] = useState<number>(108);
+  const [mantraCount, setMantraCount] = useState(0);
+  const [showCustomTargetModal, setShowCustomTargetModal] = useState(false);
+  const [customTargetInput, setCustomTargetInput] = useState('');
+  const [mantraLinkedSessionId, setMantraLinkedSessionId] = useState<string | undefined>(undefined);
+  const [showMantraLinkPicker, setShowMantraLinkPicker] = useState(false);
+  const [mantraSessionTitleInput, setMantraSessionTitleInput] = useState('');
+  const [hasTouchedMantraSessionTitle, setHasTouchedMantraSessionTitle] = useState(false);
+  const [mantraElapsedSec, setMantraElapsedSec] = useState(0);
+  const [saveLinkedSessionId, setSaveLinkedSessionId] = useState<string | undefined>(undefined);
+  const [saveSessionTitle, setSaveSessionTitle] = useState(DEFAULT_TIMED_SESSION_TITLE);
+  const [completedPracticeMode, setCompletedPracticeMode] = useState<'timed' | 'mantra' | null>(null);
+  const [mantraInProgress, setMantraInProgress] = useState<MantraInProgressState | null>(null);
+  const [mantraResumeDraft, setMantraResumeDraft] = useState<MantraInProgressState | null>(null);
 
   const stats: PracticeStats = useMemo(() => calculatePracticeStats(sessions), [sessions]);
   const linkableSessions = useMemo(() => getLinkableSessions(sessions), [sessions]);
@@ -123,9 +154,43 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     () => linkableSessions.find((session) => session.id === linkedSessionId),
     [linkableSessions, linkedSessionId]
   );
+  const selectedMantra = useMemo(
+    () => PRACTICE_MANTRA_LIBRARY.find((mantra) => mantra.id === selectedMantraId) ?? null,
+    [selectedMantraId]
+  );
+  const mantraLinkedSession = useMemo(
+    () => linkableSessions.find((session) => session.id === mantraLinkedSessionId),
+    [linkableSessions, mantraLinkedSessionId]
+  );
 
   const openTimerDetail = () => {
-    setStage('timerDetail');
+    if (runningSnapshot) {
+      setRemainingSec(getRemainingSeconds(runningSnapshot, Date.now()));
+      setStage('running');
+    } else {
+      setStage('timerDetail');
+    }
+    Animated.timing(slideX, {
+      toValue: -screenWidth,
+      duration: 240,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const openMantraLibrary = () => {
+    setExpandedMantraId(null);
+    setSelectedMantraId(null);
+    setSelectedMantraTarget(108);
+    setMantraCount(0);
+    setShowMantraLinkPicker(false);
+    setMantraLinkedSessionId(undefined);
+    setMantraSessionTitleInput('');
+    setHasTouchedMantraSessionTitle(false);
+    setMantraElapsedSec(0);
+    setMantraResumeDraft(null);
+    setShowCustomTargetModal(false);
+    setCustomTargetInput('');
+    setStage('mantraLibrary');
     Animated.timing(slideX, {
       toValue: -screenWidth,
       duration: 240,
@@ -141,6 +206,54 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       duration: 220,
       useNativeDriver: true,
     }).start();
+  };
+
+  const handleDetailBack = () => {
+    if (stage === 'mantraSetup') {
+      setStage('mantraLibrary');
+      return;
+    }
+    if (stage === 'mantraIntention') {
+      setStage('mantraSetup');
+      return;
+    }
+    if (stage === 'mantraRunning') {
+      if (selectedMantra) {
+        setMantraInProgress((current) => {
+          if (!current || current.mantraId !== selectedMantra.id) return current;
+          return {
+            ...current,
+            done: mantraCount,
+            elapsedSec: mantraElapsedSec,
+          };
+        });
+      }
+      setStage('mantraLibrary');
+      return;
+    }
+    returnHome();
+  };
+
+  const startFreshMantraSetup = (mantraId: string) => {
+    setMantraInProgress((current) => (current?.mantraId === mantraId ? null : current));
+    setSelectedMantraId(mantraId);
+    setSelectedMantraTarget(108);
+    setMantraCount(0);
+    setMantraResumeDraft(null);
+    setStage('mantraSetup');
+  };
+
+  const resumeMantraInProgress = (inProgress: MantraInProgressState) => {
+    setSelectedMantraId(inProgress.mantraId);
+    setSelectedMantraTarget(inProgress.target);
+    setMantraCount(inProgress.done);
+    setMantraLinkedSessionId(inProgress.linkedSessionId);
+    setShowMantraLinkPicker(false);
+    setMantraSessionTitleInput(inProgress.sessionTitle || '');
+    setHasTouchedMantraSessionTitle(Boolean(inProgress.sessionTitle?.trim()));
+    setMantraElapsedSec(inProgress.elapsedSec);
+    setMantraResumeDraft(inProgress);
+    setStage('mantraIntention');
   };
 
   const handleAdjustMinutes = (deltaMinutes: number) => {
@@ -190,6 +303,17 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     const interval = setInterval(tick, 250);
     return () => clearInterval(interval);
   }, [runningSnapshot, stage]);
+
+  useEffect(() => {
+    if (stage !== 'mantraRunning' || !sessionStartedAt) return;
+    const tick = () => {
+      const elapsed = Math.max(0, Math.floor((Date.now() - sessionStartedAt.getTime()) / 1000));
+      setMantraElapsedSec(elapsed);
+    };
+    tick();
+    const interval = setInterval(tick, 250);
+    return () => clearInterval(interval);
+  }, [stage, sessionStartedAt]);
 
   const beginCountdown = () => {
     const now = new Date();
@@ -243,7 +367,54 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     setCompletedDurationSec(safeDuration);
     setSessionStartedAt(startedAt);
     setSessionEndedAt(endedAt);
+    setSaveLinkedSessionId(linkedSessionId);
+    setSaveSessionTitle(
+      linkedSessionId
+        ? DEFAULT_TIMED_SESSION_TITLE
+        : (hasTouchedSessionTitle ? sessionTitleInput.trim() : DEFAULT_TIMED_SESSION_TITLE)
+    );
+    setDedicationAccumulations(linkedSession?.accumulations);
+    setCompletedPracticeMode('timed');
     setRunningSnapshot(null);
+    setStage('done');
+    void playPracticeCompletionFeedback();
+  };
+
+  const completeMantraSession = () => {
+    if (!sessionStartedAt) return;
+    const endedAt = new Date();
+    const durationSec = Math.max(0, Math.floor((endedAt.getTime() - sessionStartedAt.getTime()) / 1000));
+    const fallbackTitle = selectedMantra ? `${selectedMantra.title} Session` : DEFAULT_MANTRA_SESSION_TITLE;
+    const resolvedTitle = mantraLinkedSessionId
+      ? fallbackTitle
+      : (hasTouchedMantraSessionTitle ? mantraSessionTitleInput.trim() : fallbackTitle);
+
+    setCompletedDurationSec(durationSec);
+    setSessionEndedAt(endedAt);
+    setSaveLinkedSessionId(mantraLinkedSessionId);
+    setSaveSessionTitle(resolvedTitle || fallbackTitle);
+    setDedicationAccumulations(
+      mantraLinkedSession?.accumulations !== undefined
+        ? mantraLinkedSession.accumulations
+        : mantraCount
+    );
+    setCompletedPracticeMode('mantra');
+    setMantraInProgress((current) => {
+      if (!selectedMantra) return current;
+      const done = mantraCount;
+      if (done >= selectedMantraTarget) {
+        return null;
+      }
+      return {
+        mantraId: selectedMantra.id,
+        mantraTitle: selectedMantra.title,
+        target: selectedMantraTarget,
+        done,
+        elapsedSec: durationSec,
+        linkedSessionId: mantraLinkedSessionId,
+        sessionTitle: hasTouchedMantraSessionTitle ? mantraSessionTitleInput.trim() : undefined,
+      };
+    });
     setStage('done');
     void playPracticeCompletionFeedback();
   };
@@ -251,22 +422,49 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const resetAfterSave = () => {
     setShowAccumulationsModal(false);
     setAccumulationsInput('');
+    setDedicationAccumulations(undefined);
     setCompletedDurationSec(0);
     setSessionStartedAt(null);
     setSessionEndedAt(null);
     setLinkedSessionId(undefined);
     setSessionTitleInput('');
     setHasTouchedSessionTitle(false);
+    setMantraSessionTitleInput('');
+    setHasTouchedMantraSessionTitle(false);
+    setMantraLinkedSessionId(undefined);
+    setShowMantraLinkPicker(false);
+    setMantraElapsedSec(0);
+    setMantraResumeDraft(null);
+    setShowCustomTargetModal(false);
+    setCustomTargetInput('');
+    setSaveLinkedSessionId(undefined);
+    setSaveSessionTitle(DEFAULT_TIMED_SESSION_TITLE);
+    setCompletedPracticeMode(null);
     setShowLinkPicker(false);
     returnHome();
   };
 
-  const submitSessionSave = async () => {
-    if (!sessionStartedAt || !sessionEndedAt) return;
-    if (accumulationsInput && !/^\d+$/.test(accumulationsInput)) {
+  const openAccumulationsEditor = () => {
+    setAccumulationsInput('');
+    setShowAccumulationsModal(true);
+  };
+
+  const applyAccumulationsEdit = () => {
+    const trimmed = accumulationsInput.trim();
+    if (!trimmed) {
+      setShowAccumulationsModal(false);
+      return;
+    }
+    if (!/^\d+$/.test(trimmed)) {
       Alert.alert('Invalid Accumulations', 'Accumulations must be a non-negative integer.');
       return;
     }
+    setDedicationAccumulations(Number(trimmed));
+    setShowAccumulationsModal(false);
+  };
+
+  const submitSessionSave = async () => {
+    if (!sessionStartedAt || !sessionEndedAt) return;
 
     setIsSaving(true);
     try {
@@ -274,11 +472,12 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         startedAt: sessionStartedAt,
         endedAt: sessionEndedAt,
         durationSec: completedDurationSec,
-        linkedSessionId,
-        sessionTitle: linkedSessionId
+        linkedSessionId: saveLinkedSessionId,
+        sessionTitle: saveLinkedSessionId
           ? undefined
-          : (hasTouchedSessionTitle ? sessionTitleInput.trim() : DEFAULT_TIMED_SESSION_TITLE),
-        accumulations: accumulationsInput ? Number(accumulationsInput) : undefined,
+          : (saveSessionTitle.trim() || DEFAULT_TIMED_SESSION_TITLE),
+        practiceSource: completedPracticeMode === 'mantra' ? 'mantra-counter' : 'timed-meditation',
+        accumulations: dedicationAccumulations,
       });
       void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       resetAfterSave();
@@ -287,7 +486,317 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     }
   };
 
+  const applyCustomMantraTarget = () => {
+    const trimmed = customTargetInput.trim();
+    if (!/^\d+$/.test(trimmed)) {
+      Alert.alert('Invalid Target Count', 'Please enter a non-negative whole number.');
+      return;
+    }
+    setSelectedMantraTarget(Number(trimmed));
+    setShowCustomTargetModal(false);
+    setCustomTargetInput('');
+  };
+
   const renderDetailContent = () => {
+    if (stage === 'mantraLibrary') {
+      return (
+        <ScrollView contentContainerStyle={styles.detailPanel}>
+          <Text style={styles.selectDurationTitle}>Mantra Library</Text>
+          <View style={styles.mantraLibraryList}>
+            {PRACTICE_MANTRA_LIBRARY.map((mantra) => {
+              const isExpanded = expandedMantraId === mantra.id;
+              return (
+                <TouchableOpacity
+                  key={mantra.id}
+                  style={styles.mantraCard}
+                  activeOpacity={0.9}
+                  onPress={() => setExpandedMantraId(isExpanded ? null : mantra.id)}
+                  testID={`practice-mantra-card-${mantra.id}`}
+                >
+                  <View style={styles.mantraCardHeader}>
+                    <View style={styles.mantraCardHeaderText}>
+                      <Text style={styles.mantraCardTitle}>{mantra.title}</Text>
+                      <Text style={styles.mantraCardMantra}>{mantra.mantra}</Text>
+                    </View>
+                    <Text style={styles.mantraCardChevron}>{isExpanded ? '⌃' : '⌄'}</Text>
+                  </View>
+                  {isExpanded ? (
+                    <View style={styles.mantraCardExpanded}>
+                      <Text style={styles.mantraCardDescription}>{mantra.description}</Text>
+                      <TouchableOpacity
+                        style={styles.primaryButton}
+                        onPress={() => {
+                          const hasInProgress =
+                            mantraInProgress &&
+                            mantraInProgress.mantraId === mantra.id &&
+                            mantraInProgress.done < mantraInProgress.target;
+
+                          if (hasInProgress) {
+                            Alert.alert(
+                              'Session In Progress',
+                              `Are you sure you want to start a fresh ${mantra.title} session? This will overwrite your progress towards your existing goal.`,
+                              [
+                                {
+                                  text: 'Resume Existing',
+                                  onPress: () => resumeMantraInProgress(mantraInProgress),
+                                },
+                                {
+                                  text: 'Start Fresh',
+                                  style: 'destructive',
+                                  onPress: () => startFreshMantraSetup(mantra.id),
+                                },
+                                {
+                                  text: 'Cancel',
+                                  style: 'cancel',
+                                },
+                              ]
+                            );
+                            return;
+                          }
+                          startFreshMantraSetup(mantra.id);
+                        }}
+                        testID={`practice-mantra-add-${mantra.id}`}
+                      >
+                        <Text style={styles.primaryButtonText}>Add Mantra</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : null}
+                  {mantraInProgress &&
+                  mantraInProgress.mantraId === mantra.id &&
+                  mantraInProgress.done < mantraInProgress.target ? (
+                    <TouchableOpacity
+                      style={styles.mantraInProgressRow}
+                      onPress={() => resumeMantraInProgress(mantraInProgress)}
+                      testID={`practice-mantra-in-progress-${mantra.id}`}
+                    >
+                      <View style={styles.mantraInProgressTextWrap}>
+                        <Text style={styles.mantraInProgressTitle}>
+                          {`In Progress ${mantraInProgress.mantraTitle} Mantra`}
+                        </Text>
+                        <Text style={styles.mantraInProgressMeta}>
+                          {`Target: ${formatMantraTargetLabel(mantraInProgress.target)}, Done: ${mantraInProgress.done}`}
+                        </Text>
+                      </View>
+                      <Text style={styles.mantraInProgressChevron}>›</Text>
+                    </TouchableOpacity>
+                  ) : null}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      );
+    }
+
+    if (stage === 'mantraSetup' && selectedMantra) {
+      return (
+        <ScrollView
+          ref={detailScrollRef}
+          contentContainerStyle={styles.detailPanel}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
+        >
+          <Text style={styles.selectDurationTitle}>{selectedMantra.title}</Text>
+          <View style={styles.intentionCard}>
+            <Text style={styles.sectionLabel}>Mantra</Text>
+            <Text style={styles.intentionText}>{selectedMantra.mantra}</Text>
+            <Text style={[styles.sectionLabel, styles.sectionLabelSpacing]}>Description</Text>
+            <Text style={styles.intentionText}>{selectedMantra.description}</Text>
+          </View>
+          <Text style={styles.sectionLabel}>Target Count</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.targetPillsWrap}
+            testID="practice-mantra-target-strip"
+          >
+            {PRACTICE_MANTRA_TARGET_OPTIONS.map((target) => {
+              const isSelected = selectedMantraTarget === target;
+              return (
+                <TouchableOpacity
+                  key={target}
+                  style={[styles.targetPill, isSelected && styles.minutePillSelected]}
+                  onPress={() => setSelectedMantraTarget(target)}
+                  testID={`practice-mantra-target-${target}`}
+                >
+                  <Text style={[styles.minutePillText, isSelected && styles.minutePillTextSelected]}>
+                    {formatMantraTargetLabel(target)}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+            <TouchableOpacity
+              style={styles.targetPill}
+              onPress={() => setShowCustomTargetModal(true)}
+              testID="practice-mantra-target-custom"
+            >
+              <Text style={styles.minutePillText}>Custom</Text>
+            </TouchableOpacity>
+          </ScrollView>
+          <TouchableOpacity
+            style={styles.linkButton}
+            onPress={() => setShowMantraLinkPicker((prev) => !prev)}
+            testID="practice-mantra-link-toggle"
+          >
+            <Text style={styles.linkButtonText}>
+              {mantraLinkedSession
+                ? `Linked: ${mantraLinkedSession.title}`
+                : 'Link Calendar Session (optional)'}
+            </Text>
+          </TouchableOpacity>
+          {showMantraLinkPicker ? (
+            <View style={styles.linkList}>
+              <TouchableOpacity
+                style={styles.linkRow}
+                onPress={() => {
+                  setMantraLinkedSessionId(undefined);
+                  setShowMantraLinkPicker(false);
+                }}
+                testID="practice-mantra-link-none"
+              >
+                <Text style={styles.linkRowText}>No linked session</Text>
+              </TouchableOpacity>
+              {linkableSessions.map((session) => (
+                <TouchableOpacity
+                  key={session.id}
+                  style={styles.linkRow}
+                  onPress={() => {
+                    setMantraLinkedSessionId(session.id);
+                    setShowMantraLinkPicker(false);
+                  }}
+                  testID={`practice-mantra-link-${session.id}`}
+                >
+                  <Text style={styles.linkRowText}>{session.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : null}
+          {!mantraLinkedSessionId ? (
+            <TextInput
+              style={styles.sessionTitleInput}
+              value={mantraSessionTitleInput}
+              onChangeText={(text) => {
+                setHasTouchedMantraSessionTitle(true);
+                setMantraSessionTitleInput(text);
+              }}
+              onFocus={() => {
+                setHasTouchedMantraSessionTitle(true);
+                setTimeout(() => {
+                  detailScrollRef.current?.scrollToEnd({ animated: true });
+                }, 120);
+              }}
+              placeholder={SESSION_TITLE_PLACEHOLDER}
+              placeholderTextColor={colors.placeholder}
+              autoCapitalize="sentences"
+              autoCorrect={false}
+              returnKeyType="done"
+              testID="practice-mantra-session-title-input"
+            />
+          ) : null}
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={() => setStage('mantraIntention')}
+            testID="practice-mantra-set-intention"
+          >
+            <Text style={styles.primaryButtonText}>Set Intention</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      );
+    }
+
+    if (stage === 'mantraIntention') {
+      return (
+        <View style={styles.detailPanel}>
+          <Text style={styles.selectDurationTitle}>Set Intention</Text>
+          <View style={styles.intentionCard}>
+            <Text style={styles.intentionText}>{PRACTICE_INTENTION_TEXT}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={() => {
+              setMantraCount(0);
+              const resumeElapsed = mantraResumeDraft?.elapsedSec ?? 0;
+              const resumeDone = mantraResumeDraft?.done ?? 0;
+              const now = new Date();
+              const startedAt = new Date(now.getTime() - resumeElapsed * 1000);
+              setSessionStartedAt(startedAt);
+              setSessionEndedAt(null);
+              setCompletedDurationSec(0);
+              setMantraCount(resumeDone);
+              setMantraElapsedSec(resumeElapsed);
+              if (!mantraResumeDraft && selectedMantra) {
+                setMantraInProgress({
+                  mantraId: selectedMantra.id,
+                  mantraTitle: selectedMantra.title,
+                  target: selectedMantraTarget,
+                  done: 0,
+                  elapsedSec: 0,
+                  linkedSessionId: mantraLinkedSessionId,
+                  sessionTitle: hasTouchedMantraSessionTitle ? mantraSessionTitleInput.trim() : undefined,
+                });
+              }
+              setMantraResumeDraft(null);
+              setStage('mantraRunning');
+              void playPracticeGong();
+            }}
+            testID="practice-mantra-start"
+          >
+            <Text style={styles.primaryButtonText}>Start Practice</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    if (stage === 'mantraRunning' && selectedMantra) {
+      return (
+        <View style={[styles.detailPanel, styles.runningDetailPanel]}>
+          <Text style={styles.selectDurationTitle}>{selectedMantra.title}</Text>
+          <Text style={styles.mantraCounterSubtitle}>{selectedMantra.mantra}</Text>
+          <View style={styles.mantraCounterWrap}>
+            <TouchableOpacity
+              style={styles.mantraCounterButton}
+              onPress={() => {
+                setMantraCount((prev) => {
+                  const next = prev + 1;
+                  setMantraInProgress((current) => {
+                    if (!current || !selectedMantra) return current;
+                    if (current.mantraId !== selectedMantra.id) return current;
+                    return {
+                      ...current,
+                      done: next,
+                      elapsedSec: mantraElapsedSec,
+                    };
+                  });
+                  return next;
+                });
+                void Haptics.selectionAsync();
+              }}
+              testID="practice-mantra-counter-button"
+            >
+              <Text style={styles.mantraCounterValue} testID="practice-mantra-counter-value">
+                {mantraCount}
+              </Text>
+              <Text style={styles.mantraCounterHint}>Tap to count</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.mantraCounterProgress}>
+            {mantraCount} / {formatMantraTargetLabel(selectedMantraTarget)}
+          </Text>
+          <Text style={styles.mantraClockText} testID="practice-mantra-clock">
+            Clock {formatDurationMmSs(mantraElapsedSec)}
+          </Text>
+          <TouchableOpacity
+            style={[styles.primaryButton, styles.finishSessionButton, styles.runningEndButton]}
+            onPress={completeMantraSession}
+            testID="practice-mantra-end"
+          >
+            <Text style={styles.primaryButtonText}>Finish Session</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     if (stage === 'intention') {
       return (
         <View style={styles.detailPanel}>
@@ -334,11 +843,11 @@ const PracticeView: React.FC<PracticeViewProps> = ({
             )}
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.primaryButton, styles.runningEndButton]}
+            style={[styles.primaryButton, styles.finishSessionButton, styles.runningEndButton]}
             onPress={() => completeRunningSession(false)}
             testID="practice-end"
           >
-            <Text style={styles.primaryButtonText}>End</Text>
+            <Text style={styles.primaryButtonText}>Finish Session</Text>
           </TouchableOpacity>
         </View>
       );
@@ -359,12 +868,26 @@ const PracticeView: React.FC<PracticeViewProps> = ({
             <Text style={styles.intentionText}>{PRACTICE_DEDICATION_TEXT}</Text>
           </View>
           <Text style={styles.doneSubtext}>Duration {formatDurationMmSs(completedDurationSec)}</Text>
+          {completedPracticeMode ? (
+            <TouchableOpacity
+              style={styles.dedicationAccumulationsRow}
+              onPress={openAccumulationsEditor}
+              testID="practice-dedication-accumulations-edit"
+            >
+              <Text style={styles.dedicationAccumulationsLabel}>Accumulations</Text>
+              <Text style={styles.dedicationAccumulationsValue}>
+                {dedicationAccumulations !== undefined ? dedicationAccumulations : 0}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={() => setShowAccumulationsModal(true)}
+            onPress={() => {
+              void submitSessionSave();
+            }}
             testID="practice-dedication-return"
           >
-            <Text style={styles.primaryButtonText}>Return</Text>
+            <Text style={styles.primaryButtonText}>Dedicate</Text>
           </TouchableOpacity>
         </View>
       );
@@ -521,13 +1044,10 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                   <Text style={styles.featureCardSubtitle}>Set duration, intention, and begin</Text>
                 </TouchableOpacity>
 
-                <View style={[styles.featureCard, styles.featureCardDisabled]}>
-                  <View style={styles.comingSoonBadge}>
-                    <Text style={styles.comingSoonText}>Coming Soon</Text>
-                  </View>
-                  <Text style={styles.featureCardTitle}>Mantra Counter</Text>
-                  <Text style={styles.featureCardSubtitle}>Track repetitions and streaks</Text>
-                </View>
+                <TouchableOpacity style={styles.featureCard} onPress={openMantraLibrary} testID="practice-card-mantra">
+                  <Text style={styles.featureCardTitle}>Mantra Recitations</Text>
+                  <Text style={styles.featureCardSubtitle}>Open your mantra library and count recitations</Text>
+                </TouchableOpacity>
 
                 <View style={[styles.featureCard, styles.featureCardDisabled]}>
                   <View style={styles.comingSoonBadge}>
@@ -553,7 +1073,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               resizeMode="cover"
               testID="practice-detail-background-pattern"
             />
-            <TouchableOpacity style={styles.backButton} onPress={returnHome} testID="practice-back">
+            <TouchableOpacity style={styles.backButton} onPress={handleDetailBack} testID="practice-back">
               <Text style={styles.backButtonText}>‹ Back</Text>
             </TouchableOpacity>
             {renderDetailContent()}
@@ -569,7 +1089,11 @@ const PracticeView: React.FC<PracticeViewProps> = ({
             <TextInput
               style={styles.modalInput}
               keyboardType="number-pad"
-              placeholder="Leave blank or enter a number"
+              placeholder={
+                dedicationAccumulations !== undefined
+                  ? String(dedicationAccumulations)
+                  : 'Leave blank or enter a number'
+              }
               value={accumulationsInput}
               onChangeText={setAccumulationsInput}
               testID="practice-accumulations-input"
@@ -583,11 +1107,48 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.primaryButton, styles.modalActionButton]}
-                onPress={submitSessionSave}
-                disabled={isSaving}
+                onPress={applyAccumulationsEdit}
                 testID="practice-accumulations-save"
               >
-                <Text style={styles.primaryButtonText}>{isSaving ? 'Saving...' : 'Save'}</Text>
+                <Text style={styles.primaryButtonText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={showCustomTargetModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowCustomTargetModal(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Custom Target Count</Text>
+            <Text style={styles.modalSubtitle}>Enter a non-negative whole number</Text>
+            <TextInput
+              style={styles.modalInput}
+              keyboardType="number-pad"
+              placeholder="e.g. 500"
+              value={customTargetInput}
+              onChangeText={setCustomTargetInput}
+              testID="practice-mantra-custom-target-input"
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={[styles.secondaryButton, styles.modalActionButton]}
+                onPress={() => setShowCustomTargetModal(false)}
+                testID="practice-mantra-custom-target-cancel"
+              >
+                <Text style={styles.secondaryButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.primaryButton, styles.modalActionButton]}
+                onPress={applyCustomMantraTarget}
+                testID="practice-mantra-custom-target-save"
+              >
+                <Text style={styles.primaryButtonText}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -752,6 +1313,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     letterSpacing: 0.2,
   },
+  sectionLabel: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.textSecondary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+    marginBottom: spacing.xs,
+  },
+  sectionLabelSpacing: {
+    marginTop: spacing.md,
+  },
   selectDurationTitle: {
     fontSize: 22,
     fontWeight: '500',
@@ -787,9 +1359,28 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.brandPrimaryDark,
     fontWeight: '700',
+    textAlign: 'center',
   },
   minutePillTextSelected: {
     color: colors.white,
+  },
+  targetPillsWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.lg,
+    paddingRight: spacing.xs,
+  },
+  targetPill: {
+    minWidth: 64,
+    height: 44,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   detailClock: {
     fontSize: 44,
@@ -918,12 +1509,153 @@ const styles = StyleSheet.create({
     color: colors.brandPrimaryDark,
     marginBottom: spacing.lg,
   },
+  dedicationAccumulationsRow: {
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+    marginBottom: spacing.lg,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dedicationAccumulationsLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.textSecondary,
+  },
+  dedicationAccumulationsValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.brandPrimaryDark,
+  },
   runningEndButton: {
     marginTop: 'auto',
     marginBottom: spacing.xs,
   },
   runningDetailPanel: {
     flex: 1,
+  },
+  mantraLibraryList: {
+    gap: spacing.sm,
+  },
+  mantraCard: {
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  mantraCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mantraCardHeaderText: {
+    flex: 1,
+    paddingRight: spacing.sm,
+  },
+  mantraCardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.brandInk,
+    marginBottom: 4,
+  },
+  mantraCardMantra: {
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+  mantraCardChevron: {
+    fontSize: 22,
+    color: colors.brandPrimaryDark,
+    lineHeight: 24,
+  },
+  mantraCardExpanded: {
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderSubtle,
+    gap: spacing.md,
+  },
+  mantraCardDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: colors.textPrimary,
+  },
+  mantraInProgressRow: {
+    marginTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderSubtle,
+    paddingTop: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  mantraInProgressTextWrap: {
+    flex: 1,
+    paddingRight: spacing.sm,
+  },
+  mantraInProgressTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.brandPrimaryDark,
+  },
+  mantraInProgressMeta: {
+    marginTop: 2,
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  mantraInProgressChevron: {
+    fontSize: 22,
+    color: colors.brandPrimaryDark,
+    lineHeight: 22,
+  },
+  mantraCounterSubtitle: {
+    marginTop: spacing.xs,
+    textAlign: 'center',
+    color: colors.textSecondary,
+    fontSize: 16,
+    marginBottom: spacing.sm,
+  },
+  mantraClockText: {
+    textAlign: 'center',
+    color: colors.textMuted,
+    fontSize: 12,
+    marginBottom: spacing.sm,
+  },
+  mantraCounterWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  mantraCounterButton: {
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mantraCounterValue: {
+    fontSize: 52,
+    fontWeight: '600',
+    color: colors.brandPrimaryDark,
+  },
+  mantraCounterHint: {
+    marginTop: spacing.xs,
+    fontSize: 13,
+    color: colors.textSecondary,
+  },
+  mantraCounterProgress: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: colors.brandPrimaryDark,
+    marginBottom: spacing.md,
+    fontWeight: '600',
   },
   playPauseButton: {
     width: 84,
@@ -965,6 +1697,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     paddingHorizontal: spacing.md,
+  },
+  finishSessionButton: {
+    backgroundColor: 'rgba(245, 158, 11, 0.68)',
   },
   primaryButtonText: {
     fontSize: 16,

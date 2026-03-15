@@ -495,6 +495,14 @@ export default function App() {
     }
   };
 
+  const handleEditSessionFromEventsList = (event: CalendarEvent) => {
+    setPreviousView('eventsList');
+    setSelectedEvent(event);
+    setEditScope('all');
+    setEditOccurrenceKey(null);
+    setViewMode('editEvent');
+  };
+
   const handleUpdateEvent = async (eventData: EditableEventUpdate) => {
     const eventToEdit = selectedEvent;
     const sanitizedEventData = eventToEdit
@@ -685,6 +693,42 @@ export default function App() {
     setEditScope(null);
     setEditOccurrenceKey(null);
     setViewMode('day');
+  };
+
+  const handleDeleteSessionFromEventsList = (event: CalendarEvent) => {
+    Alert.alert(
+      'Delete Session',
+      'Are you sure you want to delete this session? This action cannot be undone.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            let updatedEvents = masterEvents;
+
+            if (event.isRecurringInstance && event.originalEventId) {
+              updatedEvents = masterEvents.filter(item => item.id !== event.originalEventId);
+            } else {
+              updatedEvents = masterEvents.filter(item => item.id !== event.id);
+            }
+
+            setMasterEvents(updatedEvents);
+            try {
+              const sessionEvents = updatedEvents.filter(
+                item => isSessionItem(item) && !isMemberOnlyEvent(item)
+              );
+              await saveEvents(sessionEvents);
+            } catch (error) {
+              console.error('Failed to delete event from storage:', error);
+            }
+          },
+        },
+      ]
+    );
   };
 
   const handleUpdateNotificationSettings = async (nextSettings: NotificationSettings) => {
@@ -999,6 +1043,8 @@ export default function App() {
               events={visibleEvents}
               onEventPress={handleEventPress}
               onAddEvent={handleAddEvent}
+              onSessionEdit={handleEditSessionFromEventsList}
+              onSessionDelete={handleDeleteSessionFromEventsList}
             />
           ) : viewMode === 'practice' ? (
             <PracticeView
