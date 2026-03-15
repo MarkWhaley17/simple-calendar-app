@@ -3,6 +3,7 @@ import {
   Alert,
   Animated,
   Dimensions,
+  Easing,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
@@ -70,6 +71,22 @@ const COUNTDOWN_RING_SEGMENTS = 72;
 const COUNTDOWN_RING_RADIUS = 88;
 const COUNTDOWN_SEGMENT_WIDTH = 2;
 const COUNTDOWN_SEGMENT_HEIGHT = 8;
+const DEDICATION_CELEBRATION_DURATION_MS = 1600;
+const SHOULD_WAIT_FOR_CELEBRATION = process.env.NODE_ENV !== 'test';
+const DEDICATION_CONFETTI_PIECES = [
+  { id: 'confetti-1', xStart: -18, xEnd: -220, yEnd: 260, rotation: -170, color: '#F97316' },
+  { id: 'confetti-2', xStart: 20, xEnd: -170, yEnd: 300, rotation: -210, color: '#FACC15' },
+  { id: 'confetti-3', xStart: -12, xEnd: -112, yEnd: 272, rotation: -150, color: '#22C55E' },
+  { id: 'confetti-4', xStart: 14, xEnd: -54, yEnd: 332, rotation: -120, color: '#14B8A6' },
+  { id: 'confetti-5', xStart: -10, xEnd: 32, yEnd: 286, rotation: 130, color: '#0EA5E9' },
+  { id: 'confetti-6', xStart: 12, xEnd: 88, yEnd: 324, rotation: 170, color: '#3B82F6' },
+  { id: 'confetti-7', xStart: -8, xEnd: 132, yEnd: 274, rotation: 160, color: '#6366F1' },
+  { id: 'confetti-8', xStart: 16, xEnd: 188, yEnd: 302, rotation: 205, color: '#EC4899' },
+  { id: 'confetti-9', xStart: -14, xEnd: 216, yEnd: 260, rotation: 225, color: '#EF4444' },
+  { id: 'confetti-10', xStart: 10, xEnd: -190, yEnd: 244, rotation: -230, color: '#FB7185' },
+  { id: 'confetti-11', xStart: -20, xEnd: 76, yEnd: 252, rotation: 180, color: '#A855F7' },
+  { id: 'confetti-12', xStart: 18, xEnd: -82, yEnd: 248, rotation: -180, color: '#F59E0B' },
+] as const;
 
 const PracticeCountdownRing: React.FC<{ progress: number }> = ({ progress }) => {
   const clampedProgress = Math.max(0, Math.min(1, progress));
@@ -115,6 +132,8 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   onRunningStateChange,
 }) => {
   const slideX = useRef(new Animated.Value(0)).current;
+  const dedicationCelebrationProgress = useRef(new Animated.Value(0)).current;
+  const isMountedRef = useRef(true);
   const detailScrollRef = useRef<ScrollView | null>(null);
   const [stage, setStage] = useState<PracticeStage>('home');
   const [selectedDurationSec, setSelectedDurationSec] = useState(10 * 60);
@@ -131,6 +150,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [sessionStartedAt, setSessionStartedAt] = useState<Date | null>(null);
   const [sessionEndedAt, setSessionEndedAt] = useState<Date | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [dedicationConfettiOriginY, setDedicationConfettiOriginY] = useState(440);
   const [expandedMantraId, setExpandedMantraId] = useState<string | null>(null);
   const [selectedMantraId, setSelectedMantraId] = useState<string | null>(null);
   const [selectedMantraTarget, setSelectedMantraTarget] = useState<number>(108);
@@ -315,6 +335,35 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     return () => clearInterval(interval);
   }, [stage, sessionStartedAt]);
 
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      dedicationCelebrationProgress.stopAnimation();
+    };
+  }, [dedicationCelebrationProgress]);
+
+  const triggerDedicationCelebration = () => {
+    dedicationCelebrationProgress.stopAnimation();
+    dedicationCelebrationProgress.setValue(0);
+    return new Promise<void>((resolve) => {
+      Animated.timing(dedicationCelebrationProgress, {
+        toValue: 1,
+        duration: DEDICATION_CELEBRATION_DURATION_MS,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }).start(() => {
+        dedicationCelebrationProgress.setValue(0);
+        resolve();
+      });
+    });
+  };
+
+  useEffect(() => {
+    if (stage !== 'done') return;
+    dedicationCelebrationProgress.stopAnimation();
+    dedicationCelebrationProgress.setValue(0);
+  }, [dedicationCelebrationProgress, stage]);
+
   const beginCountdown = () => {
     const now = new Date();
     const snapshot: PracticeRunningSnapshot = {
@@ -464,9 +513,10 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   };
 
   const submitSessionSave = async () => {
-    if (!sessionStartedAt || !sessionEndedAt) return;
+    if (!sessionStartedAt || !sessionEndedAt || isSaving) return;
 
     setIsSaving(true);
+    const celebrationPromise = triggerDedicationCelebration();
     try {
       await onSaveTimedSession({
         startedAt: sessionStartedAt,
@@ -479,10 +529,16 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         practiceSource: completedPracticeMode === 'mantra' ? 'mantra-counter' : 'timed-meditation',
         accumulations: dedicationAccumulations,
       });
+      if (SHOULD_WAIT_FOR_CELEBRATION) {
+        await celebrationPromise;
+      }
+      if (!isMountedRef.current) return;
       void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       resetAfterSave();
     } finally {
-      setIsSaving(false);
+      if (isMountedRef.current) {
+        setIsSaving(false);
+      }
     }
   };
 
@@ -881,14 +937,58 @@ const PracticeView: React.FC<PracticeViewProps> = ({
             </TouchableOpacity>
           ) : null}
           <TouchableOpacity
-            style={styles.primaryButton}
+            style={[styles.primaryButton, isSaving && styles.primaryButtonDisabled]}
+            disabled={isSaving}
+            onLayout={(event) => {
+              const { y, height } = event.nativeEvent.layout;
+              setDedicationConfettiOriginY(y + height / 2);
+            }}
             onPress={() => {
               void submitSessionSave();
             }}
             testID="practice-dedication-return"
           >
-            <Text style={styles.primaryButtonText}>Dedicate</Text>
+            <Text style={styles.primaryButtonText}>{isSaving ? 'Dedicating...' : 'Dedicate'}</Text>
           </TouchableOpacity>
+          <View
+            pointerEvents="none"
+            style={styles.dedicationCelebrationOverlay}
+            testID="practice-dedication-celebration"
+          >
+            {DEDICATION_CONFETTI_PIECES.map((piece) => {
+              const translateX = dedicationCelebrationProgress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [piece.xStart, piece.xEnd],
+              });
+              const translateY = dedicationCelebrationProgress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, -piece.yEnd],
+              });
+              const rotate = dedicationCelebrationProgress.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['0deg', `${piece.rotation}deg`],
+              });
+              const opacity = dedicationCelebrationProgress.interpolate({
+                inputRange: [0, 0.14, 0.82, 1],
+                outputRange: [0, 1, 1, 0],
+              });
+
+              return (
+                <Animated.View
+                  key={piece.id}
+                  style={[
+                    styles.dedicationConfettiPiece,
+                    {
+                      top: dedicationConfettiOriginY,
+                      backgroundColor: piece.color,
+                      transform: [{ translateX }, { translateY }, { rotate }],
+                      opacity,
+                    },
+                  ]}
+                />
+              );
+            })}
+          </View>
         </View>
       );
     }
@@ -1154,6 +1254,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           </View>
         </View>
       </Modal>
+
     </View>
   );
 };
@@ -1296,6 +1397,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl + spacing.sm,
     paddingBottom: spacing.xl,
+  },
+  donePanel: {
+    position: 'relative',
   },
   detailTitle: {
     fontSize: 28,
@@ -1698,6 +1802,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: spacing.md,
   },
+  primaryButtonDisabled: {
+    opacity: 0.7,
+  },
   finishSessionButton: {
     backgroundColor: 'rgba(245, 158, 11, 0.68)',
   },
@@ -1763,6 +1870,18 @@ const styles = StyleSheet.create({
   },
   modalActionButton: {
     flex: 1,
+  },
+  dedicationCelebrationOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    pointerEvents: 'none',
+    zIndex: 2,
+  },
+  dedicationConfettiPiece: {
+    position: 'absolute',
+    width: 7,
+    height: 13,
+    borderRadius: 2,
   },
 });
 
