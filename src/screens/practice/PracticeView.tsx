@@ -613,7 +613,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                         }}
                         testID={`practice-mantra-add-${mantra.id}`}
                       >
-                        <Text style={styles.primaryButtonText}>Add Mantra</Text>
+                        <Text style={styles.primaryButtonText}>Select Mantra</Text>
                       </TouchableOpacity>
                     </View>
                   ) : null}
