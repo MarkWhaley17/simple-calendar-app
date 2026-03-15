@@ -23,6 +23,7 @@ import { isMemberOnlyEvent, filterVisibleEvents } from './src/utils/eventVisibil
 import {
   TimedPracticeSaveInput,
   applyTimedPracticeSave,
+  clearPracticeMantraSnapshot,
   clearPracticeRunningSnapshot,
 } from './src/utils/practice';
 import {
@@ -777,7 +778,7 @@ export default function App() {
     if (viewMode === 'practice' && view !== 'practice' && hasActivePracticeTimer) {
       Alert.alert(
         'Practice Session Running',
-        'Do you want to stop and discard this running session, or keep it running?',
+        'Do you want to stop and discard this running practice, or keep it running?',
         [
           {
             text: 'Keep Running',
@@ -790,7 +791,10 @@ export default function App() {
             text: 'Stop & Discard',
             style: 'destructive',
             onPress: () => {
-              void clearPracticeRunningSnapshot();
+              void Promise.all([
+                clearPracticeRunningSnapshot(),
+                clearPracticeMantraSnapshot(),
+              ]);
               setHasActivePracticeTimer(false);
               navigateTo();
             },

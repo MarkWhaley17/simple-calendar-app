@@ -27,17 +27,21 @@ import {
   formatMantraTargetLabel,
 } from '../../constants/practice';
 import {
+  PracticeMantraSnapshot,
   PracticeRunningSnapshot,
   PracticeStage,
   PracticeStats,
   TimedPracticeSaveInput,
   calculatePracticeStats,
+  clearPracticeMantraSnapshot,
   clearPracticeRunningSnapshot,
   formatDurationMmSs,
   getElapsedSeconds,
   getLinkableSessions,
   getRemainingSeconds,
+  loadPracticeMantraSnapshot,
   loadPracticeRunningSnapshot,
+  savePracticeMantraSnapshot,
   savePracticeRunningSnapshot,
 } from '../../utils/practice';
 import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
@@ -167,6 +171,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [completedPracticeMode, setCompletedPracticeMode] = useState<'timed' | 'mantra' | null>(null);
   const [mantraInProgress, setMantraInProgress] = useState<MantraInProgressState | null>(null);
   const [mantraResumeDraft, setMantraResumeDraft] = useState<MantraInProgressState | null>(null);
+  const hasHydratedSnapshotsRef = useRef(false);
 
   const stats: PracticeStats = useMemo(() => calculatePracticeStats(sessions), [sessions]);
   const linkableSessions = useMemo(() => getLinkableSessions(sessions), [sessions]);
@@ -288,24 +293,145 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     await clearPracticeRunningSnapshot();
   };
 
+  const persistMantraSnapshot = async (snapshot: PracticeMantraSnapshot | null) => {
+    if (snapshot) {
+      await savePracticeMantraSnapshot(snapshot);
+      return;
+    }
+    await clearPracticeMantraSnapshot();
+  };
+
   useEffect(() => {
-    loadPracticeRunningSnapshot().then((snapshot) => {
-      if (!snapshot) return;
-      setSelectedDurationSec(snapshot.selectedDurationSec);
-      setLinkedSessionId(snapshot.linkedSessionId);
-      setSessionTitleInput(snapshot.sessionTitle || '');
-      setHasTouchedSessionTitle(Boolean(snapshot.sessionTitle?.trim()));
-      setRunningSnapshot(snapshot);
-      setStage('running');
-      setRemainingSec(getRemainingSeconds(snapshot, Date.now()));
+    Promise.all([
+      loadPracticeRunningSnapshot(),
+      loadPracticeMantraSnapshot(),
+    ]).then(([timedSnapshot, mantraSnapshot]) => {
+      if (timedSnapshot) {
+        setSelectedDurationSec(timedSnapshot.selectedDurationSec);
+        setLinkedSessionId(timedSnapshot.linkedSessionId);
+        setSessionTitleInput(timedSnapshot.sessionTitle || '');
+        setHasTouchedSessionTitle(Boolean(timedSnapshot.sessionTitle?.trim()));
+        setRunningSnapshot(timedSnapshot);
+        setStage('running');
+        setRemainingSec(getRemainingSeconds(timedSnapshot, Date.now()));
+        slideX.setValue(-screenWidth);
+        return;
+      }
+
+      if (!mantraSnapshot) return;
+
+      const restoredInProgress: MantraInProgressState = {
+        mantraId: mantraSnapshot.mantraId,
+        mantraTitle: mantraSnapshot.mantraTitle,
+        target: mantraSnapshot.target,
+        done: mantraSnapshot.done,
+        elapsedSec: mantraSnapshot.elapsedSec,
+        linkedSessionId: mantraSnapshot.linkedSessionId,
+        sessionTitle: mantraSnapshot.sessionTitle,
+      };
+
+      setMantraInProgress(restoredInProgress);
+
+      if (!mantraSnapshot.isRunning) {
+        return;
+      }
+
+      const mantraExists = PRACTICE_MANTRA_LIBRARY.some(
+        (mantra) => mantra.id === mantraSnapshot.mantraId
+      );
+      if (!mantraExists) {
+        return;
+      }
+
+      const restoredStartedAt = mantraSnapshot.startedAt
+        ? new Date(mantraSnapshot.startedAt)
+        : new Date(Date.now() - mantraSnapshot.elapsedSec * 1000);
+      const restoredElapsed = Math.max(
+        0,
+        Math.floor((Date.now() - restoredStartedAt.getTime()) / 1000)
+      );
+
+      setSelectedMantraId(mantraSnapshot.mantraId);
+      setSelectedMantraTarget(mantraSnapshot.target);
+      setMantraCount(mantraSnapshot.done);
+      setMantraLinkedSessionId(mantraSnapshot.linkedSessionId);
+      setShowMantraLinkPicker(false);
+      setMantraSessionTitleInput(mantraSnapshot.sessionTitle || '');
+      setHasTouchedMantraSessionTitle(Boolean(mantraSnapshot.sessionTitle?.trim()));
+      setSessionStartedAt(restoredStartedAt);
+      setSessionEndedAt(null);
+      setCompletedDurationSec(0);
+      setMantraElapsedSec(restoredElapsed);
+      setMantraResumeDraft(null);
+      setStage('mantraRunning');
       slideX.setValue(-screenWidth);
+    }).finally(() => {
+      hasHydratedSnapshotsRef.current = true;
     });
   }, [slideX]);
 
   useEffect(() => {
+    if (!hasHydratedSnapshotsRef.current && !runningSnapshot) return;
     void persistSnapshot(runningSnapshot);
-    onRunningStateChange?.(Boolean(runningSnapshot));
-  }, [runningSnapshot, onRunningStateChange]);
+  }, [runningSnapshot]);
+
+  useEffect(() => {
+    const hasMantraState =
+      Boolean(mantraInProgress) ||
+      (stage === 'mantraRunning' && Boolean(selectedMantra) && Boolean(sessionStartedAt));
+    if (!hasHydratedSnapshotsRef.current && !hasMantraState) return;
+
+    const isMantraRunning =
+      stage === 'mantraRunning' &&
+      Boolean(selectedMantra) &&
+      Boolean(sessionStartedAt);
+
+    if (isMantraRunning && selectedMantra && sessionStartedAt) {
+      void persistMantraSnapshot({
+        mantraId: selectedMantra.id,
+        mantraTitle: selectedMantra.title,
+        target: selectedMantraTarget,
+        done: mantraCount,
+        elapsedSec: Math.max(
+          mantraElapsedSec,
+          Math.floor((Date.now() - sessionStartedAt.getTime()) / 1000)
+        ),
+        linkedSessionId: mantraLinkedSessionId,
+        sessionTitle: hasTouchedMantraSessionTitle ? mantraSessionTitleInput.trim() : undefined,
+        isRunning: true,
+        startedAt: sessionStartedAt.toISOString(),
+      });
+      return;
+    }
+
+    if (mantraInProgress && mantraInProgress.done < mantraInProgress.target) {
+      void persistMantraSnapshot({
+        ...mantraInProgress,
+        isRunning: false,
+      });
+      return;
+    }
+
+    void persistMantraSnapshot(null);
+  }, [
+    stage,
+    selectedMantra,
+    selectedMantraTarget,
+    mantraCount,
+    mantraElapsedSec,
+    mantraLinkedSessionId,
+    hasTouchedMantraSessionTitle,
+    mantraSessionTitleInput,
+    mantraInProgress,
+    sessionStartedAt,
+  ]);
+
+  useEffect(() => {
+    const isRunning =
+      Boolean(runningSnapshot) ||
+      (stage === 'mantraRunning' && Boolean(selectedMantra) && Boolean(sessionStartedAt));
+    onRunningStateChange?.(isRunning);
+  }, [runningSnapshot, stage, selectedMantra, sessionStartedAt, onRunningStateChange]);
 
   useEffect(() => {
     if (!runningSnapshot || stage !== 'running') return;

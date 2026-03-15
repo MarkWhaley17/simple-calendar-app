@@ -3,6 +3,7 @@ import { CalendarEvent } from '../types';
 import { isSessionItem } from './eventEditability';
 
 const PRACTICE_SNAPSHOT_KEY = '@kalapa_practice_running_snapshot';
+const PRACTICE_MANTRA_SNAPSHOT_KEY = '@kalapa_practice_mantra_snapshot';
 
 export type PracticeStage =
   | 'home'
@@ -25,6 +26,18 @@ export interface PracticeRunningSnapshot {
   linkedSessionId?: string;
   sessionTitle?: string;
   stage: Extract<PracticeStage, 'running'>;
+}
+
+export interface PracticeMantraSnapshot {
+  mantraId: string;
+  mantraTitle: string;
+  target: number;
+  done: number;
+  elapsedSec: number;
+  linkedSessionId?: string;
+  sessionTitle?: string;
+  isRunning: boolean;
+  startedAt?: string;
 }
 
 export interface PracticeStats {
@@ -247,5 +260,34 @@ export const clearPracticeRunningSnapshot = async (): Promise<void> => {
     await AsyncStorage.removeItem(PRACTICE_SNAPSHOT_KEY);
   } catch (error) {
     console.error('Failed to clear practice snapshot', error);
+  }
+};
+
+export const loadPracticeMantraSnapshot = async (): Promise<PracticeMantraSnapshot | null> => {
+  try {
+    const value = await AsyncStorage.getItem(PRACTICE_MANTRA_SNAPSHOT_KEY);
+    if (!value) return null;
+    const parsed = JSON.parse(value) as PracticeMantraSnapshot;
+    if (!parsed?.mantraId || !parsed?.mantraTitle) return null;
+    return parsed;
+  } catch (error) {
+    console.error('Failed to load mantra snapshot', error);
+    return null;
+  }
+};
+
+export const savePracticeMantraSnapshot = async (snapshot: PracticeMantraSnapshot): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(PRACTICE_MANTRA_SNAPSHOT_KEY, JSON.stringify(snapshot));
+  } catch (error) {
+    console.error('Failed to save mantra snapshot', error);
+  }
+};
+
+export const clearPracticeMantraSnapshot = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem(PRACTICE_MANTRA_SNAPSHOT_KEY);
+  } catch (error) {
+    console.error('Failed to clear mantra snapshot', error);
   }
 };

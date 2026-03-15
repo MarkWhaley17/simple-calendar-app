@@ -1,13 +1,21 @@
 import {
   applyTimedPracticeSave,
   calculatePracticeStats,
+  clearPracticeMantraSnapshot,
   getElapsedSeconds,
+  loadPracticeMantraSnapshot,
   getRemainingSeconds,
   PracticeRunningSnapshot,
+  savePracticeMantraSnapshot,
 } from '../../utils/practice';
 import { CalendarEvent } from '../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 describe('practice utils', () => {
+  beforeEach(async () => {
+    await AsyncStorage.clear();
+  });
+
   it('computes remaining seconds across pause/resume wall-clock intervals', () => {
     const snapshot: PracticeRunningSnapshot = {
       runningSessionId: 'run-1',
@@ -134,5 +142,40 @@ describe('practice utils', () => {
 
     expect(result.created).toBe(true);
     expect(result.savedSession.title).toBe('Morning Tara Practice');
+  });
+
+  it('round-trips mantra snapshot persistence', async () => {
+    await savePracticeMantraSnapshot({
+      mantraId: 'tara',
+      mantraTitle: 'Green Tara',
+      target: 108,
+      done: 12,
+      elapsedSec: 90,
+      isRunning: true,
+      startedAt: '2026-03-14T10:00:00.000Z',
+    });
+
+    const loaded = await loadPracticeMantraSnapshot();
+    expect(loaded).toEqual(
+      expect.objectContaining({
+        mantraId: 'tara',
+        done: 12,
+        isRunning: true,
+      })
+    );
+  });
+
+  it('clears mantra snapshot storage', async () => {
+    await savePracticeMantraSnapshot({
+      mantraId: 'tara',
+      mantraTitle: 'Green Tara',
+      target: 108,
+      done: 1,
+      elapsedSec: 10,
+      isRunning: false,
+    });
+
+    await clearPracticeMantraSnapshot();
+    expect(await loadPracticeMantraSnapshot()).toBeNull();
   });
 });

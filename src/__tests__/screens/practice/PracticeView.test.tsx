@@ -24,15 +24,18 @@ describe('PracticeView', () => {
 
   const setup = (sessions: CalendarEvent[] = [baseSession]) => {
     const onSaveTimedSession = jest.fn().mockResolvedValue(undefined);
+    const onRunningStateChange = jest.fn();
     const view = render(
       <PracticeView
         sessions={sessions}
         onSaveTimedSession={onSaveTimedSession}
+        onRunningStateChange={onRunningStateChange}
       />
     );
     return {
       ...view,
       onSaveTimedSession,
+      onRunningStateChange,
     };
   };
 
@@ -473,6 +476,45 @@ describe('PracticeView', () => {
         accumulations: 9,
       })
     );
+  });
+
+  it('reports running-state changes for active mantra sessions', async () => {
+    const { getByTestId, onRunningStateChange } = setup();
+
+    fireEvent.press(getByTestId('practice-card-mantra'));
+    fireEvent.press(getByTestId('practice-mantra-card-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-set-intention'));
+    fireEvent.press(getByTestId('practice-mantra-start'));
+
+    await waitFor(() => {
+      expect(onRunningStateChange).toHaveBeenLastCalledWith(true);
+    });
+
+    fireEvent.press(getByTestId('practice-back'));
+
+    await waitFor(() => {
+      expect(onRunningStateChange).toHaveBeenLastCalledWith(false);
+    });
+  });
+
+  it('restores an active mantra session after remounting the screen', async () => {
+    const firstMount = setup();
+    fireEvent.press(firstMount.getByTestId('practice-card-mantra'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-card-tara'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-set-intention'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-start'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-counter-button'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-counter-button'));
+    firstMount.unmount();
+
+    const secondMount = setup();
+    const restoredCounter = await secondMount.findByTestId('practice-mantra-counter-value');
+    const restoredClock = await secondMount.findByTestId('practice-mantra-clock');
+
+    expect(restoredCounter.props.children).toBe(2);
+    expect(restoredClock).toBeTruthy();
   });
 
 });
