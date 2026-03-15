@@ -291,7 +291,14 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'intention') {
       return (
         <View style={styles.detailPanel}>
-          <Text style={styles.detailTitle}>Set Intention</Text>
+          <Text style={[
+            styles.detailTitle,
+            styles.selectDurationWeightTitle,
+            styles.selectDurationTitleSize,
+            styles.selectDurationTitleAlignment,
+          ]}>
+            Set Intention
+          </Text>
           <View style={styles.intentionCard}>
             <Text style={styles.intentionText}>{PRACTICE_INTENTION_TEXT}</Text>
           </View>
@@ -728,11 +735,21 @@ const styles = StyleSheet.create({
     color: colors.brandInk,
     marginBottom: spacing.md,
   },
+  selectDurationWeightTitle: {
+    fontWeight: '500',
+  },
+  selectDurationTitleSize: {
+    fontSize: 22,
+  },
+  selectDurationTitleAlignment: {
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  },
   selectDurationTitle: {
     fontSize: 22,
     fontWeight: '500',
     color: colors.brandInk,
-    marginBottom: spacing.md,
+    marginBottom: spacing.lg,
     textAlign: 'center',
     letterSpacing: 0.2,
   },
@@ -740,7 +757,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
   },
   minutePill: {
     width: '23%',

@@ -1,6 +1,8 @@
 export const PRACTICE_INTENTION_TEXT = `Take a moment to settle your body, speech, and mind.
 
-Generate bodhicitta and dedicate this session for the benefit of all beings.
+Wholeheartedly go for refuge in the Buddha, Dharma, and Sangha.
+
+Generate the supreme motivation to dedicate this session for the benefit of all beings.
 
 Rest your attention gently, and return to your intention whenever you are distracted.`;
 
