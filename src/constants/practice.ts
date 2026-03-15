@@ -6,10 +6,12 @@ Generate the supreme motivation to dedicate this session for the benefit of all 
 
 Rest your attention gently, and return to your intention whenever you are distracted.`;
 
-export const PRACTICE_DEDICATION_TEXT = `By this merit, may all attain omniscience; 
+export const PRACTICE_DEDICATION_TEXT = `By this merit, may all attain omniscience. 
 
-May it defeat the enemy of wrongdoing. 
+May it defeat the enemy, wrongdoing. 
 
-From the stormy waves of birth, old age, sickness, and death, from the ocean of samsara, my I free all beings.`;
+From the stormy waves of birth, old age, sickness, and death, 
+
+From the ocean of samsara, may I free all beings.`;
 
 export const PRACTICE_DURATION_PRESETS_MINUTES = [1, 2, 5, 10, 20, 30, 45, 60];

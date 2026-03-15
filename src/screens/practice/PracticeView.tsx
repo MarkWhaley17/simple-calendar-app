@@ -313,7 +313,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       const target = runningSnapshot?.targetDurationSec || 1;
       const progress = remainingSec / target;
       return (
-        <View style={styles.detailPanel}>
+        <View style={[styles.detailPanel, styles.runningDetailPanel]}>
           <View style={styles.countdownRingWrapper}>
             <PracticeCountdownRing progress={progress} />
           </View>
@@ -347,7 +347,14 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'done') {
       return (
         <View style={styles.detailPanel}>
-          <Text style={styles.detailTitle}>Dedication</Text>
+          <Text style={[
+            styles.detailTitle,
+            styles.selectDurationWeightTitle,
+            styles.selectDurationTitleSize,
+            styles.selectDurationTitleAlignment,
+          ]}>
+            Dedication
+          </Text>
           <View style={styles.intentionCard}>
             <Text style={styles.intentionText}>{PRACTICE_DEDICATION_TEXT}</Text>
           </View>
@@ -912,7 +919,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
   runningEndButton: {
-    marginTop: spacing.md,
+    marginTop: 'auto',
+    marginBottom: spacing.xs,
+  },
+  runningDetailPanel: {
+    flex: 1,
   },
   playPauseButton: {
     width: 84,
@@ -924,6 +935,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceStrong,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: spacing.xl,
   },
   playIcon: {
     width: 0,
