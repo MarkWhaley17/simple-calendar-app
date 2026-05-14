@@ -3,53 +3,22 @@ import { CalendarEvent, RecurrenceRule } from '../types';
 
 const EVENTS_STORAGE_KEY = '@kalapa_calendar_events';
 const EVENTS_STORAGE_BACKUP_KEY = '@kalapa_calendar_events_backup';
-const EVENTS_STORAGE_TEMP_KEY = '@kalapa_calendar_events_tmp';
-const EVENTS_STORAGE_SCHEMA_VERSION = 1;
 
-interface StoredEventsEnvelope {
-  version: number;
-  savedAt: string;
-  events: CalendarEvent[];
-}
-
-const isCalendarEventLike = (value: unknown): value is CalendarEvent =>
-  Boolean(
-    value &&
-      typeof value === 'object' &&
-      typeof (value as CalendarEvent).id === 'string' &&
-      typeof (value as CalendarEvent).title === 'string'
-  );
-
-const hydrateEvent = (event: any): CalendarEvent => {
-  const recurrence = hydrateRecurrence(event.recurrence);
-
-  return {
-    ...event,
-    date: event.date ? new Date(event.date) : undefined,
-    fromDate: event.fromDate ? new Date(event.fromDate) : undefined,
-    toDate: event.toDate ? new Date(event.toDate) : undefined,
-    recurrence,
-  };
-};
-
+// Handles both the legacy plain-array format and the envelope format
+// { version, savedAt, events } that was briefly used.
 const tryParseStoredEvents = (raw: string | null): CalendarEvent[] | null => {
   if (!raw) return null;
-
   try {
     const parsed: unknown = JSON.parse(raw);
-    const payload = Array.isArray(parsed)
+    const array = Array.isArray(parsed)
       ? parsed
-      : (
-          parsed &&
-          typeof parsed === 'object' &&
-          Array.isArray((parsed as StoredEventsEnvelope).events)
-        )
-        ? (parsed as StoredEventsEnvelope).events
-        : null;
-    if (!payload || !payload.every(isCalendarEventLike)) {
-      return null;
-    }
-    return payload.map(hydrateEvent);
+      : parsed &&
+        typeof parsed === 'object' &&
+        Array.isArray((parsed as { events?: unknown }).events)
+      ? (parsed as { events: unknown[] }).events
+      : null;
+    if (!array) return null;
+    return array.map(hydrateEvent);
   } catch {
     return null;
   }
@@ -60,26 +29,15 @@ const tryParseStoredEvents = (raw: string | null): CalendarEvent[] | null => {
  */
 export const saveEvents = async (events: CalendarEvent[]): Promise<void> => {
   try {
-    const payload: StoredEventsEnvelope = {
-      version: EVENTS_STORAGE_SCHEMA_VERSION,
-      savedAt: new Date().toISOString(),
-      events,
-    };
-    const jsonValue = JSON.stringify(payload);
-    const previousMain = await AsyncStorage.getItem(EVENTS_STORAGE_KEY);
+    const jsonValue = JSON.stringify(events);
 
-    if (previousMain !== null) {
-      await AsyncStorage.setItem(EVENTS_STORAGE_BACKUP_KEY, previousMain);
-    }
-
-    await AsyncStorage.setItem(EVENTS_STORAGE_TEMP_KEY, jsonValue);
-    const verifyTemp = await AsyncStorage.getItem(EVENTS_STORAGE_TEMP_KEY);
-    if (!tryParseStoredEvents(verifyTemp)) {
-      throw new Error('Temporary storage verification failed');
+    // Preserve previous main as a backup before overwriting
+    const previous = await AsyncStorage.getItem(EVENTS_STORAGE_KEY);
+    if (previous !== null) {
+      await AsyncStorage.setItem(EVENTS_STORAGE_BACKUP_KEY, previous);
     }
 
     await AsyncStorage.setItem(EVENTS_STORAGE_KEY, jsonValue);
-    await AsyncStorage.removeItem(EVENTS_STORAGE_TEMP_KEY);
   } catch (error) {
     console.error('Error saving events to storage:', error);
     throw error;
@@ -91,41 +49,27 @@ export const saveEvents = async (events: CalendarEvent[]): Promise<void> => {
  */
 export const loadEvents = async (): Promise<CalendarEvent[]> => {
   try {
-    const [mainRaw, backupRaw, tempRaw] = await Promise.all([
-      AsyncStorage.getItem(EVENTS_STORAGE_KEY),
-      AsyncStorage.getItem(EVENTS_STORAGE_BACKUP_KEY),
-      AsyncStorage.getItem(EVENTS_STORAGE_TEMP_KEY),
-    ]);
+    const raw = await AsyncStorage.getItem(EVENTS_STORAGE_KEY);
+    const events = tryParseStoredEvents(raw);
+    if (events) return events;
 
-    const mainEvents = tryParseStoredEvents(mainRaw);
-    if (mainEvents) {
-      return mainEvents;
-    }
-
-    const backupEvents = tryParseStoredEvents(backupRaw);
-    if (backupEvents) {
-      await AsyncStorage.setItem(
-        EVENTS_STORAGE_KEY,
-        backupRaw as string
-      );
-      return backupEvents;
-    }
-
-    const tempEvents = tryParseStoredEvents(tempRaw);
-    if (tempEvents) {
-      await AsyncStorage.setItem(
-        EVENTS_STORAGE_KEY,
-        tempRaw as string
-      );
-      await AsyncStorage.removeItem(EVENTS_STORAGE_TEMP_KEY);
-      return tempEvents;
-    }
-
-    return [];
+    // Fall back to backup if main is missing or corrupt
+    const backupRaw = await AsyncStorage.getItem(EVENTS_STORAGE_BACKUP_KEY);
+    return tryParseStoredEvents(backupRaw) ?? [];
   } catch (error) {
     console.error('Error loading events from storage:', error);
     return [];
   }
+};
+
+const hydrateEvent = (event: any): CalendarEvent => {
+  return {
+    ...event,
+    date: event.date ? new Date(event.date) : undefined,
+    fromDate: event.fromDate ? new Date(event.fromDate) : undefined,
+    toDate: event.toDate ? new Date(event.toDate) : undefined,
+    recurrence: hydrateRecurrence(event.recurrence),
+  };
 };
 
 const hydrateRecurrence = (recurrence?: RecurrenceRule): RecurrenceRule | undefined => {
@@ -134,14 +78,14 @@ const hydrateRecurrence = (recurrence?: RecurrenceRule): RecurrenceRule | undefi
   const overrides = recurrence.overrides
     ? Object.fromEntries(
         Object.entries(recurrence.overrides).map(([key, override]) => {
-          const overrideAny = override as any;
+          const o = override as any;
           return [
             key,
             {
-              ...overrideAny,
-              date: overrideAny.date ? new Date(overrideAny.date) : undefined,
-              fromDate: overrideAny.fromDate ? new Date(overrideAny.fromDate) : undefined,
-              toDate: overrideAny.toDate ? new Date(overrideAny.toDate) : undefined,
+              ...o,
+              date: o.date ? new Date(o.date) : undefined,
+              fromDate: o.fromDate ? new Date(o.fromDate) : undefined,
+              toDate: o.toDate ? new Date(o.toDate) : undefined,
             },
           ];
         })
@@ -156,15 +100,11 @@ const hydrateRecurrence = (recurrence?: RecurrenceRule): RecurrenceRule | undefi
 };
 
 /**
- * Clear all events from storage (useful for testing/debugging)
+ * Clear all events from storage
  */
 export const clearEvents = async (): Promise<void> => {
   try {
-    await AsyncStorage.multiRemove([
-      EVENTS_STORAGE_KEY,
-      EVENTS_STORAGE_BACKUP_KEY,
-      EVENTS_STORAGE_TEMP_KEY,
-    ]);
+    await AsyncStorage.multiRemove([EVENTS_STORAGE_KEY, EVENTS_STORAGE_BACKUP_KEY]);
   } catch (error) {
     console.error('Error clearing events from storage:', error);
     throw error;

@@ -16,7 +16,7 @@ describe('storage utils', () => {
     (AsyncStorage.clear as jest.Mock)();
   });
 
-  it('saves using a versioned envelope and keeps previous main as backup', async () => {
+  it('saves as a plain array and keeps previous main as backup', async () => {
     await AsyncStorage.setItem(
       '@kalapa_calendar_events',
       JSON.stringify([{ ...sampleEvent, title: 'Older Session' }])
@@ -26,18 +26,18 @@ describe('storage utils', () => {
 
     const mainRaw = await AsyncStorage.getItem('@kalapa_calendar_events');
     const backupRaw = await AsyncStorage.getItem('@kalapa_calendar_events_backup');
-    const tempRaw = await AsyncStorage.getItem('@kalapa_calendar_events_tmp');
     expect(mainRaw).not.toBeNull();
     expect(backupRaw).not.toBeNull();
-    expect(tempRaw).toBeNull();
 
     const mainParsed = JSON.parse(mainRaw as string);
-    expect(mainParsed.version).toBe(1);
-    expect(Array.isArray(mainParsed.events)).toBe(true);
-    expect(mainParsed.events[0].id).toBe('session-1');
+    expect(Array.isArray(mainParsed)).toBe(true);
+    expect(mainParsed[0].id).toBe('session-1');
+
+    const backupParsed = JSON.parse(backupRaw as string);
+    expect(backupParsed[0].title).toBe('Older Session');
   });
 
-  it('loads hydrated events from main storage envelope', async () => {
+  it('loads and hydrates events from main storage', async () => {
     await saveEvents([sampleEvent]);
 
     const loaded = await loadEvents();
@@ -51,22 +51,28 @@ describe('storage utils', () => {
     await AsyncStorage.setItem('@kalapa_calendar_events', 'not-json');
     await AsyncStorage.setItem(
       '@kalapa_calendar_events_backup',
-      JSON.stringify({
-        version: 1,
-        savedAt: '2026-03-15T00:00:00.000Z',
-        events: [sampleEvent],
-      })
+      JSON.stringify([sampleEvent])
     );
 
     const loaded = await loadEvents();
 
     expect(loaded).toHaveLength(1);
     expect(loaded[0].id).toBe('session-1');
-    const repairedMain = await AsyncStorage.getItem('@kalapa_calendar_events');
-    expect(repairedMain).toBe(await AsyncStorage.getItem('@kalapa_calendar_events_backup'));
   });
 
-  it('loads legacy array format for backward compatibility', async () => {
+  it('loads legacy envelope format for backward compatibility', async () => {
+    await AsyncStorage.setItem(
+      '@kalapa_calendar_events',
+      JSON.stringify({ version: 1, savedAt: '2026-03-15T00:00:00.000Z', events: [sampleEvent] })
+    );
+
+    const loaded = await loadEvents();
+    expect(loaded).toHaveLength(1);
+    expect(loaded[0].id).toBe('session-1');
+    expect(loaded[0].fromDate).toBeInstanceOf(Date);
+  });
+
+  it('loads legacy plain-array format for backward compatibility', async () => {
     await AsyncStorage.setItem(
       '@kalapa_calendar_events',
       JSON.stringify([sampleEvent])
@@ -78,17 +84,15 @@ describe('storage utils', () => {
     expect(loaded[0].fromDate).toBeInstanceOf(Date);
   });
 
-  it('clears main, backup, and temp keys', async () => {
+  it('clears main and backup keys', async () => {
     await AsyncStorage.multiSet([
-      ['@kalapa_calendar_events', JSON.stringify({ version: 1, events: [sampleEvent] })],
-      ['@kalapa_calendar_events_backup', JSON.stringify({ version: 1, events: [sampleEvent] })],
-      ['@kalapa_calendar_events_tmp', JSON.stringify({ version: 1, events: [sampleEvent] })],
+      ['@kalapa_calendar_events', JSON.stringify([sampleEvent])],
+      ['@kalapa_calendar_events_backup', JSON.stringify([sampleEvent])],
     ]);
 
     await clearEvents();
 
     expect(await AsyncStorage.getItem('@kalapa_calendar_events')).toBeNull();
     expect(await AsyncStorage.getItem('@kalapa_calendar_events_backup')).toBeNull();
-    expect(await AsyncStorage.getItem('@kalapa_calendar_events_tmp')).toBeNull();
   });
 });
