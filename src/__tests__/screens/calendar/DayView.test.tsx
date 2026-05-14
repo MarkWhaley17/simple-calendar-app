@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { Alert } from 'react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import DayView from '../../../screens/calendar/DayView';
 import { CalendarEvent } from '../../../types';
 
@@ -274,5 +275,50 @@ describe('DayView', () => {
 
     expect(getByTestId('day-event-event-event-public-1')).toHaveStyle({ marginBottom: 14 });
     expect(getByTestId('day-event-session-session-1')).toHaveStyle({ marginBottom: 14 });
+  });
+
+  it('opens session options on long press for session rows only', () => {
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+    const onSessionEdit = jest.fn();
+    const onSessionDelete = jest.fn();
+    const onEventPress = jest.fn();
+    const eventItem: CalendarEvent = {
+      id: 'event-public-1',
+      title: 'Preloaded Event',
+      fromDate: new Date(2026, 2, 10),
+      isAllDay: true,
+    };
+    const sessionItem: CalendarEvent = {
+      id: 'session-1',
+      title: 'User Event',
+      fromDate: new Date(2026, 2, 10),
+      isAllDay: true,
+    };
+
+    const { getByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 2, 10)}
+        onBack={jest.fn()}
+        events={[eventItem, sessionItem]}
+        onEventPress={onEventPress}
+        onSessionEdit={onSessionEdit}
+        onSessionDelete={onSessionDelete}
+      />
+    );
+
+    fireEvent(getByTestId('day-event-session-session-1'), 'longPress');
+    expect(alertSpy).toHaveBeenCalledWith(
+      'Session Options',
+      undefined,
+      expect.arrayContaining([
+        expect.objectContaining({ text: 'Edit' }),
+        expect.objectContaining({ text: 'Delete', style: 'destructive' }),
+      ])
+    );
+
+    fireEvent(getByTestId('day-event-event-event-public-1'), 'longPress');
+    expect(alertSpy).toHaveBeenCalledTimes(1);
+
+    alertSpy.mockRestore();
   });
 });

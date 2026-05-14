@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
@@ -15,6 +15,8 @@ interface DayViewProps {
   events?: CalendarEvent[];
   onEventPress?: (event: CalendarEvent) => void;
   onAddEvent?: () => void;
+  onSessionEdit?: (event: CalendarEvent) => void;
+  onSessionDelete?: (event: CalendarEvent) => void;
   onChangeDate?: (date: Date) => void;
 }
 
@@ -24,6 +26,8 @@ const DayView: React.FC<DayViewProps> = ({
   events = [],
   onEventPress,
   onAddEvent,
+  onSessionEdit,
+  onSessionDelete,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const dayName = DAY_NAMES[selectedDate.getDay()];
@@ -211,6 +215,33 @@ const DayView: React.FC<DayViewProps> = ({
                     key={event.id}
                     style={styles.sessionRowTouchable}
                     onPress={() => onEventPress && onEventPress(event)}
+                    onLongPress={() => {
+                      Alert.alert(
+                        'Session Options',
+                        undefined,
+                        [
+                          {
+                            text: 'Edit',
+                            onPress: () => {
+                              if (onSessionEdit) {
+                                onSessionEdit(event);
+                                return;
+                              }
+                              onEventPress?.(event);
+                            },
+                          },
+                          {
+                            text: 'Delete',
+                            style: 'destructive',
+                            onPress: () => onSessionDelete?.(event),
+                          },
+                          {
+                            text: 'Cancel',
+                            style: 'cancel',
+                          },
+                        ]
+                      );
+                    }}
                     activeOpacity={0.8}
                     testID={`day-event-session-${event.id}`}
                   >

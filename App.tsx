@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Asset } from 'expo-asset';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
 import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -853,7 +853,7 @@ export default function App() {
   // Pan responder for swipe gestures on month view
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponder: () => false,
       onMoveShouldSetPanResponder: (_evt, gestureState) => {
         // Only respond to horizontal swipes
         return Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
@@ -1075,6 +1075,8 @@ export default function App() {
                 events={visibleEvents}
                 onEventPress={handleEventPress}
                 onAddEvent={handleAddEvent}
+                onSessionEdit={handleEditSessionFromEventsList}
+                onSessionDelete={handleDeleteSessionFromEventsList}
               />
             </Animated.View>
           ) : (
@@ -1088,7 +1090,7 @@ export default function App() {
                   },
                 ]}
               >
-                <View style={styles.content}>
+                <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                   <CalendarHeader
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
@@ -1104,7 +1106,7 @@ export default function App() {
                     </View>
                   </View>
                   <StatusBar style="auto" />
-                </View>
+                </ScrollView>
               </Animated.View>
             </View>
           )}
@@ -1139,7 +1141,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flex: 1,
+    flexGrow: 1,
   },
   quoteWrapper: {
     flex: 1,
