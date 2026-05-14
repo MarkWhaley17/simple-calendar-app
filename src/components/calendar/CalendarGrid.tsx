@@ -10,9 +10,14 @@ interface CalendarGridProps {
   currentDate: Date;
   onDayPress?: (date: Date) => void;
   events?: CalendarEvent[];
+  availableHeight?: number;
 }
 
-const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [] }) => {
+// Heights of non-row elements that share the available space:
+// CalendarHeader minHeight (144) + weekday row (~46) + grid padding (30) + quote minimum (80)
+const NON_ROWS_HEIGHT = 300;
+
+const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [], availableHeight }) => {
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const useGlassGrid = ENABLE_GLASS_UI && useIosNativePilot;
   const today = new Date();
@@ -27,6 +32,11 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
 
   // Get the number of days in the previous month
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+  const numWeeks = Math.ceil((firstDayOfMonth + daysInMonth) / 7);
+  const rowHeight = availableHeight
+    ? Math.min(cellSize, Math.max(32, (availableHeight - NON_ROWS_HEIGHT) / numWeeks))
+    : cellSize;
 
   // Helper function to check if a date has events
   const hasEvents = (year: number, month: number, day: number) => {
@@ -171,13 +181,14 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
           return (
             <TouchableOpacity
               key={index}
-              style={styles.dayCell}
+              style={[styles.dayCell, { height: rowHeight }]}
               onPress={handlePress}
               activeOpacity={0.7}
             >
               <View
                 style={[
                   styles.dayContent,
+                  { height: rowHeight - 10 },
                   dayData.isToday && styles.todayContent,
                 ]}
               >

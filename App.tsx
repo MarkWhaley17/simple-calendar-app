@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Asset } from 'expo-asset';
-import { StyleSheet, View, SafeAreaView, ScrollView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
+import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
 import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -61,6 +61,7 @@ export default function App() {
   const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [hasActivePracticeTimer, setHasActivePracticeTimer] = useState(false);
+  const [monthViewHeight, setMonthViewHeight] = useState(0);
   const previousViewModeRef = useRef<ViewMode | null>(null);
   const selectedDateRef = useRef<Date | null>(null);
 
@@ -1080,7 +1081,11 @@ export default function App() {
               />
             </Animated.View>
           ) : (
-            <View style={styles.monthViewContainer} {...panResponder.panHandlers}>
+            <View
+              style={styles.monthViewContainer}
+              onLayout={(e) => setMonthViewHeight(e.nativeEvent.layout.height)}
+              {...panResponder.panHandlers}
+            >
               <Animated.View
                 style={[
                   styles.animatedContent,
@@ -1090,14 +1095,14 @@ export default function App() {
                   },
                 ]}
               >
-                <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+                <View style={styles.content}>
                   <CalendarHeader
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
                     onDatePress={handleOpenMonthYearPicker}
                   />
-                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} />
+                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} availableHeight={monthViewHeight || undefined} />
                   <View style={styles.quoteWrapper}>
                     <View style={styles.quoteContainer}>
                       <Animated.Text style={[styles.quoteText, { opacity: quoteOpacity }]}>
@@ -1106,7 +1111,7 @@ export default function App() {
                     </View>
                   </View>
                   <StatusBar style="auto" />
-                </ScrollView>
+                </View>
               </Animated.View>
             </View>
           )}
@@ -1141,7 +1146,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flexGrow: 1,
+    flex: 1,
   },
   quoteWrapper: {
     flex: 1,
