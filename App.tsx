@@ -62,7 +62,6 @@ export default function App() {
   const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [hasActivePracticeTimer, setHasActivePracticeTimer] = useState(false);
-  const [monthViewHeight, setMonthViewHeight] = useState(0);
   const previousViewModeRef = useRef<ViewMode | null>(null);
   const selectedDateRef = useRef<Date | null>(null);
 
@@ -1082,11 +1081,7 @@ export default function App() {
               />
             </Animated.View>
           ) : (
-            <View
-              style={styles.monthViewContainer}
-              onLayout={(e) => setMonthViewHeight(e.nativeEvent.layout.height)}
-              {...panResponder.panHandlers}
-            >
+            <View style={styles.monthViewContainer} {...panResponder.panHandlers}>
               <Animated.View
                 style={[
                   styles.animatedContent,
@@ -1103,7 +1098,7 @@ export default function App() {
                     onNextMonth={handleNextMonth}
                     onDatePress={handleOpenMonthYearPicker}
                   />
-                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} availableHeight={monthViewHeight || undefined} />
+                  <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} />
                   <View style={styles.quoteWrapper}>
                     <Animated.View style={[styles.quoteContainer, { opacity: quoteOpacity }]}>
                       <MarqueeText
@@ -1152,11 +1147,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   quoteWrapper: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 12,
   },
   quoteContainer: {
     backgroundColor: '#fff',

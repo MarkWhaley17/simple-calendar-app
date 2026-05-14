@@ -10,14 +10,9 @@ interface CalendarGridProps {
   currentDate: Date;
   onDayPress?: (date: Date) => void;
   events?: CalendarEvent[];
-  availableHeight?: number;
 }
 
-// Heights of non-row elements that share the available space:
-// CalendarHeader minHeight (144) + weekday row (~46) + grid padding (30) + quote minimum (80)
-const NON_ROWS_HEIGHT = 300;
-
-const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [], availableHeight }) => {
+const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, events = [] }) => {
   const useIosNativePilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const useGlassGrid = ENABLE_GLASS_UI && useIosNativePilot;
   const today = new Date();
@@ -32,11 +27,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
 
   // Get the number of days in the previous month
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-  const numWeeks = Math.ceil((firstDayOfMonth + daysInMonth) / 7);
-  const rowHeight = availableHeight
-    ? Math.min(cellSize, Math.max(32, (availableHeight - NON_ROWS_HEIGHT) / numWeeks))
-    : cellSize;
 
   // Helper function to check if a date has events
   const hasEvents = (year: number, month: number, day: number) => {
@@ -67,6 +57,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
       return spansDay && !isMultiDay;
     });
   };
+
   // Helper to get multi-day event status for a day
   const getMultiDayEventType = (year: number, month: number, day: number) => {
     for (const event of events) {
@@ -100,7 +91,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
     return null;
   };
 
-  // Generate calendar days
+  // Build flat list of calendar days
   const calendarDays: Array<{
     day: number;
     month: number;
@@ -142,7 +133,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   }
 
   // Add next month's days to complete the last row only
-  const remainingDays = (7 - (calendarDays.length % 7)) % 7; // Days needed to complete the week
+  const remainingDays = (7 - (calendarDays.length % 7)) % 7;
   const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
   const nextYear = currentMonth === 11 ? currentYear + 1 : currentYear;
   for (let day = 1; day <= remainingDays; day++) {
@@ -156,6 +147,12 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
     });
   }
 
+  // Group into weeks so each row can flex-fill available vertical space
+  const weeks: typeof calendarDays[] = [];
+  for (let i = 0; i < calendarDays.length; i += 7) {
+    weeks.push(calendarDays.slice(i, i + 7));
+  }
+
   const content = (
     <>
       {/* Week day headers */}
@@ -167,64 +164,63 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
         ))}
       </View>
 
-      {/* Calendar grid */}
+      {/* Calendar grid — each week row flex-fills remaining height */}
       <View style={styles.calendarGrid}>
-        {calendarDays.map((dayData, index) => {
-          const dayKey = `${dayData.year}-${dayData.month}-${dayData.day}`;
-          const handlePress = () => {
-            if (onDayPress) {
-              const selectedDate = new Date(dayData.year, dayData.month, dayData.day);
-              onDayPress(selectedDate);
-            }
-          };
+        {weeks.map((week, weekIndex) => (
+          <View key={weekIndex} style={styles.weekRow}>
+            {week.map((dayData, dayIndex) => {
+              const dayKey = `${dayData.year}-${dayData.month}-${dayData.day}`;
+              const handlePress = () => {
+                if (onDayPress) {
+                  onDayPress(new Date(dayData.year, dayData.month, dayData.day));
+                }
+              };
+              const multiDayType = getMultiDayEventType(dayData.year, dayData.month, dayData.day);
 
-          return (
-            <TouchableOpacity
-              key={index}
-              style={[styles.dayCell, { height: rowHeight }]}
-              onPress={handlePress}
-              activeOpacity={0.7}
-            >
-              <View
-                style={[
-                  styles.dayContent,
-                  { height: rowHeight - 10 },
-                  dayData.isToday && styles.todayContent,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.dayText,
-                    !dayData.isCurrentMonth && styles.otherMonthText,
-                    dayData.isToday && styles.todayText,
-                  ]}
+              return (
+                <TouchableOpacity
+                  key={dayIndex}
+                  style={styles.dayCell}
+                  onPress={handlePress}
+                  activeOpacity={0.7}
                 >
-                  {dayData.day}
-                </Text>
-                {/* Multi-day event gold line with rounded ends */}
-                {(() => {
-                  const type = getMultiDayEventType(dayData.year, dayData.month, dayData.day);
-                  if (!type) return null;
-                  return (
-                    <View
+                  <View
+                    style={[
+                      styles.dayContent,
+                      dayData.isToday && styles.todayContent,
+                    ]}
+                  >
+                    <Text
                       style={[
-                        styles.multiDayBand,
-                        type === 'start' && styles.multiDayBandStart,
-                        type === 'end' && styles.multiDayBandEnd,
+                        styles.dayText,
+                        !dayData.isCurrentMonth && styles.otherMonthText,
+                        dayData.isToday && styles.todayText,
                       ]}
-                      testID={`multi-day-line-${dayKey}`}
-                      pointerEvents="none"
-                    />
-                  );
-                })()}
-                {/* Single-day event indicator */}
-                {hasNonMultiDayEvents(dayData.year, dayData.month, dayData.day) && (
-                  <View style={styles.eventIndicator} testID={`event-indicator-${dayKey}`} />
-                )}
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+                    >
+                      {dayData.day}
+                    </Text>
+                    {/* Multi-day event gold band */}
+                    {multiDayType && (
+                      <View
+                        style={[
+                          styles.multiDayBand,
+                          multiDayType === 'start' && styles.multiDayBandStart,
+                          multiDayType === 'end' && styles.multiDayBandEnd,
+                        ]}
+                        testID={`multi-day-line-${dayKey}`}
+                        pointerEvents="none"
+                      />
+                    )}
+                    {/* Single-day event indicator dot */}
+                    {hasNonMultiDayEvents(dayData.year, dayData.month, dayData.day) && (
+                      <View style={styles.eventIndicator} testID={`event-indicator-${dayKey}`} />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        ))}
       </View>
     </>
   );
@@ -232,7 +228,7 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({ currentDate, onDayPress, ev
   if (useGlassGrid) {
     return (
       <View style={styles.pilotOuter}>
-        <GlassSurface style={styles.pilotContainer} intensity={44}>
+        <GlassSurface style={styles.pilotContainer} contentStyle={styles.pilotContent} intensity={44}>
           {content}
         </GlassSurface>
       </View>
@@ -251,8 +247,9 @@ const cellSize = (screenWidth - 16) / 7; // Account for horizontal padding (8px 
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: colors.surfaceSolid,
-    paddingBottom: 20,
+    paddingBottom: 12,
     borderRadius: 16,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 4 },
@@ -262,12 +259,17 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   pilotOuter: {
+    flex: 1,
     paddingBottom: spacing.sm,
   },
   pilotContainer: {
+    flex: 1,
     backgroundColor: colors.surfaceStrong,
     borderWidth: 0,
-    paddingBottom: 20,
+  },
+  pilotContent: {
+    flex: 1,
+    paddingBottom: 12,
   },
   weekDaysRow: {
     flexDirection: 'row',
@@ -288,21 +290,25 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   calendarGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flex: 1,
     paddingHorizontal: 8,
-    paddingTop: 10,
+    paddingTop: 6,
+    paddingBottom: 6,
+  },
+  weekRow: {
+    flex: 1,
+    flexDirection: 'row',
   },
   dayCell: {
     width: cellSize,
-    height: cellSize,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 2,
   },
   dayContent: {
     width: cellSize - 10,
-    height: cellSize - 10,
+    aspectRatio: 1,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 12,
@@ -346,9 +352,9 @@ const styles = StyleSheet.create({
   multiDayBand: {
     position: 'absolute',
     top: 0,
+    bottom: 0,
     left: -5,
     width: cellSize,
-    height: cellSize - 10,
     backgroundColor: colors.multiDaySpanFill,
     borderWidth: 1,
     borderColor: colors.multiDaySpanBorder,
