@@ -10,6 +10,7 @@ import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsO
 import { PracticeView } from './src/screens/practice';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
+import MarqueeText from './src/components/ui/MarqueeText';
 import { getEvents } from './src/utils/events';
 import { getMemberEvents } from './src/utils/memberEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
@@ -1104,11 +1105,13 @@ export default function App() {
                   />
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} availableHeight={monthViewHeight || undefined} />
                   <View style={styles.quoteWrapper}>
-                    <View style={styles.quoteContainer}>
-                      <Animated.Text style={[styles.quoteText, { opacity: quoteOpacity }]}>
-                        {currentQuote}
-                      </Animated.Text>
-                    </View>
+                    <Animated.View style={[styles.quoteContainer, { opacity: quoteOpacity }]}>
+                      <MarqueeText
+                        text={currentQuote}
+                        style={styles.quoteText}
+                        containerStyle={styles.quoteMarqueeContainer}
+                      />
+                    </Animated.View>
                   </View>
                   <StatusBar style="auto" />
                 </View>
@@ -1169,12 +1172,14 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 4,
   },
+  quoteMarqueeContainer: {
+    width: '100%',
+  },
   quoteText: {
     fontSize: 16,
     lineHeight: 26,
     color: '#1E3A8A',
     fontStyle: 'italic',
-    textAlign: 'center',
     letterSpacing: 0.2,
   },
 });
