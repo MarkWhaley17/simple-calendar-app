@@ -18,7 +18,7 @@ const tryParseStoredEvents = (raw: string | null): CalendarEvent[] | null => {
       ? (parsed as { events: unknown[] }).events
       : null;
     if (!array) return null;
-    return array.map(hydrateEvent);
+    return array.map(hydrateEvent).filter((e): e is CalendarEvent => e !== null);
   } catch {
     return null;
   }
@@ -62,7 +62,8 @@ export const loadEvents = async (): Promise<CalendarEvent[]> => {
   }
 };
 
-const hydrateEvent = (event: any): CalendarEvent => {
+const hydrateEvent = (event: any): CalendarEvent | null => {
+  if (!event || typeof event !== 'object') return null;
   return {
     ...event,
     date: event.date ? new Date(event.date) : undefined,
