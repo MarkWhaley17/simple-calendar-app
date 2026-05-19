@@ -14,7 +14,8 @@ export type PracticeStage =
   | 'mantraLibrary'
   | 'mantraSetup'
   | 'mantraIntention'
-  | 'mantraRunning';
+  | 'mantraRunning'
+  | 'rikpa';
 
 export interface PracticeRunningSnapshot {
   runningSessionId: string;

@@ -46,6 +46,8 @@ describe('PracticeView', () => {
     expect(getAllByText('Timed Meditation').length).toBeGreaterThan(0);
     expect(getByText('Mantra Recitations')).toBeTruthy();
     expect(getByTestId('practice-card-mantra')).toBeTruthy();
+    expect(getByTestId('practice-card-rikpa')).toBeTruthy();
+    expect(getByText('Rikpa')).toBeTruthy();
     expect(() => getByText('Session History')).toThrow();
   });
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
@@ -45,7 +45,9 @@ import {
   savePracticeRunningSnapshot,
 } from '../../utils/practice';
 import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
+import { RikpaEntry, addRikpaEntry, loadRikpaEntries } from '../../utils/rikpa';
 import { colors, spacing } from '../../theme/tokens';
+import RikpaView from './RikpaView';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
 const detailBackground = require('../../../assets/day-view-pattern.png');
@@ -173,6 +175,17 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [mantraResumeDraft, setMantraResumeDraft] = useState<MantraInProgressState | null>(null);
   const hasHydratedSnapshotsRef = useRef(false);
 
+  const [rikpaEntries, setRikpaEntries] = useState<RikpaEntry[]>([]);
+
+  useEffect(() => {
+    loadRikpaEntries().then(setRikpaEntries);
+  }, []);
+
+  const handleRikpaLog = useCallback(async (recognition: number, duration: number) => {
+    const next = await addRikpaEntry(rikpaEntries, recognition, duration);
+    setRikpaEntries(next);
+  }, [rikpaEntries]);
+
   const stats: PracticeStats = useMemo(() => calculatePracticeStats(sessions), [sessions]);
   const linkableSessions = useMemo(() => getLinkableSessions(sessions), [sessions]);
   const linkedSession = useMemo(
@@ -234,6 +247,10 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   };
 
   const handleDetailBack = () => {
+    if (stage === 'rikpa') {
+      returnHome();
+      return;
+    }
     if (stage === 'mantraSetup') {
       setStage('mantraLibrary');
       return;
@@ -680,6 +697,15 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   };
 
   const renderDetailContent = () => {
+    if (stage === 'rikpa') {
+      return (
+        <RikpaView
+          entries={rikpaEntries}
+          onLog={handleRikpaLog}
+        />
+      );
+    }
+
     if (stage === 'mantraLibrary') {
       return (
         <ScrollView contentContainerStyle={styles.detailPanel}>
@@ -1273,6 +1299,22 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                 <TouchableOpacity style={styles.featureCard} onPress={openMantraLibrary} testID="practice-card-mantra">
                   <Text style={styles.featureCardTitle}>Mantra Recitations</Text>
                   <Text style={styles.featureCardSubtitle}>Open your mantra library and count recitations</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.featureCard}
+                  onPress={() => {
+                    setStage('rikpa');
+                    Animated.timing(slideX, {
+                      toValue: -screenWidth,
+                      duration: 240,
+                      useNativeDriver: true,
+                    }).start();
+                  }}
+                  testID="practice-card-rikpa"
+                >
+                  <Text style={styles.featureCardTitle}>Rikpa</Text>
+                  <Text style={styles.featureCardSubtitle}>Log moments of recognition and track your practice</Text>
                 </TouchableOpacity>
 
                 <View style={[styles.featureCard, styles.featureCardDisabled]}>
