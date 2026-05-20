@@ -64,17 +64,30 @@ const MarqueeText: React.FC<MarqueeTextProps> = ({
     <View
       style={[containerStyle, { overflow: 'hidden' }]}
       onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+      testID="marquee-container"
     >
-      {/* Hidden unconstrained text to measure natural width */}
-      <View style={{ position: 'absolute', opacity: 0, flexDirection: 'row' }} pointerEvents="none">
-        <Text numberOfLines={1} style={style} onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}>
+      {/* Hidden text sized to its natural width for measurement */}
+      <View style={{ position: 'absolute', opacity: 0, width: 9999 }} pointerEvents="none" testID="marquee-measure-wrapper">
+        <Text
+          numberOfLines={1}
+          style={style}
+          onLayout={(e) => setTextWidth(e.nativeEvent.layout.width)}
+          testID="marquee-measure-text"
+        >
           {text}
         </Text>
       </View>
 
       <Animated.Text
         numberOfLines={1}
-        style={[style, { transform: [{ translateX }] }]}
+        testID="marquee-visible-text"
+        style={[
+          style,
+          {
+            transform: [{ translateX }],
+            width: textWidth > 0 ? textWidth + 32 : undefined,
+          },
+        ]}
       >
         {text}
       </Animated.Text>
