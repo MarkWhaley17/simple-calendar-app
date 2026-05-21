@@ -1085,7 +1085,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               style={styles.intentionEditLink}
               testID="intention-edit-link"
             >
-              <Text style={styles.intentionEditLinkText}>Edit intention</Text>
+              <Text style={styles.intentionEditLinkText}>Edit intention ›</Text>
             </TouchableOpacity>
           )}
 
@@ -1847,13 +1847,13 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   intentionEditLink: {
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
     marginBottom: spacing.lg,
   },
   intentionEditLinkText: {
     fontSize: 14,
-    color: colors.brandPrimary,
-    textDecorationLine: 'underline',
+    color: colors.accentStrong,
+    fontWeight: '600',
   },
   intentionEditBox: {
     backgroundColor: colors.surfaceStrong,
