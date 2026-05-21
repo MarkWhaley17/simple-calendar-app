@@ -4,6 +4,7 @@ import { isSessionItem } from './eventEditability';
 
 const PRACTICE_SNAPSHOT_KEY = '@kalapa_practice_running_snapshot';
 const PRACTICE_MANTRA_SNAPSHOT_KEY = '@kalapa_practice_mantra_snapshot';
+const PRACTICE_CUSTOM_INTENTION_KEY = '@kalapa_practice_custom_intention';
 
 export type PracticeStage =
   | 'home'
@@ -290,5 +291,21 @@ export const clearPracticeMantraSnapshot = async (): Promise<void> => {
     await AsyncStorage.removeItem(PRACTICE_MANTRA_SNAPSHOT_KEY);
   } catch (error) {
     console.error('Failed to clear mantra snapshot', error);
+  }
+};
+
+export const loadCustomIntention = async (): Promise<string | null> => {
+  try {
+    return await AsyncStorage.getItem(PRACTICE_CUSTOM_INTENTION_KEY);
+  } catch {
+    return null;
+  }
+};
+
+export const saveCustomIntention = async (text: string): Promise<void> => {
+  try {
+    await AsyncStorage.setItem(PRACTICE_CUSTOM_INTENTION_KEY, text);
+  } catch (error) {
+    console.error('Failed to save custom intention', error);
   }
 };

@@ -39,8 +39,10 @@ import {
   getElapsedSeconds,
   getLinkableSessions,
   getRemainingSeconds,
+  loadCustomIntention,
   loadPracticeMantraSnapshot,
   loadPracticeRunningSnapshot,
+  saveCustomIntention,
   savePracticeMantraSnapshot,
   savePracticeRunningSnapshot,
 } from '../../utils/practice';
@@ -178,9 +180,18 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const hasHydratedSnapshotsRef = useRef(false);
 
   const [rikpaEntries, setRikpaEntries] = useState<RikpaEntry[]>([]);
+  const [customIntentionText, setCustomIntentionText] = useState(PRACTICE_INTENTION_TEXT);
+  const [isEditingIntention, setIsEditingIntention] = useState(false);
+  const [intentionDraft, setIntentionDraft] = useState('');
 
   useEffect(() => {
     loadRikpaEntries().then(setRikpaEntries);
+  }, []);
+
+  useEffect(() => {
+    loadCustomIntention().then(saved => {
+      if (saved !== null) setCustomIntentionText(saved);
+    });
   }, []);
 
   const handleRikpaLog = useCallback(async (recognition: number, duration: number) => {
@@ -1027,8 +1038,57 @@ const PracticeView: React.FC<PracticeViewProps> = ({
             Set Intention
           </Text>
           <View style={styles.intentionCard}>
-            <Text style={styles.intentionText}>{PRACTICE_INTENTION_TEXT}</Text>
+            <Text style={styles.intentionText}>{customIntentionText}</Text>
           </View>
+
+          {isEditingIntention ? (
+            <View style={styles.intentionEditBox} testID="intention-edit-box">
+              <TextInput
+                style={styles.intentionEditInput}
+                value={intentionDraft}
+                onChangeText={setIntentionDraft}
+                multiline
+                autoFocus
+                autoCapitalize="sentences"
+                autoCorrect
+                testID="intention-edit-input"
+              />
+              <View style={styles.intentionEditActions}>
+                <TouchableOpacity
+                  onPress={() => setIsEditingIntention(false)}
+                  style={styles.intentionEditCancel}
+                  testID="intention-edit-cancel"
+                >
+                  <Text style={styles.intentionEditCancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={async () => {
+                    const trimmed = intentionDraft.trim();
+                    if (trimmed.length === 0) return;
+                    setCustomIntentionText(trimmed);
+                    await saveCustomIntention(trimmed);
+                    setIsEditingIntention(false);
+                  }}
+                  style={styles.intentionEditSave}
+                  testID="intention-edit-save"
+                >
+                  <Text style={styles.intentionEditSaveText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setIntentionDraft(customIntentionText);
+                setIsEditingIntention(true);
+              }}
+              style={styles.intentionEditLink}
+              testID="intention-edit-link"
+            >
+              <Text style={styles.intentionEditLinkText}>Edit intention</Text>
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity style={styles.primaryButton} onPress={beginCountdown} testID="practice-begin">
             <Text style={styles.primaryButtonText}>Begin</Text>
           </TouchableOpacity>
@@ -1785,6 +1845,53 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: colors.textPrimary,
+  },
+  intentionEditLink: {
+    alignSelf: 'center',
+    marginBottom: spacing.lg,
+  },
+  intentionEditLinkText: {
+    fontSize: 14,
+    color: colors.brandPrimary,
+    textDecorationLine: 'underline',
+  },
+  intentionEditBox: {
+    backgroundColor: colors.surfaceStrong,
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    borderRadius: 16,
+    padding: spacing.md,
+    marginBottom: spacing.lg,
+  },
+  intentionEditInput: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.textPrimary,
+    minHeight: 120,
+    textAlignVertical: 'top',
+  },
+  intentionEditActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: spacing.md,
+    marginTop: spacing.sm,
+  },
+  intentionEditCancel: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+  },
+  intentionEditCancelText: {
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+  intentionEditSave: {
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+  },
+  intentionEditSaveText: {
+    fontSize: 14,
+    color: colors.brandPrimary,
+    fontWeight: '600',
   },
   doneSubtext: {
     fontSize: 18,

@@ -570,4 +570,56 @@ describe('PracticeView', () => {
     expect(style.paddingTop).toBe(52);
   });
 
+  it('shows edit intention link on intention screen', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    expect(getByTestId('intention-edit-link')).toBeTruthy();
+  });
+
+  it('opens intention editor when edit link is tapped', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('intention-edit-link'));
+    expect(getByTestId('intention-edit-box')).toBeTruthy();
+    expect(getByTestId('intention-edit-input')).toBeTruthy();
+  });
+
+  it('saves custom intention text and shows it after closing editor', async () => {
+    const { getByTestId, getByText } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('intention-edit-link'));
+
+    fireEvent.changeText(getByTestId('intention-edit-input'), 'My custom intention text');
+    await act(async () => {
+      fireEvent.press(getByTestId('intention-edit-save'));
+    });
+
+    expect(getByText('My custom intention text')).toBeTruthy();
+  });
+
+  it('cancel closes editor without changing intention text', () => {
+    const { getByTestId, queryByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('intention-edit-link'));
+    fireEvent.changeText(getByTestId('intention-edit-input'), 'Should not be saved');
+    fireEvent.press(getByTestId('intention-edit-cancel'));
+
+    expect(queryByTestId('intention-edit-box')).toBeNull();
+    expect(getByTestId('intention-edit-link')).toBeTruthy();
+  });
+
+  it('restores custom intention from storage on mount', async () => {
+    await AsyncStorage.setItem('@kalapa_practice_custom_intention', 'Persisted intention');
+
+    const { findByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+
+    await findByText('Persisted intention');
+  });
+
 });
