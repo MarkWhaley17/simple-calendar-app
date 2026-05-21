@@ -519,4 +519,55 @@ describe('PracticeView', () => {
     expect(restoredClock).toBeTruthy();
   });
 
+  it('resetKey returns sub-page back to home', async () => {
+    const onSaveTimedSession = jest.fn().mockResolvedValue(undefined);
+    const { getByTestId, queryByTestId, rerender } = render(
+      <PracticeView
+        sessions={[baseSession]}
+        onSaveTimedSession={onSaveTimedSession}
+        resetKey={0}
+      />
+    );
+
+    // Navigate into Rikpa — its FAB only renders when stage === 'rikpa'
+    fireEvent.press(getByTestId('practice-card-rikpa'));
+    expect(getByTestId('rikpa-fab')).toBeTruthy();
+
+    await act(async () => {
+      rerender(
+        <PracticeView
+          sessions={[baseSession]}
+          onSaveTimedSession={onSaveTimedSession}
+          resetKey={1}
+        />
+      );
+    });
+
+    // Rikpa FAB gone means stage returned to 'home'
+    expect(queryByTestId('rikpa-fab')).toBeNull();
+  });
+
+  it('rikpa content is offset below the back button', () => {
+    const { getByTestId } = setup();
+
+    fireEvent.press(getByTestId('practice-card-rikpa'));
+
+    const fab = getByTestId('rikpa-fab');
+    // Walk up to find the paddingTop wrapper (parent of RikpaView's container)
+    let node = fab.parent;
+    while (node && node.parent) {
+      const style = Array.isArray(node.props?.style)
+        ? Object.assign({}, ...node.props.style.filter(Boolean))
+        : node.props?.style ?? {};
+      if (style.paddingTop === 52) {
+        break;
+      }
+      node = node.parent;
+    }
+    const style = Array.isArray(node?.props?.style)
+      ? Object.assign({}, ...node.props.style.filter(Boolean))
+      : node?.props?.style ?? {};
+    expect(style.paddingTop).toBe(52);
+  });
+
 });

@@ -707,10 +707,12 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const renderDetailContent = () => {
     if (stage === 'rikpa') {
       return (
-        <RikpaView
-          entries={rikpaEntries}
-          onLog={handleRikpaLog}
-        />
+        <View style={{ flex: 1, paddingTop: 52 }}>
+          <RikpaView
+            entries={rikpaEntries}
+            onLog={handleRikpaLog}
+          />
+        </View>
       );
     }
 
