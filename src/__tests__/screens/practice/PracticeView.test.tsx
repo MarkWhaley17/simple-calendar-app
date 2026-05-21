@@ -446,11 +446,12 @@ describe('PracticeView', () => {
   });
 
   it('preserves linked mantra accumulations when editor is opened and saved without edits', async () => {
+    const today = new Date();
     const linkedWithAccumulations: CalendarEvent = {
       id: 'session-2',
       title: 'Linked Mantra Session',
-      fromDate: new Date(2026, 2, 20, 8, 0, 0),
-      toDate: new Date(2026, 2, 20, 8, 15, 0),
+      fromDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 8, 0, 0),
+      toDate: new Date(today.getFullYear(), today.getMonth(), today.getDate(), 8, 15, 0),
       accumulations: 9,
     };
     const { getByTestId, getByText, onSaveTimedSession } = setup([baseSession, linkedWithAccumulations]);
