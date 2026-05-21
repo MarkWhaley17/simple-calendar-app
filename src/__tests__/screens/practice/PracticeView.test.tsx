@@ -608,7 +608,7 @@ describe('PracticeView', () => {
     fireEvent.changeText(getByTestId('intention-edit-input'), 'Should not be saved');
     fireEvent.press(getByTestId('intention-edit-cancel'));
 
-    expect(queryByTestId('intention-edit-box')).toBeNull();
+    expect(queryByTestId('intention-edit-input')).toBeNull();
     expect(getByTestId('intention-edit-link')).toBeTruthy();
   });
 

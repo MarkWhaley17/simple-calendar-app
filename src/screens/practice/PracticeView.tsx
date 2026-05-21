@@ -1042,12 +1042,8 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           ]}>
             Set Intention
           </Text>
-          <View style={styles.intentionCard}>
-            <Text style={styles.intentionText}>{customIntentionText}</Text>
-          </View>
-
-          {isEditingIntention ? (
-            <View style={styles.intentionEditBox} testID="intention-edit-box">
+          <View style={styles.intentionCard} testID="intention-edit-box">
+            {isEditingIntention ? (
               <TextInput
                 style={styles.intentionEditInput}
                 value={intentionDraft}
@@ -1062,28 +1058,33 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                 }}
                 testID="intention-edit-input"
               />
-              <View style={styles.intentionEditActions}>
-                <TouchableOpacity
-                  onPress={() => setIsEditingIntention(false)}
-                  style={styles.intentionEditCancel}
-                  testID="intention-edit-cancel"
-                >
-                  <Text style={styles.intentionEditCancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={async () => {
-                    const trimmed = intentionDraft.trim();
-                    if (trimmed.length === 0) return;
-                    setCustomIntentionText(trimmed);
-                    await saveCustomIntention(trimmed);
-                    setIsEditingIntention(false);
-                  }}
-                  style={styles.intentionEditSave}
-                  testID="intention-edit-save"
-                >
-                  <Text style={styles.intentionEditSaveText}>Save</Text>
-                </TouchableOpacity>
-              </View>
+            ) : (
+              <Text style={styles.intentionText}>{customIntentionText}</Text>
+            )}
+          </View>
+
+          {isEditingIntention ? (
+            <View style={styles.intentionEditActions}>
+              <TouchableOpacity
+                onPress={() => setIsEditingIntention(false)}
+                style={styles.intentionEditCancel}
+                testID="intention-edit-cancel"
+              >
+                <Text style={styles.intentionEditCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  const trimmed = intentionDraft.trim();
+                  if (trimmed.length === 0) return;
+                  setCustomIntentionText(trimmed);
+                  await saveCustomIntention(trimmed);
+                  setIsEditingIntention(false);
+                }}
+                style={styles.intentionEditSave}
+                testID="intention-edit-save"
+              >
+                <Text style={styles.intentionEditSaveText}>Save</Text>
+              </TouchableOpacity>
             </View>
           ) : (
             <TouchableOpacity
@@ -1883,7 +1884,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     gap: spacing.md,
-    marginTop: spacing.sm,
+    marginBottom: spacing.lg,
   },
   intentionEditCancel: {
     paddingVertical: spacing.xs,
