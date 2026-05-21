@@ -44,10 +44,20 @@ describe('AccountView', () => {
   });
 
   describe('signed-out state', () => {
-    it('shows username and password inputs', () => {
+    it('shows email and password inputs', () => {
       const { getByPlaceholderText } = render(<AccountView {...defaultProps} />);
-      expect(getByPlaceholderText('Username')).toBeTruthy();
+      expect(getByPlaceholderText('Email')).toBeTruthy();
       expect(getByPlaceholderText('Password')).toBeTruthy();
+    });
+
+    it('shows sign-in prompt explaining email is required', () => {
+      const { getByText } = render(<AccountView {...defaultProps} />);
+      expect(getByText('Sign in with your email to see member-level events and features.')).toBeTruthy();
+    });
+
+    it('email input uses email-address keyboard type', () => {
+      const { getByPlaceholderText } = render(<AccountView {...defaultProps} />);
+      expect(getByPlaceholderText('Email').props.keyboardType).toBe('email-address');
     });
 
     it('shows Sign In button', () => {
@@ -77,7 +87,7 @@ describe('AccountView', () => {
       (auth.login as jest.Mock).mockResolvedValueOnce(signedInUser);
 
       const { getByPlaceholderText, getByText } = render(<AccountView {...defaultProps} />);
-      fireEvent.changeText(getByPlaceholderText('Username'), 'marktwhaley');
+      fireEvent.changeText(getByPlaceholderText('Email'), 'marktwhaley');
       fireEvent.changeText(getByPlaceholderText('Password'), 'password123');
       fireEvent.press(getByText('Sign In'));
 
@@ -91,7 +101,7 @@ describe('AccountView', () => {
       (auth.login as jest.Mock).mockRejectedValueOnce(new Error('Invalid username or password.'));
 
       const { getByPlaceholderText, getByText } = render(<AccountView {...defaultProps} />);
-      fireEvent.changeText(getByPlaceholderText('Username'), 'bad');
+      fireEvent.changeText(getByPlaceholderText('Email'), 'bad');
       fireEvent.changeText(getByPlaceholderText('Password'), 'wrong');
       fireEvent.press(getByText('Sign In'));
 

@@ -159,13 +159,13 @@ const AccountView: React.FC<AccountViewProps> = ({
               </>
             ) : (
               <>
-                <Text style={styles.cardText}>Sign in to see member-level events.</Text>
+                <Text style={styles.cardText}>Sign in with your email to see member-level events and features.</Text>
                 <TextInput
                   style={styles.authInput}
-                  placeholder="Username"
+                  placeholder="Email"
                   placeholderTextColor={colors.textMutedSoft}
                   autoCapitalize="none"
-                  keyboardType="default"
+                  keyboardType="email-address"
                   value={username}
                   onChangeText={setUsername}
                   editable={!authLoading}
