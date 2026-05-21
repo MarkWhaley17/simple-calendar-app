@@ -88,12 +88,12 @@ const MarqueeText: React.FC<MarqueeTextProps> = ({
           { transform: [{ translateX }] },
         ]}
       >
-        <Text style={[style, { width: tw > 0 ? tw : undefined }]}>
+        <Text numberOfLines={1} style={[style, { width: tw > 0 ? tw : undefined }]}>
           {text}
         </Text>
         {overflow && <View style={{ width: INTER_GAP }} />}
         {overflow && (
-          <Text style={[style, { width: tw > 0 ? tw : undefined }]}>
+          <Text numberOfLines={1} style={[style, { width: tw > 0 ? tw : undefined }]}>
             {text}
           </Text>
         )}
