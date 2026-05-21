@@ -59,6 +59,7 @@ interface PracticeViewProps {
   sessions: CalendarEvent[];
   onSaveTimedSession: (input: Omit<TimedPracticeSaveInput, 'sessions'>) => Promise<void>;
   onRunningStateChange?: (isRunning: boolean) => void;
+  resetKey?: number;
 }
 
 interface MantraInProgressState {
@@ -136,6 +137,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   sessions,
   onSaveTimedSession,
   onRunningStateChange,
+  resetKey,
 }) => {
   const slideX = useRef(new Animated.Value(0)).current;
   const dedicationCelebrationProgress = useRef(new Animated.Value(0)).current;
@@ -245,6 +247,12 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       useNativeDriver: true,
     }).start();
   };
+
+  useEffect(() => {
+    if (resetKey !== undefined && resetKey > 0) returnHome();
+  // returnHome is stable (no deps change identity); resetKey is the only trigger
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey]);
 
   const handleDetailBack = () => {
     if (stage === 'rikpa') {

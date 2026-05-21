@@ -62,6 +62,7 @@ export default function App() {
   const [skipDayViewEnterAnimation, setSkipDayViewEnterAnimation] = useState(false);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [hasActivePracticeTimer, setHasActivePracticeTimer] = useState(false);
+  const [practiceResetKey, setPracticeResetKey] = useState(0);
   const previousViewModeRef = useRef<ViewMode | null>(null);
   const selectedDateRef = useRef<Date | null>(null);
 
@@ -771,7 +772,11 @@ export default function App() {
       } else if (view === 'account') {
         setViewMode('account');
       } else if (view === 'practice') {
-        setViewMode('practice');
+        if (viewMode === 'practice') {
+          setPracticeResetKey(k => k + 1);
+        } else {
+          setViewMode('practice');
+        }
         setSelectedEvent(null);
       }
     };
@@ -1058,6 +1063,7 @@ export default function App() {
               )}
               onSaveTimedSession={handleSaveTimedPracticeSession}
               onRunningStateChange={handlePracticeRunningStateChange}
+              resetKey={practiceResetKey}
             />
           ) : viewMode === 'day' && selectedDate ? (
             <Animated.View
