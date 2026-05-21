@@ -6,6 +6,7 @@ import {
   Easing,
   Image,
   ImageBackground,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -193,6 +194,14 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       if (saved !== null) setCustomIntentionText(saved);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isEditingIntention) return;
+    const sub = Keyboard.addListener('keyboardDidShow', () => {
+      detailScrollRef.current?.scrollToEnd({ animated: true });
+    });
+    return () => sub.remove();
+  }, [isEditingIntention]);
 
   const handleRikpaLog = useCallback(async (recognition: number, duration: number) => {
     const next = await addRikpaEntry(rikpaEntries, recognition, duration);
@@ -1030,7 +1039,10 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       return (
         <ScrollView
           ref={detailScrollRef}
-          contentContainerStyle={styles.detailPanel}
+          contentContainerStyle={[
+            styles.detailPanel,
+            isEditingIntention && { paddingBottom: 320 },
+          ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -1053,9 +1065,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                 autoCapitalize="sentences"
                 autoCorrect
                 scrollEnabled={false}
-                onLayout={() => {
-                  setTimeout(() => detailScrollRef.current?.scrollToEnd({ animated: true }), 100);
-                }}
                 testID="intention-edit-input"
               />
             ) : (
