@@ -40,9 +40,11 @@ import {
   getElapsedSeconds,
   getLinkableSessions,
   getRemainingSeconds,
+  loadCustomDedication,
   loadCustomIntention,
   loadPracticeMantraSnapshot,
   loadPracticeRunningSnapshot,
+  saveCustomDedication,
   saveCustomIntention,
   savePracticeMantraSnapshot,
   savePracticeRunningSnapshot,
@@ -184,6 +186,9 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   const [customIntentionText, setCustomIntentionText] = useState(PRACTICE_INTENTION_TEXT);
   const [isEditingIntention, setIsEditingIntention] = useState(false);
   const [intentionDraft, setIntentionDraft] = useState('');
+  const [customDedicationText, setCustomDedicationText] = useState(PRACTICE_DEDICATION_TEXT);
+  const [isEditingDedication, setIsEditingDedication] = useState(false);
+  const [dedicationDraft, setDedicationDraft] = useState('');
 
   useEffect(() => {
     loadRikpaEntries().then(setRikpaEntries);
@@ -192,6 +197,9 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   useEffect(() => {
     loadCustomIntention().then(saved => {
       if (saved !== null) setCustomIntentionText(saved);
+    });
+    loadCustomDedication().then(saved => {
+      if (saved !== null) setCustomDedicationText(saved);
     });
   }, []);
 
@@ -202,6 +210,14 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     });
     return () => sub.remove();
   }, [isEditingIntention]);
+
+  useEffect(() => {
+    if (!isEditingDedication) return;
+    const sub = Keyboard.addListener('keyboardDidShow', () => {
+      detailScrollRef.current?.scrollToEnd({ animated: true });
+    });
+    return () => sub.remove();
+  }, [isEditingDedication]);
 
   const handleRikpaLog = useCallback(async (recognition: number, duration: number) => {
     const next = await addRikpaEntry(rikpaEntries, recognition, duration);
@@ -1153,7 +1169,16 @@ const PracticeView: React.FC<PracticeViewProps> = ({
 
     if (stage === 'done') {
       return (
-        <View style={styles.detailPanel}>
+        <ScrollView
+          ref={detailScrollRef}
+          testID="dedication-scroll"
+          contentContainerStyle={[
+            styles.detailPanel,
+            isEditingDedication && { paddingBottom: 320 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={[
             styles.detailTitle,
             styles.selectDurationWeightTitle,
@@ -1162,9 +1187,59 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           ]}>
             Dedication
           </Text>
-          <View style={styles.intentionCard}>
-            <Text style={styles.intentionText}>{PRACTICE_DEDICATION_TEXT}</Text>
+          <View style={styles.intentionCard} testID="dedication-edit-box">
+            {isEditingDedication ? (
+              <TextInput
+                style={styles.intentionEditInput}
+                value={dedicationDraft}
+                onChangeText={setDedicationDraft}
+                multiline
+                autoFocus
+                autoCapitalize="sentences"
+                autoCorrect
+                scrollEnabled={false}
+                testID="dedication-edit-input"
+              />
+            ) : (
+              <Text style={styles.intentionText}>{customDedicationText}</Text>
+            )}
           </View>
+
+          {isEditingDedication ? (
+            <View style={styles.intentionEditActions}>
+              <TouchableOpacity
+                onPress={() => setIsEditingDedication(false)}
+                style={styles.intentionEditCancel}
+                testID="dedication-edit-cancel"
+              >
+                <Text style={styles.intentionEditCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  const trimmed = dedicationDraft.trim();
+                  if (trimmed.length === 0) return;
+                  setCustomDedicationText(trimmed);
+                  await saveCustomDedication(trimmed);
+                  setIsEditingDedication(false);
+                }}
+                style={styles.intentionEditSave}
+                testID="dedication-edit-save"
+              >
+                <Text style={styles.intentionEditSaveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setDedicationDraft(customDedicationText);
+                setIsEditingDedication(true);
+              }}
+              style={styles.intentionEditLink}
+              testID="dedication-edit-link"
+            >
+              <Text style={styles.intentionEditLinkText}>Edit dedication ›</Text>
+            </TouchableOpacity>
+          )}
           <Text style={styles.doneSubtext}>Duration {formatDurationMmSs(completedDurationSec)}</Text>
           {completedPracticeMode ? (
             <TouchableOpacity
@@ -1231,7 +1306,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
               );
             })}
           </View>
-        </View>
+        </ScrollView>
       );
     }
 

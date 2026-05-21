@@ -655,4 +655,83 @@ describe('PracticeView', () => {
     addListenerSpy.mockRestore();
   });
 
+  // Helpers to reach the dedication screen
+  const reachDedication = (view: ReturnType<typeof setup>) => {
+    const { getByTestId } = view;
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('practice-begin'));
+    fireEvent.press(getByTestId('practice-end'));
+  };
+
+  it('shows edit dedication link on dedication screen', () => {
+    const view = setup();
+    reachDedication(view);
+    expect(view.getByTestId('dedication-edit-link')).toBeTruthy();
+  });
+
+  it('opens dedication editor inline when edit link is tapped', () => {
+    const view = setup();
+    reachDedication(view);
+    fireEvent.press(view.getByTestId('dedication-edit-link'));
+    expect(view.getByTestId('dedication-edit-input')).toBeTruthy();
+  });
+
+  it('saves custom dedication text and shows it after closing editor', async () => {
+    const view = setup();
+    reachDedication(view);
+    fireEvent.press(view.getByTestId('dedication-edit-link'));
+    fireEvent.changeText(view.getByTestId('dedication-edit-input'), 'My custom dedication');
+    await act(async () => {
+      fireEvent.press(view.getByTestId('dedication-edit-save'));
+    });
+    expect(view.getByText('My custom dedication')).toBeTruthy();
+  });
+
+  it('cancel closes dedication editor without changing text', () => {
+    const view = setup();
+    reachDedication(view);
+    fireEvent.press(view.getByTestId('dedication-edit-link'));
+    fireEvent.changeText(view.getByTestId('dedication-edit-input'), 'Should not be saved');
+    fireEvent.press(view.getByTestId('dedication-edit-cancel'));
+    expect(view.queryByTestId('dedication-edit-input')).toBeNull();
+    expect(view.getByTestId('dedication-edit-link')).toBeTruthy();
+  });
+
+  it('restores custom dedication from storage on mount', async () => {
+    await AsyncStorage.setItem('@kalapa_practice_custom_dedication', 'Persisted dedication');
+    const view = setup();
+    reachDedication(view);
+    await view.findByText('Persisted dedication');
+  });
+
+  it('adds bottom padding to scroll content when dedication editor is open', () => {
+    const view = setup();
+    reachDedication(view);
+    fireEvent.press(view.getByTestId('dedication-edit-link'));
+    const scrollView = view.getByTestId('dedication-scroll');
+    const contentStyle = scrollView.props.contentContainerStyle;
+    const flat = Array.isArray(contentStyle)
+      ? Object.assign({}, ...contentStyle.filter(Boolean))
+      : contentStyle ?? {};
+    expect(flat.paddingBottom).toBe(320);
+  });
+
+  it('registers keyboard listener when editing dedication and removes it on cancel', () => {
+    const addListenerSpy = jest.spyOn(Keyboard, 'addListener');
+    const removeMock = jest.fn();
+    addListenerSpy.mockReturnValue({ remove: removeMock } as any);
+
+    const view = setup();
+    reachDedication(view);
+    fireEvent.press(view.getByTestId('dedication-edit-link'));
+
+    expect(addListenerSpy).toHaveBeenCalledWith('keyboardDidShow', expect.any(Function));
+
+    fireEvent.press(view.getByTestId('dedication-edit-cancel'));
+    expect(removeMock).toHaveBeenCalled();
+
+    addListenerSpy.mockRestore();
+  });
+
 });
