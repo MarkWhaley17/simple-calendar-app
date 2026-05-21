@@ -1028,7 +1028,12 @@ const PracticeView: React.FC<PracticeViewProps> = ({
 
     if (stage === 'intention') {
       return (
-        <View style={styles.detailPanel}>
+        <ScrollView
+          ref={detailScrollRef}
+          contentContainerStyle={styles.detailPanel}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <Text style={[
             styles.detailTitle,
             styles.selectDurationWeightTitle,
@@ -1051,6 +1056,10 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                 autoFocus
                 autoCapitalize="sentences"
                 autoCorrect
+                scrollEnabled={false}
+                onLayout={() => {
+                  setTimeout(() => detailScrollRef.current?.scrollToEnd({ animated: true }), 100);
+                }}
                 testID="intention-edit-input"
               />
               <View style={styles.intentionEditActions}>
@@ -1092,7 +1101,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           <TouchableOpacity style={styles.primaryButton} onPress={beginCountdown} testID="practice-begin">
             <Text style={styles.primaryButtonText}>Begin</Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
