@@ -171,7 +171,7 @@ export default function App() {
       Animated.timing(quoteOpacity, {
         toValue: 0,
         duration: 400,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start(() => {
         // Change quote
         setCurrentQuote(getRandomQuote());
@@ -179,7 +179,7 @@ export default function App() {
         Animated.timing(quoteOpacity, {
           toValue: 1,
           duration: 400,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }).start();
       });
     }, 5 * 60 * 1000); // 5 minutes in milliseconds
