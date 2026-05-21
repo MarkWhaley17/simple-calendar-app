@@ -1039,6 +1039,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
       return (
         <ScrollView
           ref={detailScrollRef}
+          testID="intention-scroll"
           contentContainerStyle={[
             styles.detailPanel,
             isEditingIntention && { paddingBottom: 320 },

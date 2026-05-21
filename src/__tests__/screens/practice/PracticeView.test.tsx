@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, fireEvent, render, waitFor, within } from '@testing-library/react-native';
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import PracticeView from '../../../screens/practice/PracticeView';
 import { CalendarEvent } from '../../../types';
 import { Audio } from 'expo-av';
@@ -620,6 +620,39 @@ describe('PracticeView', () => {
     fireEvent.press(getByTestId('practice-set-intention'));
 
     await findByText('Persisted intention');
+  });
+
+  it('adds bottom padding to scroll content when intention editor is open', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('intention-edit-link'));
+
+    const scrollView = getByTestId('intention-scroll');
+    const contentStyle = scrollView.props.contentContainerStyle;
+    const flat = Array.isArray(contentStyle)
+      ? Object.assign({}, ...contentStyle.filter(Boolean))
+      : contentStyle ?? {};
+    expect(flat.paddingBottom).toBe(320);
+  });
+
+  it('registers keyboard listener when editing and removes it on cancel', () => {
+    const addListenerSpy = jest.spyOn(Keyboard, 'addListener');
+    const removeMock = jest.fn();
+    addListenerSpy.mockReturnValue({ remove: removeMock } as any);
+
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('intention-edit-link'));
+
+    expect(addListenerSpy).toHaveBeenCalledWith('keyboardDidShow', expect.any(Function));
+
+    fireEvent.press(getByTestId('intention-edit-cancel'));
+
+    expect(removeMock).toHaveBeenCalled();
+
+    addListenerSpy.mockRestore();
   });
 
 });
