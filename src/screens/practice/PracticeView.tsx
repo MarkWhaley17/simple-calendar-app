@@ -2043,7 +2043,8 @@ const styles = StyleSheet.create({
   },
   mantraCardMantra: {
     fontSize: 14,
-    color: colors.textSecondary,
+    color: colors.danger,
+    opacity: 0.7,
   },
   mantraCardChevron: {
     fontSize: 22,

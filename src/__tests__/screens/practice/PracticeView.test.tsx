@@ -51,6 +51,17 @@ describe('PracticeView', () => {
     expect(() => getByText('Session History')).toThrow();
   });
 
+  it('mantra card pronunciation uses danger red at 0.7 opacity', () => {
+    const { getByTestId, getByText } = setup();
+    fireEvent.press(getByTestId('practice-card-mantra'));
+    const mantraText = getByText(/Om Tare Tuttare/);
+    const style = Array.isArray(mantraText.props.style)
+      ? Object.assign({}, ...mantraText.props.style.filter(Boolean))
+      : mantraText.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+    expect(style.opacity).toBe(0.7);
+  });
+
   it('practice card subtitles use danger red at 0.7 opacity', () => {
     const { getByText } = setup();
     const subtitle = getByText('Set duration, intention, and begin');
@@ -155,6 +166,12 @@ describe('PracticeView', () => {
     expect(getByTestId('practice-running-clock')).toBeTruthy();
     expect(getByTestId('practice-end')).toBeTruthy();
     expect(queryByTestId('practice-set-intention')).toBeNull();
+  });
+
+  it('Guru Rinpoche mantra shows correct Sanskrit text', () => {
+    const { getByTestId, getByText } = setup();
+    fireEvent.press(getByTestId('practice-card-mantra'));
+    expect(getByText('Om Ah Hum Vajra Guru Padma Siddhi Hum')).toBeTruthy();
   });
 
   it('runs mantra counter flow from library to recitation counting', () => {

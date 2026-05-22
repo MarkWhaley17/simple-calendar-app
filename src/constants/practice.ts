@@ -36,7 +36,7 @@ export const PRACTICE_MANTRA_LIBRARY: PracticeMantraLibraryItem[] = [
   {
     id: 'guru-rinpoche',
     title: 'Guru Rinpoche',
-    mantra: 'Om Ah Hum Vajra Guru Pema Siddhi Hum',
+    mantra: 'Om Ah Hum Vajra Guru Padma Siddhi Hum',
     description:
       'This mantra invokes Padmasambhava, the lotus-born guru. It is practiced to awaken wisdom, dissolve obstacles, and connect with enlightened blessing.',
   },
