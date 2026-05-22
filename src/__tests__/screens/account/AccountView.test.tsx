@@ -65,9 +65,27 @@ describe('AccountView', () => {
       expect(getByText('Sign In')).toBeTruthy();
     });
 
+    it('Sign In button uses danger red background', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} />);
+      const btn = getByTestId('sign-in-button');
+      const style = Array.isArray(btn.props.style)
+        ? Object.assign({}, ...btn.props.style.filter(Boolean))
+        : btn.props.style ?? {};
+      expect(style.backgroundColor).toBe('#991B1B');
+    });
+
     it('shows Open My Recordings button', () => {
       const { getByText } = render(<AccountView {...defaultProps} />);
       expect(getByText('Open My Recordings')).toBeTruthy();
+    });
+
+    it('Open My Recordings button uses danger red background', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} />);
+      const btn = getByTestId('open-recordings-button');
+      const style = Array.isArray(btn.props.style)
+        ? Object.assign({}, ...btn.props.style.filter(Boolean))
+        : btn.props.style ?? {};
+      expect(style.backgroundColor).toBe('#991B1B');
     });
 
     it('does not show Sign Out button', () => {

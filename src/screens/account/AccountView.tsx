@@ -181,6 +181,7 @@ const AccountView: React.FC<AccountViewProps> = ({
                 />
                 {authError && <Text style={styles.authError}>{authError}</Text>}
                 <TouchableOpacity
+                  testID="sign-in-button"
                   style={[styles.primaryButton, authLoading && styles.buttonDisabled]}
                   onPress={handleSignIn}
                   disabled={authLoading}
@@ -427,11 +428,11 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     flex: 1,
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.danger,
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: 'center',
-    shadowColor: colors.brandPrimary,
+    shadowColor: colors.danger,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 6,
