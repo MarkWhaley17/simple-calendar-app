@@ -190,4 +190,15 @@ describe('RikpaView', () => {
     fireEvent.press(getByText('90d'));
     expect(getByText('90d')).toBeTruthy();
   });
+
+  it('FAB is centered and larger than the old 56px size', () => {
+    const { getByTestId } = setup();
+    const fab = getByTestId('rikpa-fab');
+    const style = Array.isArray(fab.props.style)
+      ? Object.assign({}, ...fab.props.style.filter(Boolean))
+      : fab.props.style ?? {};
+    expect(style.width).toBeGreaterThan(56);
+    expect(style.alignSelf).toBe('center');
+    expect(style.position).toBeUndefined();
+  });
 });

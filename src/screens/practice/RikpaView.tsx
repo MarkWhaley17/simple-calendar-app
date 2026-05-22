@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
   tabContentInner: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: 100, // space for FAB
+    paddingBottom: spacing.lg,
   },
 
   // History
@@ -635,12 +635,11 @@ const styles = StyleSheet.create({
 
   // FAB
   fab: {
-    position: 'absolute',
-    right: spacing.lg,
-    bottom: spacing.xl,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    alignSelf: 'center',
+    marginVertical: spacing.xl,
+    width: 96,
+    height: 96,
+    borderRadius: 48,
     backgroundColor: colors.accentStrong,
     alignItems: 'center',
     justifyContent: 'center',
@@ -651,10 +650,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   fabText: {
-    fontSize: 30,
-    lineHeight: 34,
+    fontSize: 52,
+    lineHeight: 56,
     color: colors.white,
-    fontWeight: '400',
+    fontWeight: '300',
     marginTop: -2,
   },
 
