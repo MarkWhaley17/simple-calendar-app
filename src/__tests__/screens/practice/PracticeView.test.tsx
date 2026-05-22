@@ -51,6 +51,16 @@ describe('PracticeView', () => {
     expect(() => getByText('Session History')).toThrow();
   });
 
+  it('practice card subtitles use danger red at 0.7 opacity', () => {
+    const { getByText } = setup();
+    const subtitle = getByText('Set duration, intention, and begin');
+    const style = Array.isArray(subtitle.props.style)
+      ? Object.assign({}, ...subtitle.props.style.filter(Boolean))
+      : subtitle.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+    expect(style.opacity).toBe(0.7);
+  });
+
   it('opens timer detail from card and updates time using preset and +/- controls', () => {
     const { getByTestId } = setup();
 
@@ -733,6 +743,96 @@ describe('PracticeView', () => {
     expect(removeMock).toHaveBeenCalled();
 
     addListenerSpy.mockRestore();
+  });
+
+  const checkTitleStyle = (title: { props: { style: unknown } }) => {
+    const style = Array.isArray(title.props.style)
+      ? Object.assign({}, ...title.props.style.filter(Boolean))
+      : title.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+    expect(style.fontWeight).toBe('700');
+  };
+
+  it('Select Duration title is bold danger red', () => {
+    const { getByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    checkTitleStyle(getByText('Select Duration'));
+  });
+
+  it('Set Intention title is bold danger red', () => {
+    const { getByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    checkTitleStyle(getByText('Set Intention'));
+  });
+
+  it('Dedication title is bold danger red', async () => {
+    const { getByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    fireEvent.press(getByTestId('practice-begin'));
+    fireEvent.press(getByTestId('practice-end'));
+    checkTitleStyle(getByText('Dedication'));
+  });
+
+  it('Rikpa screen shows a Rikpa title', () => {
+    const { getAllByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-rikpa'));
+    expect(getAllByText('Rikpa').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('duration timer clock uses danger red color', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    const clock = getByTestId('practice-detail-clock');
+    const style = Array.isArray(clock.props.style)
+      ? Object.assign({}, ...clock.props.style.filter(Boolean))
+      : clock.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+  });
+
+  it('unselected duration pill text uses danger red color', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    // practice-minute-10 is selected by default; check an unselected pill
+    const pill = getByTestId('practice-minute-20');
+    const textNode = pill.children[0] as { props: { style: unknown } };
+    const style = Array.isArray(textNode.props.style)
+      ? Object.assign({}, ...textNode.props.style.filter(Boolean))
+      : textNode.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+  });
+
+  it('adjust +/- button symbols use danger red color', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    const minusText = getByTestId('practice-minus-minute').children[0] as { props: { style: unknown } };
+    const style = Array.isArray(minusText.props.style)
+      ? Object.assign({}, ...minusText.props.style.filter(Boolean))
+      : minusText.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+  });
+
+  it('selected duration pill uses danger red background', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-timed'));
+    const pill = getByTestId('practice-minute-10');
+    const style = Array.isArray(pill.props.style)
+      ? Object.assign({}, ...pill.props.style.filter(Boolean))
+      : pill.props.style ?? {};
+    expect(style.backgroundColor).toBe('#991B1B');
+  });
+
+  it('selected mantra target pill uses danger red background', () => {
+    const { getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-mantra'));
+    fireEvent.press(getByTestId('practice-mantra-card-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    const pill = getByTestId('practice-mantra-target-108');
+    const style = Array.isArray(pill.props.style)
+      ? Object.assign({}, ...pill.props.style.filter(Boolean))
+      : pill.props.style ?? {};
+    expect(style.backgroundColor).toBe('#991B1B');
   });
 
 });

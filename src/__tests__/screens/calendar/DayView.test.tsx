@@ -192,6 +192,25 @@ describe('DayView', () => {
     expect(getByText('Evening Practice')).toBeTruthy();
   });
 
+  it('event time subtitle uses danger red at 0.7 opacity', () => {
+    const event: CalendarEvent = {
+      id: 'event-time-opacity',
+      title: 'Morning Session',
+      fromDate: new Date(2026, 2, 10, 9, 0, 0),
+      fromTime: '9:00 AM',
+      isAllDay: false,
+    };
+    const { getByText } = render(
+      <DayView selectedDate={new Date(2026, 2, 10)} onBack={jest.fn()} events={[event]} />
+    );
+    const timeLabel = getByText('9:00 AM');
+    const style = Array.isArray(timeLabel.props.style)
+      ? Object.assign({}, ...timeLabel.props.style.filter(Boolean))
+      : timeLabel.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+    expect(style.opacity).toBe(0.7);
+  });
+
   it('prioritizes non-Medicine-Buddha header image on conflict days', () => {
     const medicineEvent: CalendarEvent = {
       id: 'event-medicine',

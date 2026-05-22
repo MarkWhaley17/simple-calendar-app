@@ -103,6 +103,18 @@ describe('EventsListView', () => {
     expect(getByText(new RegExp(`${currentMonthName} 10, ${currentYear} • All Day`))).toBeTruthy();
   });
 
+  it('event date subtitle uses danger red at 0.7 opacity', () => {
+    const { getByText } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+    const dateLabel = getByText(new RegExp(`${currentMonthName} 10, ${currentYear} • All Day`));
+    const style = Array.isArray(dateLabel.props.style)
+      ? Object.assign({}, ...dateLabel.props.style.filter(Boolean))
+      : dateLabel.props.style ?? {};
+    expect(style.color).toBe('#991B1B');
+    expect(style.opacity).toBe(0.7);
+  });
+
   it('shows session items in chronological order', () => {
     const { getByTestId, toJSON } = render(
       <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
@@ -213,5 +225,16 @@ describe('EventsListView', () => {
     expect(mockOnSessionEdit).toHaveBeenCalledWith(mockEvents[0]);
     expect(mockOnSessionDelete).toHaveBeenCalledWith(mockEvents[0]);
     alertSpy.mockRestore();
+  });
+
+  it('active tab button uses danger red background', () => {
+    const { getByTestId } = render(
+      <EventsListView events={mockEvents} onEventPress={mockOnEventPress} />
+    );
+    const eventsTab = getByTestId('events-tab-events');
+    const style = Array.isArray(eventsTab.props.style)
+      ? Object.assign({}, ...eventsTab.props.style.filter(Boolean))
+      : eventsTab.props.style ?? {};
+    expect(style.backgroundColor).toBe('#991B1B');
   });
 });

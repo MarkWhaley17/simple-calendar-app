@@ -126,27 +126,28 @@ describe('RikpaView', () => {
   });
 
   it('shows week groups when entries are present', () => {
-    const entries = [makeEntry(ms('2026-05-19T08:00:00'), 4, 60)];
+    const entries = [makeEntry(Date.now() - 3600_000, 4, 60)];
     const { getByText } = setup(entries);
-    expect(getByText(/May/)).toBeTruthy(); // week label contains month
+    expect(getByText(/\w+ \d+/)).toBeTruthy(); // week label contains a date range
   });
 
   it('expands a week group when tapped to reveal day rows', () => {
-    const entries = [makeEntry(ms('2026-05-19T08:00:00'), 4, 60)];
-    const { getAllByText } = setup(entries);
+    const entries = [makeEntry(Date.now() - 3600_000, 4, 60)];
+    const { getAllByText, getByText } = setup(entries);
     // summary tile always shows "Today"; after expanding the week a second "Today" appears as the day label
-    const weekHeader = getAllByText(/May/)[0];
+    const weekHeader = getAllByText(/\w+ \d+/)[0];
     fireEvent.press(weekHeader);
     expect(getAllByText('Today').length).toBeGreaterThanOrEqual(2);
   });
 
   it('expands a day to show individual entries when tapped', () => {
+    const now = Date.now();
     const entries = [
-      makeEntry(ms('2026-05-19T08:00:00'), 4, 60),
-      makeEntry(ms('2026-05-19T10:00:00'), 2, 0),
+      makeEntry(now - 7200_000, 4, 60),
+      makeEntry(now - 3600_000, 2, 0),
     ];
     const { getAllByText, getByText } = setup(entries);
-    fireEvent.press(getAllByText(/May/)[0]);          // expand week
+    fireEvent.press(getAllByText(/\w+ \d+/)[0]);     // expand week
     fireEvent.press(getAllByText('Today')[1]);        // tap day label (second "Today" after week expanded)
     expect(getByText('Vivid')).toBeTruthy();
     expect(getByText('Mild')).toBeTruthy();
@@ -189,6 +190,32 @@ describe('RikpaView', () => {
     expect(getByText('30d')).toBeTruthy();
     fireEvent.press(getByText('90d'));
     expect(getByText('90d')).toBeTruthy();
+  });
+
+  it('active period tab (7d/30d/90d) in Insights uses danger red background', () => {
+    const { getAllByText, getByTestId } = setup();
+    fireEvent.press(getAllByText('Insights')[0]);
+    const tab7d = getByTestId('rikpa-period-tab-7d');
+    const style = Array.isArray(tab7d.props.style)
+      ? Object.assign({}, ...tab7d.props.style.filter(Boolean))
+      : tab7d.props.style ?? {};
+    expect(style.backgroundColor).toBe('#991B1B');
+  });
+
+  it('active History/Insights tab uses danger red background', () => {
+    const { getByTestId } = setup();
+    const historyTab = getByTestId('rikpa-tab-history');
+    const style = Array.isArray(historyTab.props.style)
+      ? Object.assign({}, ...historyTab.props.style.filter(Boolean))
+      : historyTab.props.style ?? {};
+    expect(style.backgroundColor).toBe('#991B1B');
+
+    fireEvent.press(getByTestId('rikpa-tab-insights'));
+    const insightsTab = getByTestId('rikpa-tab-insights');
+    const insightsStyle = Array.isArray(insightsTab.props.style)
+      ? Object.assign({}, ...insightsTab.props.style.filter(Boolean))
+      : insightsTab.props.style ?? {};
+    expect(insightsStyle.backgroundColor).toBe('#991B1B');
   });
 
   it('FAB is centered and larger than the old 56px size', () => {

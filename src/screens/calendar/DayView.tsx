@@ -428,6 +428,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.danger,
     letterSpacing: 0.2,
+    opacity: 0.7,
   },
   emptyState: {
     flex: 1,

@@ -210,6 +210,7 @@ const RikpaView: React.FC<RikpaViewProps> = ({ entries, onLog }) => {
           {(['7d', '30d', '90d'] as InsightsPeriod[]).map(p => (
             <TouchableOpacity
               key={p}
+              testID={`rikpa-period-tab-${p}`}
               style={[styles.periodTab, insightsPeriod === p && styles.periodTabActive]}
               onPress={() => setInsightsPeriod(p)}
             >
@@ -331,6 +332,7 @@ const RikpaView: React.FC<RikpaViewProps> = ({ entries, onLog }) => {
 
       <View style={styles.tabBar}>
         <TouchableOpacity
+          testID="rikpa-tab-history"
           style={[styles.tabItem, activeTab === 'history' && styles.tabItemActive]}
           onPress={() => setActiveTab('history')}
         >
@@ -339,6 +341,7 @@ const RikpaView: React.FC<RikpaViewProps> = ({ entries, onLog }) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+          testID="rikpa-tab-insights"
           style={[styles.tabItem, activeTab === 'insights' && styles.tabItemActive]}
           onPress={() => setActiveTab('insights')}
         >
@@ -424,7 +427,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabItemActive: {
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.danger,
   },
   tabLabel: {
     fontSize: 14,
@@ -593,7 +596,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   periodTabActive: {
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.danger,
   },
   periodTabText: {
     fontSize: 13,

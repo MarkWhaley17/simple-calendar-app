@@ -744,6 +744,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'rikpa') {
       return (
         <View style={{ flex: 1, paddingTop: 52 }}>
+          <Text style={styles.selectDurationTitle}>Rikpa</Text>
           <RikpaView
             entries={rikpaEntries}
             onLog={handleRikpaLog}
@@ -1063,12 +1064,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={[
-            styles.detailTitle,
-            styles.selectDurationWeightTitle,
-            styles.selectDurationTitleSize,
-            styles.selectDurationTitleAlignment,
-          ]}>
+          <Text style={styles.selectDurationTitle}>
             Set Intention
           </Text>
           <View style={styles.intentionCard} testID="intention-edit-box">
@@ -1179,12 +1175,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={[
-            styles.detailTitle,
-            styles.selectDurationWeightTitle,
-            styles.selectDurationTitleSize,
-            styles.selectDurationTitleAlignment,
-          ]}>
+          <Text style={styles.selectDurationTitle}>
             Dedication
           </Text>
           <View style={styles.intentionCard} testID="dedication-edit-box">
@@ -1683,7 +1674,10 @@ const styles = StyleSheet.create({
   featureCardSubtitle: {
     marginTop: 6,
     fontSize: 14,
-    color: colors.textSecondary,
+    fontWeight: '600',
+    color: colors.danger,
+    letterSpacing: 0.2,
+    opacity: 0.7,
   },
   comingSoonBadge: {
     alignSelf: 'flex-start',
@@ -1763,8 +1757,8 @@ const styles = StyleSheet.create({
   },
   selectDurationTitle: {
     fontSize: 22,
-    fontWeight: '500',
-    color: colors.brandInk,
+    fontWeight: '700',
+    color: colors.danger,
     marginBottom: spacing.lg,
     textAlign: 'center',
     letterSpacing: 0.2,
@@ -1789,12 +1783,12 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   minutePillSelected: {
-    backgroundColor: colors.brandPrimary,
-    borderColor: colors.brandPrimary,
+    backgroundColor: colors.danger,
+    borderColor: colors.danger,
   },
   minutePillText: {
     fontSize: 15,
-    color: colors.brandPrimaryDark,
+    color: colors.danger,
     fontWeight: '700',
     textAlign: 'center',
   },
@@ -1822,7 +1816,7 @@ const styles = StyleSheet.create({
   detailClock: {
     fontSize: 44,
     lineHeight: 52,
-    color: colors.brandPrimaryDark,
+    color: colors.danger,
     fontWeight: '500',
     textAlign: 'center',
     marginBottom: spacing.md,
@@ -1880,7 +1874,7 @@ const styles = StyleSheet.create({
   adjustButtonText: {
     fontSize: 30,
     lineHeight: 30,
-    color: colors.brandPrimaryDark,
+    color: colors.danger,
     fontWeight: '500',
   },
   linkButton: {
