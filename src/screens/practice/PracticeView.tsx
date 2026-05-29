@@ -52,7 +52,7 @@ import {
 import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
 import { RikpaEntry, addRikpaEntry, loadRikpaEntries } from '../../utils/rikpa';
 import { colors, spacing } from '../../theme/tokens';
-import { ENABLE_RIKPA } from '../../theme/flags';
+import { ENABLE_RIKPA, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import RikpaView from './RikpaView';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
@@ -1408,11 +1408,19 @@ const PracticeView: React.FC<PracticeViewProps> = ({
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
-        <View style={styles.headerOverlay}>
-          <Text style={styles.headerTitle}>Practice</Text>
+      {ENABLE_CALENDAR_HEADER_BANNER ? (
+        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+          <View style={styles.headerOverlay}>
+            <Text style={styles.headerTitle}>Practice</Text>
+          </View>
+        </ImageBackground>
+      ) : (
+        <View style={[styles.headerBackground, styles.headerBackgroundPlain]}>
+          <View style={[styles.headerOverlay, styles.headerOverlayPlain]}>
+            <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Practice</Text>
+          </View>
         </View>
-      </ImageBackground>
+      )}
 
       <Animated.View
         style={[
@@ -1605,6 +1613,19 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '700',
     color: colors.white,
+  },
+  headerBackgroundPlain: {
+    backgroundColor: colors.headerPlainBg,
+    minHeight: 72,
+  },
+  headerOverlayPlain: {
+    backgroundColor: 'transparent',
+    minHeight: 72,
+    paddingVertical: spacing.md,
+  },
+  headerTitlePlain: {
+    color: colors.brandPrimaryDark,
+    fontSize: 22,
   },
   slidingPages: {
     flex: 1,

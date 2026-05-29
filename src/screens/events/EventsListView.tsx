@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Animate
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { isEventItem } from '../../utils/eventEditability';
@@ -181,12 +181,41 @@ const EventsListView: React.FC<EventsListViewProps> = ({
         ]}
       >
         {/* Header */}
-        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
-          <View style={styles.header}>
+        {ENABLE_CALENDAR_HEADER_BANNER ? (
+          <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+            <View style={styles.header}>
+              <View style={styles.headerTopRow}>
+                <View style={styles.headerMonthBlock}>
+                  <Text style={styles.headerTitle}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
+                  <Text style={styles.headerSubtitle}>{activeEvents.length} {headerCountLabel}</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={[styles.headerNavButton, styles.headerNavButtonLeft]}
+                onPress={() => runMonthSwipeTransition('previous')}
+                activeOpacity={0.8}
+                testID="events-header-prev-month"
+                accessibilityLabel="Previous month"
+              >
+                <Text style={styles.headerNavButtonText}>‹</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.headerNavButton, styles.headerNavButtonRight]}
+                onPress={() => runMonthSwipeTransition('next')}
+                activeOpacity={0.8}
+                testID="events-header-next-month"
+                accessibilityLabel="Next month"
+              >
+                <Text style={styles.headerNavButtonText}>›</Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
+        ) : (
+          <View style={[styles.header, styles.headerPlain]}>
             <View style={styles.headerTopRow}>
               <View style={styles.headerMonthBlock}>
-                <Text style={styles.headerTitle}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
-                <Text style={styles.headerSubtitle}>{activeEvents.length} {headerCountLabel}</Text>
+                <Text style={[styles.headerTitle, styles.headerTitlePlain]}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
+                <Text style={[styles.headerSubtitle, styles.headerSubtitlePlain]}>{activeEvents.length} {headerCountLabel}</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -196,7 +225,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({
               testID="events-header-prev-month"
               accessibilityLabel="Previous month"
             >
-              <Text style={styles.headerNavButtonText}>‹</Text>
+              <Text style={[styles.headerNavButtonText, styles.headerNavButtonTextPlain]}>‹</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.headerNavButton, styles.headerNavButtonRight]}
@@ -205,10 +234,10 @@ const EventsListView: React.FC<EventsListViewProps> = ({
               testID="events-header-next-month"
               accessibilityLabel="Next month"
             >
-              <Text style={styles.headerNavButtonText}>›</Text>
+              <Text style={[styles.headerNavButtonText, styles.headerNavButtonTextPlain]}>›</Text>
             </TouchableOpacity>
           </View>
-        </ImageBackground>
+        )}
 
         <View style={styles.tabBarContainer}>
           <View style={styles.tabBar}>
@@ -439,6 +468,23 @@ const styles = StyleSheet.create({
     color: colors.textOnBrandMuted,
     marginTop: 6,
     letterSpacing: 0.3,
+  },
+  headerPlain: {
+    backgroundColor: colors.headerPlainBg,
+    minHeight: 72,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  headerTitlePlain: {
+    color: colors.brandPrimaryDark,
+  },
+  headerSubtitlePlain: {
+    color: colors.brandPrimary,
+  },
+  headerNavButtonTextPlain: {
+    color: colors.brandPrimaryDark,
   },
   eventsContainer: {
     flex: 1,

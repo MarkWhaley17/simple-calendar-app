@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import CalendarHeader from '../../../components/calendar/CalendarHeader';
+import * as flags from '../../../theme/flags';
 
 describe('CalendarHeader', () => {
   const mockOnPreviousMonth = jest.fn();
@@ -8,6 +9,10 @@ describe('CalendarHeader', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should render month and year', () => {
@@ -74,5 +79,33 @@ describe('CalendarHeader', () => {
     );
 
     expect(getByText('December')).toBeTruthy();
+  });
+
+  it('renders an ImageBackground when calendarHeaderBanner is enabled', () => {
+    jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', true);
+    const date = new Date(2026, 0, 15);
+    const { UNSAFE_getByType } = render(
+      <CalendarHeader
+        currentDate={date}
+        onPreviousMonth={mockOnPreviousMonth}
+        onNextMonth={mockOnNextMonth}
+      />
+    );
+    const { ImageBackground } = require('react-native');
+    expect(UNSAFE_getByType(ImageBackground)).toBeTruthy();
+  });
+
+  it('renders a plain View (no ImageBackground) when calendarHeaderBanner is disabled', () => {
+    jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', false);
+    const date = new Date(2026, 0, 15);
+    const { UNSAFE_queryByType } = render(
+      <CalendarHeader
+        currentDate={date}
+        onPreviousMonth={mockOnPreviousMonth}
+        onNextMonth={mockOnNextMonth}
+      />
+    );
+    const { ImageBackground } = require('react-native');
+    expect(UNSAFE_queryByType(ImageBackground)).toBeNull();
   });
 });

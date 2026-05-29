@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, 
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { AnimatedPressable } from '../../components/ui/AnimatedPressable';
 import { colors, elevation, spacing } from '../../theme/tokens';
@@ -117,29 +117,40 @@ const DayView: React.FC<DayViewProps> = ({
   return (
     <View style={styles.container}>
       {/* Header */}
-      <ImageBackground
-        source={headerBackground}
-        style={styles.headerBackground}
-        resizeMode="cover"
-        testID="day-view-header-image"
-      >
-        <View style={styles.headerOverlay}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBack}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.backButtonText}>‹ Back</Text>
-          </TouchableOpacity>
+      {ENABLE_CALENDAR_HEADER_BANNER ? (
+        <ImageBackground
+          source={headerBackground}
+          style={styles.headerBackground}
+          resizeMode="cover"
+          testID="day-view-header-image"
+        >
+          <View style={styles.headerOverlay}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={onBack}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.backButtonText}>‹ Back</Text>
+            </TouchableOpacity>
 
-          <View style={styles.dateInfo}>
-            <Text style={styles.dayName}>{dayName}</Text>
-            <Text style={styles.fullDate}>
+            <View style={styles.dateInfo}>
+              <Text style={styles.dayName}>{dayName}</Text>
+              <Text style={styles.fullDate}>
+                {monthName} {dayNumber}, {year}
+              </Text>
+            </View>
+          </View>
+        </ImageBackground>
+      ) : (
+        <View style={[styles.headerOverlay, styles.headerOverlayPlain]} testID="day-view-header-plain">
+          <View style={[styles.dateInfo, styles.dateInfoPlain]}>
+            <Text style={[styles.dayName, styles.dayNamePlain]}>{dayName}</Text>
+            <Text style={[styles.fullDate, styles.fullDatePlain]}>
               {monthName} {dayNumber}, {year}
             </Text>
           </View>
         </View>
-      </ImageBackground>
+      )}
 
       {/* Events list */}
       <View style={styles.eventsBackground}>
@@ -335,6 +346,28 @@ const styles = StyleSheet.create({
     color: colors.textOnBrandMuted,
     marginTop: 6,
     letterSpacing: 0.3,
+  },
+  headerOverlayPlain: {
+    backgroundColor: colors.headerPlainBg,
+    minHeight: 72,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
+    alignItems: 'center',
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  dateInfoPlain: {
+    alignItems: 'center',
+  },
+  dayNamePlain: {
+    color: colors.brandPrimaryDark,
+    fontSize: 22,
+  },
+  fullDatePlain: {
+    color: colors.brandPrimary,
+    marginTop: 2,
   },
   eventsContainer: {
     flex: 1,

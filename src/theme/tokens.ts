@@ -46,6 +46,7 @@ export const colors = {
   // Client-configurable tokens
   bg: theme.bg,
   bgSubtle: theme.bgSubtle,
+  headerPlainBg: theme.headerPlainBg,
   brandPrimary: theme.brandPrimary,
   brandPrimaryDark: theme.brandPrimaryDark,
   brandOverlay: theme.brandOverlay,

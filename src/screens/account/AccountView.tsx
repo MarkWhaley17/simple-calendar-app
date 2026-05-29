@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform, ImageBackground } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
-import { ENABLE_GLASS_UI } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
@@ -135,11 +135,17 @@ const AccountView: React.FC<AccountViewProps> = ({
   return (
     <View style={styles.container}>
       {/* Header */}
-      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Account</Text>
+      {ENABLE_CALENDAR_HEADER_BANNER ? (
+        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Account</Text>
+          </View>
+        </ImageBackground>
+      ) : (
+        <View style={[styles.header, styles.headerPlain]}>
+          <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Account</Text>
         </View>
-      </ImageBackground>
+      )}
 
       {/* Content */}
       <ScrollView style={styles.content}>
@@ -384,6 +390,17 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
     textAlign: 'center',
     alignSelf: 'center',
+  },
+  headerPlain: {
+    backgroundColor: colors.headerPlainBg,
+    minHeight: 72,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  headerTitlePlain: {
+    color: colors.brandPrimaryDark,
   },
   content: {
     flex: 1,

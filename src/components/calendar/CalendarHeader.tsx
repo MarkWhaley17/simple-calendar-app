@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_MOTION_UI } from '../../theme/flags';
+import { ENABLE_MOTION_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import { colors, spacing } from '../../theme/tokens';
 import { AnimatedPressable } from '../ui/AnimatedPressable';
 import { AnimatedMonthTitle } from './AnimatedMonthTitle';
@@ -21,53 +21,65 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 }) => {
   const monthName = MONTH_NAMES[currentDate.getMonth()];
   const year = currentDate.getFullYear();
-  const headerBackground = require('../../../assets/day-bg.jpg');
 
-  return (
-    <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
-      <View style={styles.container}>
-        <AnimatedPressable
-          style={styles.navButton}
-          onPress={onPreviousMonth}
-          scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
-          hapticOnPress={ENABLE_MOTION_UI}
-        >
-          <Text style={styles.navButtonText}>‹</Text>
-        </AnimatedPressable>
+  const innerContent = (
+    <View style={[styles.container, !ENABLE_CALENDAR_HEADER_BANNER && styles.containerPlain]}>
+      <AnimatedPressable
+        style={styles.navButton}
+        onPress={onPreviousMonth}
+        scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
+        hapticOnPress={ENABLE_MOTION_UI}
+      >
+        <Text style={[styles.navButtonText, !ENABLE_CALENDAR_HEADER_BANNER && styles.navButtonTextPlain]}>‹</Text>
+      </AnimatedPressable>
 
-        <AnimatedPressable
-          style={styles.dateContainer}
-          onPress={onDatePress}
-          scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
-          disabled={!onDatePress}
-        >
-          {ENABLE_MOTION_UI ? (
-            <AnimatedMonthTitle
-              title={monthName}
-              style={styles.monthText}
-            />
-          ) : (
-            <Text style={styles.monthText}>{monthName}</Text>
-          )}
-          <Text style={styles.yearText}>{year} ▼</Text>
-        </AnimatedPressable>
+      <AnimatedPressable
+        style={styles.dateContainer}
+        onPress={onDatePress}
+        scaleTo={ENABLE_MOTION_UI ? 0.985 : 1}
+        disabled={!onDatePress}
+      >
+        {ENABLE_MOTION_UI ? (
+          <AnimatedMonthTitle
+            title={monthName}
+            style={[styles.monthText, !ENABLE_CALENDAR_HEADER_BANNER && styles.monthTextPlain]}
+          />
+        ) : (
+          <Text style={[styles.monthText, !ENABLE_CALENDAR_HEADER_BANNER && styles.monthTextPlain]}>{monthName}</Text>
+        )}
+        <Text style={[styles.yearText, !ENABLE_CALENDAR_HEADER_BANNER && styles.yearTextPlain]}>{year} ▼</Text>
+      </AnimatedPressable>
 
-        <AnimatedPressable
-          style={styles.navButton}
-          onPress={onNextMonth}
-          scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
-          hapticOnPress={ENABLE_MOTION_UI}
-        >
-          <Text style={styles.navButtonText}>›</Text>
-        </AnimatedPressable>
-      </View>
-    </ImageBackground>
+      <AnimatedPressable
+        style={styles.navButton}
+        onPress={onNextMonth}
+        scaleTo={ENABLE_MOTION_UI ? 0.97 : 1}
+        hapticOnPress={ENABLE_MOTION_UI}
+      >
+        <Text style={[styles.navButtonText, !ENABLE_CALENDAR_HEADER_BANNER && styles.navButtonTextPlain]}>›</Text>
+      </AnimatedPressable>
+    </View>
   );
+
+  if (ENABLE_CALENDAR_HEADER_BANNER) {
+    const headerBackground = require('../../../assets/day-bg.jpg');
+    return (
+      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+        {innerContent}
+      </ImageBackground>
+    );
+  }
+
+  return <View style={styles.plainHeader}>{innerContent}</View>;
 };
 
 const styles = StyleSheet.create({
   headerBackground: {
     width: '100%',
+  },
+  plainHeader: {
+    width: '100%',
+    backgroundColor: colors.headerPlainBg,
   },
   container: {
     flexDirection: 'row',
@@ -78,6 +90,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg + spacing.xs,
     minHeight: 144,
     backgroundColor: colors.brandOverlay,
+  },
+  containerPlain: {
+    minHeight: 72,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
+    backgroundColor: 'transparent',
   },
   navButton: {
     width: 44,
@@ -94,6 +112,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     includeFontPadding: false,
   },
+  navButtonTextPlain: {
+    color: colors.brandPrimaryDark,
+  },
   dateContainer: {
     alignItems: 'center',
   },
@@ -102,11 +123,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.white,
   },
+  monthTextPlain: {
+    color: colors.brandPrimaryDark,
+  },
   yearText: {
     fontSize: 16,
     fontWeight: '400',
     color: colors.textOnBrandMuted,
     marginTop: 2,
+  },
+  yearTextPlain: {
+    color: colors.brandPrimary,
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Asset } from 'expo-asset';
-import { StyleSheet, View, SafeAreaView, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
+import { StyleSheet, View, SafeAreaView, Text, PanResponder, Animated, Dimensions, Alert, Platform } from 'react-native';
 import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/calendar';
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
@@ -11,6 +11,7 @@ import { PracticeView } from './src/screens/practice';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getRandomQuote } from './src/utils/quotes';
 import MarqueeText from './src/components/ui/MarqueeText';
+import { ENABLE_QUOTE_ABOVE_CALENDAR, ENABLE_QUOTE_SCROLLING } from './src/theme/flags';
 import { getEvents } from './src/utils/events';
 import { getMemberEvents } from './src/utils/memberEvents';
 import { saveEvents, loadEvents } from './src/utils/storage';
@@ -1105,16 +1106,37 @@ export default function App() {
                     onNextMonth={handleNextMonth}
                     onDatePress={handleOpenMonthYearPicker}
                   />
+                  {ENABLE_QUOTE_ABOVE_CALENDAR && (
+                    <View style={styles.quoteWrapper}>
+                      <Animated.View style={[styles.quoteContainer, { opacity: quoteOpacity }]}>
+                        {ENABLE_QUOTE_SCROLLING ? (
+                          <MarqueeText
+                            text={currentQuote}
+                            style={styles.quoteText}
+                            containerStyle={styles.quoteMarqueeContainer}
+                          />
+                        ) : (
+                          <Text style={[styles.quoteText, styles.quoteTextStatic]}>{currentQuote}</Text>
+                        )}
+                      </Animated.View>
+                    </View>
+                  )}
                   <CalendarGrid currentDate={currentDate} onDayPress={handleDayPress} events={visibleEvents} />
-                  <View style={styles.quoteWrapper}>
-                    <Animated.View style={[styles.quoteContainer, { opacity: quoteOpacity }]}>
-                      <MarqueeText
-                        text={currentQuote}
-                        style={styles.quoteText}
-                        containerStyle={styles.quoteMarqueeContainer}
-                      />
-                    </Animated.View>
-                  </View>
+                  {!ENABLE_QUOTE_ABOVE_CALENDAR && (
+                    <View style={styles.quoteWrapper}>
+                      <Animated.View style={[styles.quoteContainer, { opacity: quoteOpacity }]}>
+                        {ENABLE_QUOTE_SCROLLING ? (
+                          <MarqueeText
+                            text={currentQuote}
+                            style={styles.quoteText}
+                            containerStyle={styles.quoteMarqueeContainer}
+                          />
+                        ) : (
+                          <Text style={[styles.quoteText, styles.quoteTextStatic]}>{currentQuote}</Text>
+                        )}
+                      </Animated.View>
+                    </View>
+                  )}
                   <StatusBar style="auto" />
                 </View>
               </Animated.View>
@@ -1183,5 +1205,9 @@ const styles = StyleSheet.create({
     color: '#1E3A8A',
     fontStyle: 'italic',
     letterSpacing: 0.2,
+  },
+  quoteTextStatic: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
 });

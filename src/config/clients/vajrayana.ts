@@ -16,6 +16,7 @@ const vajrayana: ClientConfig = {
     danger: '#991B1B',
     bg: '#FFFBF0',
     bgSubtle: '#FEF9E7',
+    headerPlainBg: '#FEF3C7',
   },
 
   assets: {
@@ -34,6 +35,9 @@ const vajrayana: ClientConfig = {
     memberEvents: true,
     glassUI: true,
     motionUI: true,
+    calendarHeaderBanner: true,
+    quoteAboveCalendar: false,
+    quoteScrolling: true,
   },
 
   copy: {

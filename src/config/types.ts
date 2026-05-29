@@ -18,6 +18,8 @@ export interface ThemeOverrides {
   /** App background */
   bg: string;
   bgSubtle: string;
+  /** Background used for plain (no-image) header bars */
+  headerPlainBg: string;
 }
 
 export interface AssetConfig {
@@ -43,6 +45,12 @@ export interface FeatureFlags {
   glassUI: boolean;
   /** Motion / parallax animations */
   motionUI: boolean;
+  /** Show a banner image in the calendar header; false = plain coloured title bar */
+  calendarHeaderBanner: boolean;
+  /** Show the quote block above the calendar grid (true) or below (false) */
+  quoteAboveCalendar: boolean;
+  /** Scroll long quotes as a marquee; false = static wrapping text */
+  quoteScrolling: boolean;
 }
 
 export interface CopyOverrides {

@@ -7,3 +7,6 @@ export const ENABLE_MANTRA_LIBRARY = config.features.mantraLibrary;
 export const ENABLE_RIKPA = config.features.rikpaTracker;
 export const ENABLE_RECORDINGS = config.features.recordings;
 export const ENABLE_MEMBER_EVENTS = config.features.memberEvents;
+export const ENABLE_CALENDAR_HEADER_BANNER = config.features.calendarHeaderBanner;
+export const ENABLE_QUOTE_ABOVE_CALENDAR = config.features.quoteAboveCalendar;
+export const ENABLE_QUOTE_SCROLLING = config.features.quoteScrolling;

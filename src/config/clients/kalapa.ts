@@ -16,6 +16,7 @@ const kalapa: ClientConfig = {
     danger: '#991B1B',
     bg: '#F6F8FB',
     bgSubtle: '#EFF6FF',
+    headerPlainBg: '#DBEAFE',
   },
 
   assets: {
@@ -33,6 +34,9 @@ const kalapa: ClientConfig = {
     memberEvents: true,
     glassUI: true,
     motionUI: true,
+    calendarHeaderBanner: false,
+    quoteAboveCalendar: true,
+    quoteScrolling: false,
   },
 
   copy: {

@@ -3,11 +3,15 @@ import { Alert } from 'react-native';
 import { fireEvent, render } from '@testing-library/react-native';
 import DayView from '../../../screens/calendar/DayView';
 import { CalendarEvent } from '../../../types';
+import * as flags from '../../../theme/flags';
 
 jest.mock('../../../../assets/dakini.jpg', () => 98765);
 jest.mock('../../../../assets/jambhala.jpg', () => 87654);
 
 describe('DayView', () => {
+  beforeEach(() => { jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', true); });
+  afterEach(() => { jest.restoreAllMocks(); });
+
   it('renders the header image and event list background pattern', () => {
     const event: CalendarEvent = {
       id: 'event-1',
@@ -339,5 +343,18 @@ describe('DayView', () => {
     expect(alertSpy).toHaveBeenCalledTimes(1);
 
     alertSpy.mockRestore();
+  });
+
+  it('renders a plain title bar when calendarHeaderBanner is disabled', () => {
+    jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', false);
+    const { getByTestId, queryByTestId } = render(
+      <DayView
+        selectedDate={new Date(2026, 1, 10)}
+        onBack={jest.fn()}
+        events={[]}
+      />
+    );
+    expect(getByTestId('day-view-header-plain')).toBeTruthy();
+    expect(queryByTestId('day-view-header-image')).toBeNull();
   });
 });
