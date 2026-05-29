@@ -10,6 +10,8 @@
     "web": "npm run sync:events && expo start --web",
     "start:kalapa": "npm run sync:events && EXPO_PUBLIC_APP_CLIENT=kalapa expo start",
     "start:vajrayana": "npm run sync:events && EXPO_PUBLIC_APP_CLIENT=vajrayana expo start",
+    "start:kalapa:tunnel": "npm run sync:events && EXPO_PUBLIC_APP_CLIENT=kalapa expo start --tunnel",
+    "start:vajrayana:tunnel": "npm run sync:events && EXPO_PUBLIC_APP_CLIENT=vajrayana expo start --tunnel",
     "lint": "eslint . --ext .ts,.tsx,.js",
     "typecheck": "tsc --noEmit",
     "test": "npm run sync:events && jest",
