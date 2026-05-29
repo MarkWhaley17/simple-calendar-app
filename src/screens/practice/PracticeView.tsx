@@ -757,7 +757,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'mantraLibrary') {
       return (
         <ScrollView contentContainerStyle={styles.detailPanel}>
-          <Text style={styles.selectDurationTitle}>Mantra Library</Text>
+          <Text style={styles.practiceTitleBlue}>Mantra Library</Text>
           <View style={styles.mantraLibraryList}>
             {PRACTICE_MANTRA_LIBRARY.map((mantra) => {
               const isExpanded = expandedMantraId === mantra.id;
@@ -853,7 +853,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           keyboardDismissMode="on-drag"
           automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
         >
-          <Text style={styles.selectDurationTitle}>{selectedMantra.title}</Text>
+          <Text style={styles.practiceTitleBlue}>{selectedMantra.title}</Text>
           <View style={styles.intentionCard}>
             <Text style={styles.sectionLabel}>Mantra</Text>
             <Text style={styles.intentionText}>{selectedMantra.mantra}</Text>
@@ -1007,7 +1007,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     if (stage === 'mantraRunning' && selectedMantra) {
       return (
         <View style={[styles.detailPanel, styles.runningDetailPanel]}>
-          <Text style={styles.selectDurationTitle}>{selectedMantra.title}</Text>
+          <Text style={styles.practiceTitleBlue}>{selectedMantra.title}</Text>
           <Text style={styles.mantraCounterSubtitle}>{selectedMantra.mantra}</Text>
           <View style={styles.mantraCounterWrap}>
             <TouchableOpacity
@@ -1310,7 +1310,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         keyboardDismissMode="on-drag"
         automaticallyAdjustKeyboardInsets={Platform.OS === 'ios'}
       >
-        <Text style={styles.selectDurationTitle}>Select Duration</Text>
+        <Text style={styles.practiceTitleBlue}>Select Duration</Text>
         <View style={styles.pillsWrap}>
           {PRACTICE_DURATION_PRESETS_MINUTES.map((minute) => {
             const isSelected = selectedDurationSec === minute * 60;
@@ -1762,6 +1762,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     color: colors.danger,
+    marginBottom: spacing.lg,
+    textAlign: 'center',
+    letterSpacing: 0.2,
+  },
+  practiceTitleBlue: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.brandPrimaryDark,
     marginBottom: spacing.lg,
     textAlign: 'center',
     letterSpacing: 0.2,

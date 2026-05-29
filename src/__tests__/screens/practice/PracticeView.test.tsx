@@ -746,10 +746,26 @@ describe('PracticeView', () => {
     expect(style.fontWeight).toBe('700');
   };
 
-  it('Select Duration title is bold danger red', () => {
+  it('Select Duration title is bold blue', () => {
     const { getByText, getByTestId } = setup();
     fireEvent.press(getByTestId('practice-card-timed'));
-    checkTitleStyle(getByText('Select Duration'));
+    const title = getByText('Select Duration');
+    const style = Array.isArray(title.props.style)
+      ? Object.assign({}, ...title.props.style.filter(Boolean))
+      : title.props.style ?? {};
+    expect(style.color).toBe('#1E40AF');
+    expect(style.fontWeight).toBe('700');
+  });
+
+  it('Mantra Library title is bold blue', () => {
+    const { getByText, getByTestId } = setup();
+    fireEvent.press(getByTestId('practice-card-mantra'));
+    const title = getByText('Mantra Library');
+    const style = Array.isArray(title.props.style)
+      ? Object.assign({}, ...title.props.style.filter(Boolean))
+      : title.props.style ?? {};
+    expect(style.color).toBe('#1E40AF');
+    expect(style.fontWeight).toBe('700');
   });
 
   it('Set Intention title is bold danger red', () => {
