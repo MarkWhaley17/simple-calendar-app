@@ -28,7 +28,7 @@ const kalapa: ClientConfig = {
   features: {
     timedMeditation: true,
     mantraLibrary: true,
-    rikpaTracker: true,
+    rikpaTracker: false,
     recordings: true,
     memberEvents: true,
     glassUI: true,

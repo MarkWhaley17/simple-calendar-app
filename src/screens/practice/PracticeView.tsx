@@ -52,6 +52,7 @@ import {
 import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/practiceCompletion';
 import { RikpaEntry, addRikpaEntry, loadRikpaEntries } from '../../utils/rikpa';
 import { colors, spacing } from '../../theme/tokens';
+import { ENABLE_RIKPA } from '../../theme/flags';
 import RikpaView from './RikpaView';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
@@ -741,7 +742,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   };
 
   const renderDetailContent = () => {
-    if (stage === 'rikpa') {
+    if (stage === 'rikpa' && ENABLE_RIKPA) {
       return (
         <View style={{ flex: 1, paddingTop: 52 }}>
           <Text style={styles.selectDurationTitle}>Rikpa</Text>
@@ -1457,21 +1458,23 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                   <Text style={styles.featureCardSubtitle}>Open your mantra library and count recitations</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={styles.featureCard}
-                  onPress={() => {
-                    setStage('rikpa');
-                    Animated.timing(slideX, {
-                      toValue: -screenWidth,
-                      duration: 240,
-                      useNativeDriver: true,
-                    }).start();
-                  }}
-                  testID="practice-card-rikpa"
-                >
-                  <Text style={styles.featureCardTitle}>Rikpa</Text>
-                  <Text style={styles.featureCardSubtitle}>Log moments of recognition and track your practice</Text>
-                </TouchableOpacity>
+                {ENABLE_RIKPA && (
+                  <TouchableOpacity
+                    style={styles.featureCard}
+                    onPress={() => {
+                      setStage('rikpa');
+                      Animated.timing(slideX, {
+                        toValue: -screenWidth,
+                        duration: 240,
+                        useNativeDriver: true,
+                      }).start();
+                    }}
+                    testID="practice-card-rikpa"
+                  >
+                    <Text style={styles.featureCardTitle}>Rikpa</Text>
+                    <Text style={styles.featureCardSubtitle}>Log moments of recognition and track your practice</Text>
+                  </TouchableOpacity>
+                )}
 
                 <View style={[styles.featureCard, styles.featureCardDisabled]}>
                   <View style={styles.comingSoonBadge}>

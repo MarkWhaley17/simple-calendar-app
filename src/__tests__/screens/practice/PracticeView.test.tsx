@@ -46,8 +46,6 @@ describe('PracticeView', () => {
     expect(getAllByText('Timed Meditation').length).toBeGreaterThan(0);
     expect(getByText('Mantra Recitations')).toBeTruthy();
     expect(getByTestId('practice-card-mantra')).toBeTruthy();
-    expect(getByTestId('practice-card-rikpa')).toBeTruthy();
-    expect(getByText('Rikpa')).toBeTruthy();
     expect(() => getByText('Session History')).toThrow();
   });
 
@@ -557,9 +555,10 @@ describe('PracticeView', () => {
       />
     );
 
-    // Navigate into Rikpa — its FAB only renders when stage === 'rikpa'
-    fireEvent.press(getByTestId('practice-card-rikpa'));
-    expect(getByTestId('rikpa-fab')).toBeTruthy();
+    // Navigate to intention stage — Begin button only renders there
+    fireEvent.press(getByTestId('practice-card-timed'));
+    fireEvent.press(getByTestId('practice-set-intention'));
+    expect(getByTestId('practice-begin')).toBeTruthy();
 
     await act(async () => {
       rerender(
@@ -571,31 +570,8 @@ describe('PracticeView', () => {
       );
     });
 
-    // Rikpa FAB gone means stage returned to 'home'
-    expect(queryByTestId('rikpa-fab')).toBeNull();
-  });
-
-  it('rikpa content is offset below the back button', () => {
-    const { getByTestId } = setup();
-
-    fireEvent.press(getByTestId('practice-card-rikpa'));
-
-    const fab = getByTestId('rikpa-fab');
-    // Walk up to find the paddingTop wrapper (parent of RikpaView's container)
-    let node = fab.parent;
-    while (node && node.parent) {
-      const style = Array.isArray(node.props?.style)
-        ? Object.assign({}, ...node.props.style.filter(Boolean))
-        : node.props?.style ?? {};
-      if (style.paddingTop === 52) {
-        break;
-      }
-      node = node.parent;
-    }
-    const style = Array.isArray(node?.props?.style)
-      ? Object.assign({}, ...node.props.style.filter(Boolean))
-      : node?.props?.style ?? {};
-    expect(style.paddingTop).toBe(52);
+    // Begin gone means stage returned to 'home'
+    expect(queryByTestId('practice-begin')).toBeNull();
   });
 
   it('shows edit intention link on intention screen', () => {
@@ -792,10 +768,9 @@ describe('PracticeView', () => {
     checkTitleStyle(getByText('Dedication'));
   });
 
-  it('Rikpa screen shows a Rikpa title', () => {
-    const { getAllByText, getByTestId } = setup();
-    fireEvent.press(getByTestId('practice-card-rikpa'));
-    expect(getAllByText('Rikpa').length).toBeGreaterThanOrEqual(2);
+  it('Rikpa card is not shown when feature is disabled', () => {
+    const { queryByTestId } = setup();
+    expect(queryByTestId('practice-card-rikpa')).toBeNull();
   });
 
   it('duration timer clock uses danger red color', () => {

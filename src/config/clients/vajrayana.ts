@@ -29,7 +29,7 @@ const vajrayana: ClientConfig = {
   features: {
     timedMeditation: true,
     mantraLibrary: true,
-    rikpaTracker: true,
+    rikpaTracker: false,
     recordings: false,
     memberEvents: true,
     glassUI: true,
