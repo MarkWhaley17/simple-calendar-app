@@ -1,7 +1,13 @@
-export const colors = {
+import config from '../config';
+
+const { theme } = config;
+
+/**
+ * Base palette — values that never vary between clients.
+ * Client-specific overrides (brand, accent, danger, bg) come from the config layer.
+ */
+const base = {
   black: '#000000',
-  bg: '#F6F8FB',
-  bgSubtle: '#EFF6FF',
   white: '#FFFFFF',
   overlayBackdrop: 'rgba(0, 0, 0, 0.5)',
   surface: 'rgba(255,255,255,0.58)',
@@ -12,11 +18,6 @@ export const colors = {
   borderStrong: 'rgba(255,255,255,0.58)',
   borderSubtle: 'rgba(37, 99, 235, 0.08)',
   borderInput: 'rgba(37, 99, 235, 0.15)',
-  brandPrimary: '#2563EB',
-  brandPrimaryDark: '#1E40AF',
-  brandOverlay: 'rgba(37, 99, 235, 0.35)',
-  brandSurface: '#DBEAFE',
-  brandInk: '#1E3A8A',
   textPrimary: '#0F172A',
   textSecondary: '#475569',
   textOnBrand: '#FFFFFF',
@@ -25,9 +26,6 @@ export const colors = {
   textMutedSoft: '#93C5FD',
   textTertiary: '#94A3B8',
   accent: '#2F6FED',
-  accentStrong: '#F59E0B',
-  accentWarm: '#D4A94D',
-  danger: '#991B1B',
   warningSurface: '#FEF3C7',
   warningText: '#92400E',
   warningBorder: '#F59E0B',
@@ -40,6 +38,22 @@ export const colors = {
   dayCellSurface: 'rgba(255, 255, 255, 0.7)',
   shadow: 'rgba(15,23,42,0.12)',
   shadowStrong: 'rgba(15,23,42,0.18)',
+};
+
+/** Merged color palette — base values overridden by the active client config. */
+export const colors = {
+  ...base,
+  // Client-configurable tokens
+  bg: theme.bg,
+  bgSubtle: theme.bgSubtle,
+  brandPrimary: theme.brandPrimary,
+  brandPrimaryDark: theme.brandPrimaryDark,
+  brandOverlay: theme.brandOverlay,
+  brandSurface: theme.brandSurface,
+  brandInk: theme.brandInk,
+  accentStrong: theme.accentStrong,
+  accentWarm: theme.accentWarm,
+  danger: theme.danger,
 };
 
 export const radius = {
