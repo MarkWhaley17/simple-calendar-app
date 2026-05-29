@@ -10,3 +10,48 @@ After finishing any feature or fix:
 4. Ask "Should I commit and push?" — do NOT commit or push without explicit approval
 
 Never push to GitHub without the user's consent, even for small fixes.
+
+---
+
+## Multi-client architecture
+
+This repo serves multiple white-label clients from one codebase using a config layer.
+
+### Active clients
+
+| Client ID   | App Name             | Bundle ID                          | Status      |
+|-------------|----------------------|------------------------------------|-------------|
+| `kalapa`    | Kalapa Calendar      | com.kalapamedia.kalapacalendar     | Production  |
+| `vajrayana` | Vajrayana Calendar   | com.vajrayana.calendar             | In progress |
+
+### Before making any change, confirm:
+1. **Which client the change applies to** — always ask if not specified
+2. Whether it is a **shared change** (affects all clients) or **client-specific**
+
+### Rules:
+- **Shared bug fixes and features** → edit the component or utility directly; all clients benefit automatically
+- **Client-specific colors, copy, assets, or feature flags** → edit `src/config/clients/<clientId>.ts` only
+- **New configurable values** → add the field to `src/config/types.ts` first, then set it explicitly in every client config file
+- **Never hardcode** a color or feature flag in a component — always use `colors.*` from `src/theme/tokens.ts` or `ENABLE_*` from `src/theme/flags.ts`
+- **When adding a feature flag**, set it explicitly in every client config (no silent defaults or assumptions)
+- **Commit messages** should note which client(s) are affected when the change is client-specific
+
+### Config file locations
+
+```
+src/config/
+  types.ts                  ← TypeScript shape of a full client config
+  index.ts                  ← Selects active client via EXPO_PUBLIC_APP_CLIENT
+  clients/
+    kalapa.ts               ← Kalapa Calendar config
+    vajrayana.ts            ← Vajrayana Calendar config
+```
+
+### Running a specific client locally
+
+```bash
+npm run start:kalapa
+npm run start:vajrayana
+```
+
+A small **⚙ clientId** badge appears in the top-left corner of the app in dev mode to confirm which client is active.

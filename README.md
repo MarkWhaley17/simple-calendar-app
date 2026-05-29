@@ -1,31 +1,35 @@
-# Simple Calendar App
+# Kalapa / Vajrayana Calendar
 
-A React Native calendar application built with Expo and TypeScript.
+A white-label React Native calendar and practice app built with Expo and TypeScript. One codebase serves multiple clients — each with its own branding, feature set, and App Store presence.
 
-## Features
+---
 
-- 📅 Month view calendar
-- 📱 Cross-platform (iOS, Android, Web)
-- 🎨 Modern, clean UI
-- ⚡ Built with TypeScript for type safety
+## Clients
 
-## Project Structure
+| Client ID   | App Name           | Bundle ID                      | Status      |
+|-------------|--------------------|--------------------------------|-------------|
+| `kalapa`    | Kalapa Calendar    | com.kalapamedia.kalapacalendar | Production  |
+| `vajrayana` | Vajrayana Calendar | com.vajrayana.calendar         | In progress |
 
-```
-src/
-├── components/   # Reusable UI components
-├── screens/      # App screens
-├── types/        # TypeScript type definitions
-└── utils/        # Utility functions
-```
+---
+
+## Tech Stack
+
+- **React Native 0.81.5** + **React 19**
+- **Expo SDK 54** (managed workflow)
+- **TypeScript 5.9**
+- **EAS Build** for per-client App Store binaries
+- Jest + Testing Library for tests
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v22+)
-- npm or yarn
-- Expo Go app on your mobile device (for testing)
+- Node.js v22+
+- Expo CLI (`npm install -g expo-cli`)
+- Expo Go on your device, or an iOS/Android simulator
 
 ### Installation
 
@@ -33,49 +37,103 @@ src/
 npm install
 ```
 
-### Running the App
+### Environment variables
 
-```bash
-# Start the Expo development server
-npm start
+Copy `.env.example` to `.env` and fill in your values:
 
-# Run on iOS simulator
-npm run ios
-
-# Run on Android emulator
-npm run android
-
-# Run in web browser
-npm run web
 ```
-
-## Development
-
-This project uses:
-- **Expo** - React Native framework
-- **TypeScript** - Type-safe JavaScript
-- **React Native** - Cross-platform mobile development
-
-## Feedback Ingestion Setup
-
-The in-app feedback form can post to a Google Apps Script web app that writes to Google Sheets.
-
-Required env vars:
-
-- `EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL`
-- `EXPO_PUBLIC_FEEDBACK_APP_TOKEN`
-
-Deployment template:
-
-- See [`integrations/google-feedback-apps-script/README.md`](integrations/google-feedback-apps-script/README.md)
-
-## Tech Stack
-
-- React Native
-- Expo SDK
-- TypeScript
-- React Hooks
+EXPO_PUBLIC_APP_CLIENT=kalapa
+EXPO_PUBLIC_WP_BASE_URL=https://kalapamedia.com
+EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL=...
+EXPO_PUBLIC_FEEDBACK_APP_TOKEN=...
+```
 
 ---
 
-Built with Gas Town multi-agent orchestration system
+## Running locally
+
+```bash
+# Start a specific client
+npm run start:kalapa
+npm run start:vajrayana
+
+# Generic start (uses EXPO_PUBLIC_APP_CLIENT from .env)
+npm start
+
+# Platform-specific
+npm run ios
+npm run android
+```
+
+A **⚙ clientId** badge appears in the top-left corner in dev mode to confirm which client is active.
+
+---
+
+## Running tests
+
+```bash
+npm test                  # full suite
+npm run test:watch        # watch mode
+npm run test:coverage     # with coverage report
+```
+
+---
+
+## Building for TestFlight / Play Store
+
+```bash
+# Kalapa
+eas build --profile preview           # internal preview
+eas build --profile production        # App Store / Play Store
+
+# Vajrayana
+eas build --profile vajrayana-preview
+eas build --profile vajrayana-production
+```
+
+---
+
+## Adding a new client
+
+1. Copy an existing config: `cp src/config/clients/kalapa.ts src/config/clients/newclient.ts`
+2. Update `clientId`, `bundleId`, `androidPackage`, `theme`, `assets`, `features`, and `copy`
+3. Register it in `src/config/index.ts`:
+   ```ts
+   import newclient from './clients/newclient';
+   const clients = { kalapa, vajrayana, newclient };
+   ```
+4. Add build profiles to `eas.json`
+5. Add a start script to `package.json`
+6. Update the client table in this README and in `CLAUDE.md`
+
+---
+
+## Project structure
+
+```
+src/
+├── config/               # White-label client configs
+│   ├── types.ts          # ClientConfig TypeScript shape
+│   ├── index.ts          # Active client selector
+│   └── clients/          # One file per client
+├── components/           # Shared UI components
+├── constants/            # App-wide constants (dates, mantras, etc.)
+├── screens/              # Full-screen views
+├── theme/                # Design tokens and feature flags
+│   ├── tokens.ts         # Colors, spacing, radius (merged with client config)
+│   └── flags.ts          # Feature flags (driven by client config)
+├── types/                # TypeScript interfaces
+└── utils/                # Utility functions
+```
+
+---
+
+## Feedback integration
+
+The in-app feedback form posts to a Google Apps Script web app that writes to Google Sheets.
+
+Required env vars:
+- `EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL`
+- `EXPO_PUBLIC_FEEDBACK_APP_TOKEN`
+
+See [`integrations/google-feedback-apps-script/README.md`](integrations/google-feedback-apps-script/README.md) for setup.
