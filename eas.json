@@ -26,16 +26,16 @@
       }
     },
 
-    "client-template-preview": {
+    "vajrayana-preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_APP_CLIENT": "client-template"
+        "EXPO_PUBLIC_APP_CLIENT": "vajrayana"
       }
     },
-    "client-template-production": {
+    "vajrayana-production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_APP_CLIENT": "client-template"
+        "EXPO_PUBLIC_APP_CLIENT": "vajrayana"
       }
     }
   },

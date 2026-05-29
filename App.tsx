@@ -33,6 +33,7 @@ import {
   isSessionItem,
   sanitizeEventUpdateForEditability,
 } from './src/utils/eventEditability';
+import DevClientBadge from './src/components/ui/DevClientBadge';
 
 const EVENT_BANNER_ASSETS = [
   require('./assets/day-bg.jpg'),
@@ -1134,6 +1135,7 @@ export default function App() {
         onClose={() => setShowMonthYearPicker(false)}
         onSelect={handleSelectMonthYear}
       />
+      <DevClientBadge />
     </SafeAreaView>
   );
 }

@@ -1,5 +1,6 @@
 import { ClientConfig } from './types';
 import kalapa from './clients/kalapa';
+import vajrayana from './clients/vajrayana';
 
 /**
  * Client registry — add new clients here as they are onboarded.
@@ -8,6 +9,7 @@ import kalapa from './clients/kalapa';
  */
 const clients: Record<string, ClientConfig> = {
   kalapa,
+  vajrayana,
 };
 
 const clientId = process.env.EXPO_PUBLIC_APP_CLIENT ?? 'kalapa';
