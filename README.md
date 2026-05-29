@@ -57,6 +57,10 @@ EXPO_PUBLIC_FEEDBACK_APP_TOKEN=...
 npm run start:kalapa
 npm run start:vajrayana
 
+# Start with tunnel (for physical devices on different networks)
+npm run start:kalapa:tunnel
+npm run start:vajrayana:tunnel
+
 # Generic start (uses EXPO_PUBLIC_APP_CLIENT from .env)
 npm start
 
