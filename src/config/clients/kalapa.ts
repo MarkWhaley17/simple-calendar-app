@@ -4,6 +4,7 @@ const kalapa: ClientConfig = {
   clientId: 'kalapa',
   excludedEventTitles: [],
   bannerImageOffset: 0,
+  bannerImageOffsets: {},
   bundleId: 'com.kalapamedia.kalapacalendar',
   androidPackage: 'com.kalapamedia.kalapacalendar',
 

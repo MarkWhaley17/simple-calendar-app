@@ -73,6 +73,11 @@ export interface ClientConfig {
    */
   bannerImageOffset: number;
   /**
+   * Per-image overrides for bannerImageOffset, keyed by asset filename (e.g. 'full-moon.png').
+   * Takes precedence over bannerImageOffset when the active banner image matches.
+   */
+  bannerImageOffsets: Record<string, number>;
+  /**
    * Event titles to exclude from the calendar entirely for this client.
    * Matched case-sensitively against the event title.
    */
