@@ -1022,13 +1022,6 @@ export default function App() {
           defaultEventReminderMinutes={notificationSettings.eventReminderMinutes}
           defaultAllDayReminderHours={notificationSettings.allDayReminderHours}
         />
-      ) : viewMode === 'event' && selectedEvent ? (
-        <EventView
-          event={selectedEvent}
-          onBack={handleBackToDay}
-          onEdit={!isEventItem(selectedEvent) ? handleEditEvent : undefined}
-          onAddNotes={isEventItem(selectedEvent) ? handleEditEvent : undefined}
-        />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />
       ) : viewMode === 'privacyPolicy' ? (
@@ -1039,7 +1032,14 @@ export default function App() {
         <FeedbackView onBack={() => setViewMode('account')} user={user} />
       ) : (
         <>
-          {viewMode === 'account' ? (
+          {viewMode === 'event' && selectedEvent ? (
+            <EventView
+              event={selectedEvent}
+              onBack={handleBackToDay}
+              onEdit={!isEventItem(selectedEvent) ? handleEditEvent : undefined}
+              onAddNotes={isEventItem(selectedEvent) ? handleEditEvent : undefined}
+            />
+          ) : viewMode === 'account' ? (
             <AccountView
               notificationSettings={notificationSettings}
               onUpdateNotificationSettings={handleUpdateNotificationSettings}
