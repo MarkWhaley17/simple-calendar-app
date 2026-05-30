@@ -10,3 +10,4 @@ export const ENABLE_MEMBER_EVENTS = config.features.memberEvents;
 export const ENABLE_CALENDAR_HEADER_BANNER = config.features.calendarHeaderBanner;
 export const ENABLE_QUOTE_ABOVE_CALENDAR = config.features.quoteAboveCalendar;
 export const ENABLE_QUOTE_SCROLLING = config.features.quoteScrolling;
+export const ENABLE_USER_AUTH = config.features.userAuthentication;

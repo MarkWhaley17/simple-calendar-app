@@ -39,6 +39,8 @@ export interface FeatureFlags {
   rikpaTracker: boolean;
   /** Recordings webview in the Account tab */
   recordings: boolean;
+  /** Allow users to sign in and access member-only content */
+  userAuthentication: boolean;
   /** Member-only events fetched from WordPress */
   memberEvents: boolean;
   /** Glass / blur UI style */
@@ -65,6 +67,11 @@ export interface CopyOverrides {
 export interface ClientConfig {
   /** Short identifier used in env vars and EAS build profiles, e.g. "kalapa" */
   clientId: string;
+  /**
+   * Event titles to exclude from the calendar entirely for this client.
+   * Matched case-sensitively against the event title.
+   */
+  excludedEventTitles: string[];
   /** iOS bundle identifier */
   bundleId: string;
   /** Android package name */

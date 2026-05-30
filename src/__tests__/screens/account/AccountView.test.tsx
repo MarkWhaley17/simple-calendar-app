@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import AccountView from '../../../screens/account/AccountView';
 import { NotificationSettings, AuthUser } from '../../../types';
 import * as auth from '../../../utils/auth';
+import * as flags from '../../../theme/flags';
 
 jest.mock('../../../utils/auth');
 
@@ -41,6 +42,10 @@ describe('AccountView', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('signed-out state', () => {
@@ -126,6 +131,24 @@ describe('AccountView', () => {
       await waitFor(() => {
         expect(getByText('Invalid username or password.')).toBeTruthy();
       });
+    });
+  });
+
+  describe('when userAuthentication is disabled (Vajrayana)', () => {
+    beforeEach(() => {
+      jest.replaceProperty(flags, 'ENABLE_USER_AUTH', false);
+    });
+
+    it('hides the entire Profile section', () => {
+      const { queryByText } = render(<AccountView {...defaultProps} />);
+      expect(queryByText('Profile')).toBeNull();
+      expect(queryByText('Sign In')).toBeNull();
+      expect(queryByText('Open My Recordings')).toBeNull();
+    });
+
+    it('still shows Notification Settings section', () => {
+      const { getByText } = render(<AccountView {...defaultProps} />);
+      expect(getByText('Notifications')).toBeTruthy();
     });
   });
 

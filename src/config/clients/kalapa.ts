@@ -2,6 +2,7 @@ import { ClientConfig } from '../types';
 
 const kalapa: ClientConfig = {
   clientId: 'kalapa',
+  excludedEventTitles: [],
   bundleId: 'com.kalapamedia.kalapacalendar',
   androidPackage: 'com.kalapamedia.kalapacalendar',
 
@@ -31,6 +32,7 @@ const kalapa: ClientConfig = {
     mantraLibrary: true,
     rikpaTracker: false,
     recordings: true,
+    userAuthentication: true,
     memberEvents: true,
     glassUI: true,
     motionUI: true,

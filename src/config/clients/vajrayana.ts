@@ -2,13 +2,14 @@ import { ClientConfig } from '../types';
 
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
+  excludedEventTitles: ['Jambhala Day', 'King of Ling Lhasang'],
   bundleId: 'com.vajrayana.calendar',
   androidPackage: 'com.vajrayana.calendar',
 
   theme: {
     brandPrimary: '#B45309',
     brandPrimaryDark: '#92400E',
-    brandOverlay: 'rgba(180, 83, 9, 0.35)',
+    brandOverlay: 'rgba(180, 83, 9, 0.15)',
     brandSurface: '#FEF3C7',
     brandInk: '#78350F',
     accentStrong: '#F59E0B',
@@ -32,6 +33,7 @@ const vajrayana: ClientConfig = {
     mantraLibrary: true,
     rikpaTracker: false,
     recordings: false,
+    userAuthentication: false,
     memberEvents: true,
     glassUI: true,
     motionUI: true,

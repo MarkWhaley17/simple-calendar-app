@@ -2,6 +2,7 @@
 // AUTO-GENERATED from EVENTS.md by scripts/sync-events-from-md.js
 
 import { CalendarEvent } from '../types';
+import config from '../config';
 
 const eventData: { title: string; date: string; toDate?: string; description: string; image?: string }[] = [
   {
@@ -889,7 +890,10 @@ const eventData: { title: string; date: string; toDate?: string; description: st
 ];
 
 export const getEvents = (): CalendarEvent[] => {
-  return eventData.map((event, index) => {
+  const { excludedEventTitles } = config;
+  return eventData
+    .filter(event => !excludedEventTitles.includes(event.title))
+    .map((event, index) => {
     const [year, month, day] = event.date.split('-').map(Number);
     const eventDate = new Date(year, month - 1, day);
 
