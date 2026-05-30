@@ -6,7 +6,7 @@ const vajrayana: ClientConfig = {
   bannerImageOffset: 80,
   bannerImageOffsets: {
     'full-moon.png': 0,
-    'green-tara.jpg': 120,
+    'green-tara.jpg': 200,
   },
   bundleId: 'com.vajrayana.calendar',
   androidPackage: 'com.vajrayana.calendar',

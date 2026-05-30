@@ -108,10 +108,8 @@ const DayView: React.FC<DayViewProps> = ({
     ? imageMap[eventWithImageKey]
     : require('../../../assets/day-bg.jpg');
   const activeImageKey = eventWithImageKey ?? 'day-bg.jpg';
-  const imageOffset =
-    activeImageKey in config.bannerImageOffsets
-      ? config.bannerImageOffsets[activeImageKey]
-      : config.bannerImageOffset;
+  const perImageOffset = config.bannerImageOffsets[activeImageKey];
+  const imageOffset = perImageOffset !== undefined ? perImageOffset : config.bannerImageOffset;
   const eventsBackground = require('../../../assets/day-view-pattern.png');
 
   const formatDateRange = (start: Date, end: Date) => {
