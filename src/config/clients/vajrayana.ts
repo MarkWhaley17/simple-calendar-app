@@ -3,7 +3,7 @@ import { ClientConfig } from '../types';
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
   excludedEventTitles: ['Jambhala Day', 'King of Ling Lhasang'],
-  bannerImageOffset: 80,
+  bannerImageOffset: 300,
   bannerImageOffsets: {
     'full-moon.png': 0,
     'green-tara.jpg': 200,
