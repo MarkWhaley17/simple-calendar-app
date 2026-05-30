@@ -127,7 +127,7 @@ const DayView: React.FC<DayViewProps> = ({
         <ImageBackground
           source={headerBackground}
           style={styles.headerBackground}
-          imageStyle={imageOffset > 0 ? { bottom: -imageOffset } : undefined}
+          imageStyle={imageOffset !== 0 ? { bottom: -imageOffset } : undefined}
           resizeMode="cover"
           testID="day-view-header-image"
         >
