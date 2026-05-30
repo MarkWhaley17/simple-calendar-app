@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
 import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER, ENABLE_USER_AUTH } from '../../theme/flags';
+import config from '../../config';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 
@@ -136,7 +137,7 @@ const AccountView: React.FC<AccountViewProps> = ({
     <View style={styles.container}>
       {/* Header */}
       {ENABLE_CALENDAR_HEADER_BANNER ? (
-        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+        <ImageBackground source={headerBackground} style={styles.headerBackground} imageStyle={config.bannerImageOffset > 0 ? { bottom: -config.bannerImageOffset } : undefined} resizeMode="cover">
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Account</Text>
           </View>
@@ -371,6 +372,7 @@ const styles = StyleSheet.create({
   },
   headerBackground: {
     width: '100%',
+    overflow: 'hidden',
   },
   header: {
     backgroundColor: colors.brandOverlay,

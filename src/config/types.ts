@@ -68,6 +68,11 @@ export interface ClientConfig {
   /** Short identifier used in env vars and EAS build profiles, e.g. "kalapa" */
   clientId: string;
   /**
+   * Pixels to extend the image layout below the container so cover-mode
+   * crops toward the top of the image instead of the centre. 0 = default centred.
+   */
+  bannerImageOffset: number;
+  /**
    * Event titles to exclude from the calendar entirely for this client.
    * Matched case-sensitively against the event title.
    */

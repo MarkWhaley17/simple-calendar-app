@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
+import config from '../../config';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { AnimatedPressable } from '../../components/ui/AnimatedPressable';
 import { colors, elevation, spacing } from '../../theme/tokens';
@@ -121,6 +122,7 @@ const DayView: React.FC<DayViewProps> = ({
         <ImageBackground
           source={headerBackground}
           style={styles.headerBackground}
+          imageStyle={config.bannerImageOffset > 0 ? { bottom: -config.bannerImageOffset } : undefined}
           resizeMode="cover"
           testID="day-view-header-image"
         >
@@ -308,6 +310,7 @@ const styles = StyleSheet.create({
   },
   headerBackground: {
     width: '100%',
+    overflow: 'hidden',
   },
   headerOverlay: {
     backgroundColor: colors.brandOverlay,

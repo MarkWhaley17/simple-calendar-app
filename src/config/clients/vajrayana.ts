@@ -3,6 +3,7 @@ import { ClientConfig } from '../types';
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
   excludedEventTitles: ['Jambhala Day', 'King of Ling Lhasang'],
+  bannerImageOffset: 80,
   bundleId: 'com.vajrayana.calendar',
   androidPackage: 'com.vajrayana.calendar',
 

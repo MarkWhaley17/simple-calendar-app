@@ -980,10 +980,11 @@ export default function App() {
     return 'month';
   };
 
-  // Check if we should show bottom nav (hide on event detail screens)
+  // Check if we should show bottom nav
   const shouldShowBottomNav =
     viewMode === 'month' ||
     viewMode === 'day' ||
+    viewMode === 'event' ||
     viewMode === 'account' ||
     viewMode === 'practice' ||
     viewMode === 'eventsList';

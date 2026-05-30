@@ -5,6 +5,7 @@ import { ENABLE_MOTION_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/fla
 import { colors, spacing } from '../../theme/tokens';
 import { AnimatedPressable } from '../ui/AnimatedPressable';
 import { AnimatedMonthTitle } from './AnimatedMonthTitle';
+import config from '../../config';
 
 interface CalendarHeaderProps {
   currentDate: Date;
@@ -63,8 +64,14 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 
   if (ENABLE_CALENDAR_HEADER_BANNER) {
     const headerBackground = require('../../../assets/day-bg.jpg');
+    const offset = config.bannerImageOffset;
     return (
-      <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+      <ImageBackground
+        source={headerBackground}
+        style={styles.headerBackground}
+        imageStyle={offset > 0 ? { bottom: -offset } : undefined}
+        resizeMode="cover"
+      >
         {innerContent}
       </ImageBackground>
     );
@@ -76,6 +83,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 const styles = StyleSheet.create({
   headerBackground: {
     width: '100%',
+    overflow: 'hidden',
   },
   plainHeader: {
     width: '100%',

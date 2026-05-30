@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
+import config from '../../config';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { isEventItem } from '../../utils/eventEditability';
@@ -182,7 +183,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({
       >
         {/* Header */}
         {ENABLE_CALENDAR_HEADER_BANNER ? (
-          <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+          <ImageBackground source={headerBackground} style={styles.headerBackground} imageStyle={config.bannerImageOffset > 0 ? { bottom: -config.bannerImageOffset } : undefined} resizeMode="cover">
             <View style={styles.header}>
               <View style={styles.headerTopRow}>
                 <View style={styles.headerMonthBlock}>
@@ -409,6 +410,7 @@ const styles = StyleSheet.create({
   },
   headerBackground: {
     width: '100%',
+    overflow: 'hidden',
   },
   header: {
     backgroundColor: colors.brandOverlay,

@@ -3,6 +3,7 @@ import { ClientConfig } from '../types';
 const kalapa: ClientConfig = {
   clientId: 'kalapa',
   excludedEventTitles: [],
+  bannerImageOffset: 0,
   bundleId: 'com.kalapamedia.kalapacalendar',
   androidPackage: 'com.kalapamedia.kalapacalendar',
 

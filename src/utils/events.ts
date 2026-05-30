@@ -894,27 +894,27 @@ export const getEvents = (): CalendarEvent[] => {
   return eventData
     .filter(event => !excludedEventTitles.includes(event.title))
     .map((event, index) => {
-    const [year, month, day] = event.date.split('-').map(Number);
-    const eventDate = new Date(year, month - 1, day);
+      const [year, month, day] = event.date.split('-').map(Number);
+      const eventDate = new Date(year, month - 1, day);
 
-    let toDate: Date | undefined;
-    if (event.toDate) {
-      const [toYear, toMonth, toDay] = event.toDate.split('-').map(Number);
-      toDate = new Date(toYear, toMonth - 1, toDay);
-    }
+      let toDate: Date | undefined;
+      if (event.toDate) {
+        const [toYear, toMonth, toDay] = event.toDate.split('-').map(Number);
+        toDate = new Date(toYear, toMonth - 1, toDay);
+      }
 
-    return {
-      id: `event-public-${index}`,
-      title: event.title,
-      fromDate: eventDate,
-      toDate,
-      fromTime: '',
-      description: event.description,
-      isAllDay: true,
-      image: event.image,
-      // Legacy fields for compatibility
-      date: eventDate,
-      startTime: '',
-    };
-  });
+      return {
+        id: `event-public-${index}`,
+        title: event.title,
+        fromDate: eventDate,
+        toDate,
+        fromTime: '',
+        description: event.description,
+        isAllDay: true,
+        image: event.image,
+        // Legacy fields for compatibility
+        date: eventDate,
+        startTime: '',
+      };
+    });
 };

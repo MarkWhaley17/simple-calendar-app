@@ -53,6 +53,7 @@ import { playPracticeCompletionFeedback, playPracticeGong } from '../../utils/pr
 import { RikpaEntry, addRikpaEntry, loadRikpaEntries } from '../../utils/rikpa';
 import { colors, spacing } from '../../theme/tokens';
 import { ENABLE_RIKPA, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
+import config from '../../config';
 import RikpaView from './RikpaView';
 
 const headerBackground = require('../../../assets/day-bg.jpg');
@@ -1409,7 +1410,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
   return (
     <View style={styles.container}>
       {ENABLE_CALENDAR_HEADER_BANNER ? (
-        <ImageBackground source={headerBackground} style={styles.headerBackground} resizeMode="cover">
+        <ImageBackground source={headerBackground} style={styles.headerBackground} imageStyle={config.bannerImageOffset > 0 ? { bottom: -config.bannerImageOffset } : undefined} resizeMode="cover">
           <View style={styles.headerOverlay}>
             <Text style={styles.headerTitle}>Practice</Text>
           </View>
@@ -1602,6 +1603,7 @@ const styles = StyleSheet.create({
   headerBackground: {
     width: '100%',
     minHeight: 144,
+    overflow: 'hidden',
   },
   headerOverlay: {
     flex: 1,
