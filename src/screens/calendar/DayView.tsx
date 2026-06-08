@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Image, Platform, Alert, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CalendarEvent } from '../../types';
 import { DAY_NAMES, MONTH_NAMES } from '../../constants/dates';
-import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER, ENABLE_QUOTE_SCROLLING } from '../../theme/flags';
 import config from '../../config';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { AnimatedPressable } from '../../components/ui/AnimatedPressable';
+import { MarqueeText } from '../../components/ui/MarqueeText';
 import { colors, elevation, spacing } from '../../theme/tokens';
 import { isEventItem } from '../../utils/eventEditability';
 
@@ -19,6 +20,8 @@ interface DayViewProps {
   onSessionEdit?: (event: CalendarEvent) => void;
   onSessionDelete?: (event: CalendarEvent) => void;
   onChangeDate?: (date: Date) => void;
+  quote?: string;
+  quoteOpacity?: Animated.Value;
 }
 
 const DayView: React.FC<DayViewProps> = ({
@@ -29,6 +32,8 @@ const DayView: React.FC<DayViewProps> = ({
   onAddEvent,
   onSessionEdit,
   onSessionDelete,
+  quote,
+  quoteOpacity,
 }) => {
   const useIosPilot = ENABLE_GLASS_UI && Platform.OS === 'ios';
   const dayName = DAY_NAMES[selectedDate.getDay()];
@@ -154,7 +159,7 @@ const DayView: React.FC<DayViewProps> = ({
         </View>
       ) : (
         <View style={[styles.headerOverlay, styles.headerOverlayPlain]} testID="day-view-header-plain">
-          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.dateInfo, styles.dateInfoPlain]}>
             <Text style={[styles.dayName, styles.dayNamePlain]}>{dayName}</Text>
             <Text style={[styles.fullDate, styles.fullDatePlain]}>
@@ -163,6 +168,23 @@ const DayView: React.FC<DayViewProps> = ({
           </View>
         </View>
       )}
+
+      {/* Quote */}
+      {quote ? (
+        <View style={styles.quoteWrapper}>
+          <Animated.View style={[styles.quoteContainer, quoteOpacity ? { opacity: quoteOpacity } : undefined]}>
+            {ENABLE_QUOTE_SCROLLING ? (
+              <MarqueeText
+                text={quote}
+                style={styles.quoteText}
+                containerStyle={styles.quoteMarqueeContainer}
+              />
+            ) : (
+              <Text style={[styles.quoteText, styles.quoteTextStatic]}>{quote}</Text>
+            )}
+          </Animated.View>
+        </View>
+      ) : null}
 
       {/* Events list */}
       <View style={styles.eventsBackground}>
@@ -384,6 +406,40 @@ const styles = StyleSheet.create({
     color: colors.brandPrimary,
     fontSize: 15,
     marginTop: 2,
+  },
+  quoteWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  quoteContainer: {
+    backgroundColor: '#fff',
+    paddingVertical: spacing.xl,
+    paddingHorizontal: spacing.xl,
+    borderRadius: 16,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.danger,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  quoteMarqueeContainer: {
+    width: '100%',
+  },
+  quoteText: {
+    fontSize: 16,
+    lineHeight: 26,
+    color: colors.brandInk,
+    fontStyle: 'normal',
+    letterSpacing: 0.2,
+  },
+  quoteTextStatic: {
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   eventsContainer: {
     flex: 1,

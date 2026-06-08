@@ -1087,6 +1087,8 @@ export default function App() {
                 onAddEvent={handleAddEvent}
                 onSessionEdit={handleEditSessionFromEventsList}
                 onSessionDelete={handleDeleteSessionFromEventsList}
+                quote={currentQuote}
+                quoteOpacity={quoteOpacity}
               />
             </Animated.View>
           ) : (
