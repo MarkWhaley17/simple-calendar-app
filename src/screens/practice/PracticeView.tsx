@@ -1416,11 +1416,11 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           </View>
         </ImageBackground>
       ) : (
-        <View style={[styles.headerBackground, styles.headerBackgroundPlain]}>
+        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.headerBackground, styles.headerBackgroundPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
           <View style={[styles.headerOverlay, styles.headerOverlayPlain]}>
             <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Practice</Text>
           </View>
-        </View>
+        </ImageBackground>
       )}
 
       <Animated.View

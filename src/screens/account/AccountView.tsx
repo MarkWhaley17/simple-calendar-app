@@ -143,9 +143,9 @@ const AccountView: React.FC<AccountViewProps> = ({
           </View>
         </ImageBackground>
       ) : (
-        <View style={[styles.header, styles.headerPlain]}>
+        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.header, styles.headerPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
           <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Account</Text>
-        </View>
+        </ImageBackground>
       )}
 
       {/* Content */}

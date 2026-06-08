@@ -1204,7 +1204,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 26,
     color: '#1E3A8A',
-    fontStyle: 'italic',
+    fontStyle: 'normal',
     letterSpacing: 0.2,
   },
   quoteTextStatic: {

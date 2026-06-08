@@ -122,13 +122,19 @@ const DayView: React.FC<DayViewProps> = ({
     <View style={styles.container}>
       {/* Header */}
       {ENABLE_CALENDAR_HEADER_BANNER ? (
-        <ImageBackground
-          source={headerBackground}
-          style={styles.headerBackground}
-          imageStyle={imageOffset !== 0 ? { bottom: -imageOffset } : undefined}
-          resizeMode="cover"
-          testID="day-view-header-image"
-        >
+        <View style={styles.headerBackground}>
+          <Image
+            source={headerBackground}
+            style={imageOffset > 0 ? {
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 144 + imageOffset * 2,
+            } : StyleSheet.absoluteFillObject}
+            resizeMode="cover"
+            testID="day-view-header-image"
+          />
           <View style={styles.headerOverlay}>
             <TouchableOpacity
               style={styles.backButton}
@@ -145,16 +151,16 @@ const DayView: React.FC<DayViewProps> = ({
               </Text>
             </View>
           </View>
-        </ImageBackground>
+        </View>
       ) : (
-        <View style={[styles.headerOverlay, styles.headerOverlayPlain]} testID="day-view-header-plain">
+        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.headerOverlay, styles.headerOverlayPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover" testID="day-view-header-plain">
           <View style={[styles.dateInfo, styles.dateInfoPlain]}>
             <Text style={[styles.dayName, styles.dayNamePlain]}>{dayName}</Text>
             <Text style={[styles.fullDate, styles.fullDatePlain]}>
               {monthName} {dayNumber}, {year}
             </Text>
           </View>
-        </View>
+        </ImageBackground>
       )}
 
       {/* Events list */}

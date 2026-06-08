@@ -71,13 +71,24 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         style={styles.headerBackground}
         imageStyle={offset > 0 ? { bottom: -offset } : undefined}
         resizeMode="cover"
+        testID="calendar-header-banner"
       >
         {innerContent}
       </ImageBackground>
     );
   }
 
-  return <View style={styles.plainHeader}>{innerContent}</View>;
+  return (
+    <ImageBackground
+      source={require('../../../assets/day-view-pattern.png')}
+      style={styles.plainHeader}
+      imageStyle={{ opacity: 0.35 }}
+      resizeMode="cover"
+      testID="calendar-header-plain"
+    >
+      {innerContent}
+    </ImageBackground>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -19,7 +19,7 @@ const kalapa: ClientConfig = {
     danger: '#991B1B',
     bg: '#F6F8FB',
     bgSubtle: '#EFF6FF',
-    headerPlainBg: '#DBEAFE',
+    headerPlainBg: '#F59E0B',
   },
 
   assets: {

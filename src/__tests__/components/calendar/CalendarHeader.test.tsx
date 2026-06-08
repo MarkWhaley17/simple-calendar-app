@@ -81,31 +81,30 @@ describe('CalendarHeader', () => {
     expect(getByText('December')).toBeTruthy();
   });
 
-  it('renders an ImageBackground when calendarHeaderBanner is enabled', () => {
+  it('renders the banner ImageBackground when calendarHeaderBanner is enabled', () => {
     jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', true);
     const date = new Date(2026, 0, 15);
-    const { UNSAFE_getByType } = render(
+    const { getByTestId } = render(
       <CalendarHeader
         currentDate={date}
         onPreviousMonth={mockOnPreviousMonth}
         onNextMonth={mockOnNextMonth}
       />
     );
-    const { ImageBackground } = require('react-native');
-    expect(UNSAFE_getByType(ImageBackground)).toBeTruthy();
+    expect(getByTestId('calendar-header-banner')).toBeTruthy();
   });
 
-  it('renders a plain View (no ImageBackground) when calendarHeaderBanner is disabled', () => {
+  it('renders the plain pattern header when calendarHeaderBanner is disabled', () => {
     jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', false);
     const date = new Date(2026, 0, 15);
-    const { UNSAFE_queryByType } = render(
+    const { getByTestId, queryByTestId } = render(
       <CalendarHeader
         currentDate={date}
         onPreviousMonth={mockOnPreviousMonth}
         onNextMonth={mockOnNextMonth}
       />
     );
-    const { ImageBackground } = require('react-native');
-    expect(UNSAFE_queryByType(ImageBackground)).toBeNull();
+    expect(getByTestId('calendar-header-plain')).toBeTruthy();
+    expect(queryByTestId('calendar-header-banner')).toBeNull();
   });
 });

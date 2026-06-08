@@ -212,7 +212,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({
             </View>
           </ImageBackground>
         ) : (
-          <View style={[styles.header, styles.headerPlain]}>
+          <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.header, styles.headerPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
             <View style={styles.headerTopRow}>
               <View style={styles.headerMonthBlock}>
                 <Text style={[styles.headerTitle, styles.headerTitlePlain]}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
@@ -237,7 +237,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({
             >
               <Text style={[styles.headerNavButtonText, styles.headerNavButtonTextPlain]}>›</Text>
             </TouchableOpacity>
-          </View>
+          </ImageBackground>
         )}
 
         <View style={styles.tabBarContainer}>
