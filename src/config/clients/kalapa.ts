@@ -5,6 +5,7 @@ const kalapa: ClientConfig = {
   excludedEventTitles: [],
   bannerImageOffset: 0,
   bannerImageOffsets: {},
+  headerPatternOffset: 0,
   bundleId: 'com.kalapamedia.kalapacalendar',
   androidPackage: 'com.kalapamedia.kalapacalendar',
 
@@ -27,6 +28,7 @@ const kalapa: ClientConfig = {
     splashImage: require('../../../assets/KalapaCalIcon1.png'),
     headerDefault: require('../../../assets/dakini.jpg'),
     practiceBackground: require('../../../assets/day-bg.jpg'),
+    headerPatternImage: require('../../../assets/parasol.png'),
   },
 
   features: {

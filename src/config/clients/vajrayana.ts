@@ -8,6 +8,7 @@ const vajrayana: ClientConfig = {
     'full-moon.png': 0,
     'green-tara.jpg': 200,
   },
+  headerPatternOffset: 0,
   bundleId: 'com.vajrayana.calendar',
   androidPackage: 'com.vajrayana.calendar',
 
@@ -31,6 +32,7 @@ const vajrayana: ClientConfig = {
     splashImage: require('../../../assets/KalapaCalIcon1.png'),
     headerDefault: require('../../../assets/dakini.jpg'),
     practiceBackground: require('../../../assets/day-bg.jpg'),
+    headerPatternImage: require('../../../assets/day-view-pattern.png'),
   },
 
   features: {

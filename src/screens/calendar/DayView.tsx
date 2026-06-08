@@ -153,14 +153,15 @@ const DayView: React.FC<DayViewProps> = ({
           </View>
         </View>
       ) : (
-        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.headerOverlay, styles.headerOverlayPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover" testID="day-view-header-plain">
+        <View style={[styles.headerOverlay, styles.headerOverlayPlain]} testID="day-view-header-plain">
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.dateInfo, styles.dateInfoPlain]}>
             <Text style={[styles.dayName, styles.dayNamePlain]}>{dayName}</Text>
             <Text style={[styles.fullDate, styles.fullDatePlain]}>
               {monthName} {dayNumber}, {year}
             </Text>
           </View>
-        </ImageBackground>
+        </View>
       )}
 
       {/* Events list */}
@@ -361,6 +362,7 @@ const styles = StyleSheet.create({
   },
   headerOverlayPlain: {
     backgroundColor: colors.headerPlainBg,
+    overflow: 'hidden',
     minHeight: 72,
     paddingTop: spacing.md,
     paddingBottom: spacing.md,
@@ -372,6 +374,7 @@ const styles = StyleSheet.create({
   },
   dateInfoPlain: {
     alignItems: 'center',
+    marginTop: 0,
   },
   dayNamePlain: {
     color: colors.brandPrimaryDark,
@@ -379,6 +382,7 @@ const styles = StyleSheet.create({
   },
   fullDatePlain: {
     color: colors.brandPrimary,
+    fontSize: 15,
     marginTop: 2,
   },
   eventsContainer: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import { MONTH_NAMES } from '../../constants/dates';
 import { ENABLE_MOTION_UI, ENABLE_CALENDAR_HEADER_BANNER } from '../../theme/flags';
 import { colors, spacing } from '../../theme/tokens';
@@ -79,15 +79,14 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   }
 
   return (
-    <ImageBackground
-      source={require('../../../assets/day-view-pattern.png')}
-      style={styles.plainHeader}
-      imageStyle={{ opacity: 0.35 }}
-      resizeMode="cover"
-      testID="calendar-header-plain"
-    >
+    <View style={styles.plainHeader} testID="calendar-header-plain">
+      <Image
+        source={config.assets.headerPatternImage}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }}
+        resizeMode="cover"
+      />
       {innerContent}
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -98,6 +97,7 @@ const styles = StyleSheet.create({
   },
   plainHeader: {
     width: '100%',
+    overflow: 'hidden',
     backgroundColor: colors.headerPlainBg,
   },
   container: {

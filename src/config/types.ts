@@ -31,6 +31,8 @@ export interface AssetConfig {
   headerDefault: number;
   /** Background pattern used on practice screens */
   practiceBackground: number;
+  /** Pattern image shown behind plain (no-photo) header bars */
+  headerPatternImage: number;
 }
 
 export interface FeatureFlags {
@@ -77,6 +79,11 @@ export interface ClientConfig {
    * Takes precedence over bannerImageOffset when the active banner image matches.
    */
   bannerImageOffsets: Record<string, number>;
+  /**
+   * Pixels to translate the plain-header pattern image downward so a higher
+   * portion of the tile is visible. 0 = default (cover-centred).
+   */
+  headerPatternOffset: number;
   /**
    * Event titles to exclude from the calendar entirely for this client.
    * Matched case-sensitively against the event title.

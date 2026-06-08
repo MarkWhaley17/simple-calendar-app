@@ -212,7 +212,8 @@ const EventsListView: React.FC<EventsListViewProps> = ({
             </View>
           </ImageBackground>
         ) : (
-          <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.header, styles.headerPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
+          <View style={[styles.header, styles.headerPlain]}>
+            <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
             <View style={styles.headerTopRow}>
               <View style={styles.headerMonthBlock}>
                 <Text style={[styles.headerTitle, styles.headerTitlePlain]}>{MONTH_NAMES[visibleMonth]} {visibleYear}</Text>
@@ -237,7 +238,7 @@ const EventsListView: React.FC<EventsListViewProps> = ({
             >
               <Text style={[styles.headerNavButtonText, styles.headerNavButtonTextPlain]}>›</Text>
             </TouchableOpacity>
-          </ImageBackground>
+          </View>
         )}
 
         <View style={styles.tabBarContainer}>
@@ -473,7 +474,10 @@ const styles = StyleSheet.create({
   },
   headerPlain: {
     backgroundColor: colors.headerPlainBg,
+    overflow: 'hidden',
     minHeight: 72,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
     shadowColor: undefined,
     shadowOffset: undefined,
     shadowOpacity: 0,

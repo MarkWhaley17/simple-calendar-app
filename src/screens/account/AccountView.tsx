@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform, Image, ImageBackground } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
 import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER, ENABLE_USER_AUTH } from '../../theme/flags';
@@ -143,9 +143,10 @@ const AccountView: React.FC<AccountViewProps> = ({
           </View>
         </ImageBackground>
       ) : (
-        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.header, styles.headerPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
+        <View style={[styles.header, styles.headerPlain]}>
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Account</Text>
-        </ImageBackground>
+        </View>
       )}
 
       {/* Content */}
@@ -397,7 +398,10 @@ const styles = StyleSheet.create({
   },
   headerPlain: {
     backgroundColor: colors.headerPlainBg,
+    overflow: 'hidden',
     minHeight: 72,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
     shadowColor: undefined,
     shadowOffset: undefined,
     shadowOpacity: 0,
@@ -405,6 +409,7 @@ const styles = StyleSheet.create({
   },
   headerTitlePlain: {
     color: colors.brandPrimaryDark,
+    fontSize: 22,
   },
   content: {
     flex: 1,

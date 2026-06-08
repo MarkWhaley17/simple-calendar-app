@@ -1416,11 +1416,12 @@ const PracticeView: React.FC<PracticeViewProps> = ({
           </View>
         </ImageBackground>
       ) : (
-        <ImageBackground source={require('../../../assets/day-view-pattern.png')} style={[styles.headerBackground, styles.headerBackgroundPlain]} imageStyle={{ opacity: 0.35 }} resizeMode="cover">
+        <View style={[styles.headerBackground, styles.headerBackgroundPlain]}>
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.headerOverlay, styles.headerOverlayPlain]}>
             <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Practice</Text>
           </View>
-        </ImageBackground>
+        </View>
       )}
 
       <Animated.View
@@ -1618,6 +1619,7 @@ const styles = StyleSheet.create({
   },
   headerBackgroundPlain: {
     backgroundColor: colors.headerPlainBg,
+    overflow: 'hidden',
     minHeight: 72,
   },
   headerOverlayPlain: {

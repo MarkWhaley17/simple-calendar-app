@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import CalendarHeader from '../../../components/calendar/CalendarHeader';
 import * as flags from '../../../theme/flags';
+import config from '../../../config';
 
 describe('CalendarHeader', () => {
   const mockOnPreviousMonth = jest.fn();
@@ -106,5 +107,21 @@ describe('CalendarHeader', () => {
     );
     expect(getByTestId('calendar-header-plain')).toBeTruthy();
     expect(queryByTestId('calendar-header-banner')).toBeNull();
+  });
+
+  it('uses the client headerPatternImage asset in the plain header', () => {
+    jest.replaceProperty(flags, 'ENABLE_CALENDAR_HEADER_BANNER', false);
+    const date = new Date(2026, 0, 15);
+    const { UNSAFE_getAllByType } = render(
+      <CalendarHeader
+        currentDate={date}
+        onPreviousMonth={mockOnPreviousMonth}
+        onNextMonth={mockOnNextMonth}
+      />
+    );
+    const { Image } = require('react-native');
+    const images = UNSAFE_getAllByType(Image);
+    const patternImage = images.find((img: any) => img.props.source === config.assets.headerPatternImage);
+    expect(patternImage).toBeTruthy();
   });
 });
