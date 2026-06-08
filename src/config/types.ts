@@ -3,6 +3,8 @@
  * Add new fields here as new customisation needs emerge.
  */
 
+import { PracticeMantraLibraryItem } from '../constants/practice';
+
 export interface ThemeOverrides {
   /** Primary brand colour (buttons, active states, links) */
   brandPrimary: string;
@@ -97,4 +99,9 @@ export interface ClientConfig {
   assets: AssetConfig;
   features: FeatureFlags;
   copy: CopyOverrides;
+  /**
+   * Mantra/prayer items shown in the practice library.
+   * Overrides the default shared PRACTICE_MANTRA_LIBRARY for this client.
+   */
+  mantraLibrary: PracticeMantraLibraryItem[];
 }

@@ -23,7 +23,6 @@ import {
   PRACTICE_DEDICATION_TEXT,
   PRACTICE_DURATION_PRESETS_MINUTES,
   PRACTICE_INTENTION_TEXT,
-  PRACTICE_MANTRA_LIBRARY,
   PRACTICE_MANTRA_TARGET_OPTIONS,
   formatMantraTargetLabel,
 } from '../../constants/practice';
@@ -233,7 +232,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
     [linkableSessions, linkedSessionId]
   );
   const selectedMantra = useMemo(
-    () => PRACTICE_MANTRA_LIBRARY.find((mantra) => mantra.id === selectedMantraId) ?? null,
+    () => config.mantraLibrary.find((mantra) => mantra.id === selectedMantraId) ?? null,
     [selectedMantraId]
   );
   const mantraLinkedSession = useMemo(
@@ -399,7 +398,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         return;
       }
 
-      const mantraExists = PRACTICE_MANTRA_LIBRARY.some(
+      const mantraExists = config.mantraLibrary.some(
         (mantra) => mantra.id === mantraSnapshot.mantraId
       );
       if (!mantraExists) {
@@ -760,7 +759,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         <ScrollView contentContainerStyle={styles.detailPanel}>
           <Text style={styles.practiceTitleBlue}>Mantra Library</Text>
           <View style={styles.mantraLibraryList}>
-            {PRACTICE_MANTRA_LIBRARY.map((mantra) => {
+            {config.mantraLibrary.map((mantra) => {
               const isExpanded = expandedMantraId === mantra.id;
               return (
                 <TouchableOpacity
@@ -773,7 +772,9 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                   <View style={styles.mantraCardHeader}>
                     <View style={styles.mantraCardHeaderText}>
                       <Text style={styles.mantraCardTitle}>{mantra.title}</Text>
-                      <Text style={styles.mantraCardMantra}>{mantra.mantra}</Text>
+                      {!mantra.hideMantraInList && (
+                        <Text style={styles.mantraCardMantra}>{mantra.mantra}</Text>
+                      )}
                     </View>
                     <Text style={styles.mantraCardChevron}>{isExpanded ? '⌃' : '⌄'}</Text>
                   </View>
@@ -1417,7 +1418,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         </ImageBackground>
       ) : (
         <View style={[styles.headerBackground, styles.headerBackgroundPlain]}>
-          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.35, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.headerOverlay, styles.headerOverlayPlain]}>
             <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Practice</Text>
           </View>

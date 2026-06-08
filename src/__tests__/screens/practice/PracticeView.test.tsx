@@ -166,10 +166,10 @@ describe('PracticeView', () => {
     expect(queryByTestId('practice-set-intention')).toBeNull();
   });
 
-  it('Guru Rinpoche mantra shows correct Sanskrit text', () => {
+  it('Seven-Line Supplication shows in the mantra library', () => {
     const { getByTestId, getByText } = setup();
     fireEvent.press(getByTestId('practice-card-mantra'));
-    expect(getByText('Om Ah Hum Vajra Guru Padma Siddhi Hum')).toBeTruthy();
+    expect(getByText('Seven-Line Supplication to Padmakara')).toBeTruthy();
   });
 
   it('runs mantra counter flow from library to recitation counting', () => {
@@ -178,10 +178,10 @@ describe('PracticeView', () => {
     fireEvent.press(getByTestId('practice-card-mantra'));
     expect(getByText('Mantra Library')).toBeTruthy();
 
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
 
-    expect(getByText('Green Tara')).toBeTruthy();
+    expect(getByText('Condensed Supplication to Tara')).toBeTruthy();
     expect(getByTestId('practice-mantra-link-toggle')).toBeTruthy();
     expect(getByTestId('practice-mantra-session-title-input')).toBeTruthy();
     fireEvent.press(getByTestId('practice-mantra-target-108'));
@@ -202,8 +202,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
 
     fireEvent.press(getByTestId('practice-mantra-target-custom'));
     fireEvent.changeText(getByTestId('practice-mantra-custom-target-input'), '500');
@@ -219,8 +219,8 @@ describe('PracticeView', () => {
     (Audio.Sound.createAsync as jest.Mock).mockClear();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
 
@@ -240,8 +240,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText, onSaveTimedSession } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
     fireEvent.press(getByTestId('practice-mantra-end'));
@@ -269,8 +269,8 @@ describe('PracticeView', () => {
     const { getByTestId } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
     fireEvent.press(getByTestId('practice-mantra-counter-button'));
@@ -286,8 +286,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -295,8 +295,8 @@ describe('PracticeView', () => {
     fireEvent.press(getByTestId('practice-mantra-counter-button'));
     fireEvent.press(getByTestId('practice-back'));
 
-    expect(getByTestId('practice-mantra-in-progress-tara')).toBeTruthy();
-    expect(getByText('In Progress Green Tara Mantra')).toBeTruthy();
+    expect(getByTestId('practice-mantra-in-progress-condensed-tara')).toBeTruthy();
+    expect(getByText('In Progress Condensed Supplication to Tara Mantra')).toBeTruthy();
     expect(getByText('Target: 108, Done: 2')).toBeTruthy();
   });
 
@@ -304,8 +304,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -319,7 +319,7 @@ describe('PracticeView', () => {
     });
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    expect(getByTestId('practice-mantra-in-progress-tara')).toBeTruthy();
+    expect(getByTestId('practice-mantra-in-progress-condensed-tara')).toBeTruthy();
     expect(getByText('Target: 108, Done: 2')).toBeTruthy();
   });
 
@@ -327,8 +327,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -342,7 +342,7 @@ describe('PracticeView', () => {
     });
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-in-progress-tara'));
+    fireEvent.press(getByTestId('practice-mantra-in-progress-condensed-tara'));
 
     expect(getByText('Set Intention')).toBeTruthy();
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -354,8 +354,8 @@ describe('PracticeView', () => {
     const { getByTestId } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -369,12 +369,12 @@ describe('PracticeView', () => {
     });
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
 
     expect(alertSpy).toHaveBeenCalledWith(
       'Session In Progress',
-      'Are you sure you want to start a fresh Green Tara session? This will overwrite your progress towards your existing goal.',
+      'Are you sure you want to start a fresh Condensed Supplication to Tara session? This will overwrite your progress towards your existing goal.',
       expect.arrayContaining([
         expect.objectContaining({ text: 'Resume Existing' }),
         expect.objectContaining({ text: 'Start Fresh', style: 'destructive' }),
@@ -390,8 +390,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -405,8 +405,8 @@ describe('PracticeView', () => {
     });
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
 
     const [, , alertActions] = (alertSpy.mock.calls.at(-1) ?? []) as [
       string,
@@ -433,8 +433,8 @@ describe('PracticeView', () => {
     const { getByTestId } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-target-108'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
@@ -448,8 +448,8 @@ describe('PracticeView', () => {
     });
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
 
     const [, , alertActions] = (alertSpy.mock.calls.at(-1) ?? []) as [
       string,
@@ -482,8 +482,8 @@ describe('PracticeView', () => {
     const { getByTestId, getByText, onSaveTimedSession } = setup([baseSession, linkedWithAccumulations]);
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-link-toggle'));
     fireEvent.press(getByTestId('practice-mantra-link-session-2'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
@@ -510,8 +510,8 @@ describe('PracticeView', () => {
     const { getByTestId, onRunningStateChange } = setup();
 
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(getByTestId('practice-mantra-set-intention'));
     fireEvent.press(getByTestId('practice-mantra-start'));
 
@@ -529,8 +529,8 @@ describe('PracticeView', () => {
   it('restores an active mantra session after remounting the screen', async () => {
     const firstMount = setup();
     fireEvent.press(firstMount.getByTestId('practice-card-mantra'));
-    fireEvent.press(firstMount.getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(firstMount.getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(firstMount.getByTestId('practice-mantra-add-condensed-tara'));
     fireEvent.press(firstMount.getByTestId('practice-mantra-set-intention'));
     fireEvent.press(firstMount.getByTestId('practice-mantra-start'));
     fireEvent.press(firstMount.getByTestId('practice-mantra-counter-button'));
@@ -834,8 +834,8 @@ describe('PracticeView', () => {
   it('selected mantra target pill uses danger red background', () => {
     const { getByTestId } = setup();
     fireEvent.press(getByTestId('practice-card-mantra'));
-    fireEvent.press(getByTestId('practice-mantra-card-tara'));
-    fireEvent.press(getByTestId('practice-mantra-add-tara'));
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
     const pill = getByTestId('practice-mantra-target-108');
     const style = Array.isArray(pill.props.style)
       ? Object.assign({}, ...pill.props.style.filter(Boolean))

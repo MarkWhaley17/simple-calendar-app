@@ -53,6 +53,58 @@ const kalapa: ClientConfig = {
     accountTabLabel: 'Account',
     signInPrompt: 'Sign in with your email to see member-level events and features.',
   },
+
+  mantraLibrary: [
+    {
+      id: 'amitayus',
+      title: 'Amitayus',
+      mantra: 'Om Amarani Jivantiye Svaha',
+      description:
+        'The mantra of Amitayus, the Buddha of Boundless Life. Practiced to extend life, purify the causes of untimely death, and accumulate the merit of the longevity siddhi.',
+    },
+    {
+      id: 'seven-line-supplication',
+      title: 'Seven-Line Supplication to Padmakara',
+      mantra:
+        'HUM in the northwest of the land of Uddiyana\n' +
+        'On a blooming lotus flower\n' +
+        'You have attained supreme wonderous siddhi\n' +
+        'You are renowned as Padmakara\n' +
+        'Surrounded by your retinue of many dakinis\n' +
+        'We practice following your example\n' +
+        'Please approach and grant your blessings\n' +
+        'GURU PADMA SIDDHI HUM',
+      description:
+        'The most revered invocation of Guru Padmasambhava, composed at the request of King Trisong Detsen. Reciting it clears obstacles, invokes blessings, and connects the practitioner with the enlightened activity of Padmakara.',
+      hideMantraInList: true,
+    },
+    {
+      id: 'medicine-buddha',
+      title: 'Medicine Buddha',
+      mantra: 'Tayata Om Bekandze Bekandze Maha Bekandze Radza Samudgate Soha',
+      description:
+        'The mantra of the Medicine Buddha, Sangye Menla, who embodies the healing power of all enlightened beings. Recited to purify illness, negative karma, and the causes of suffering, and to awaken the natural luminosity of mind.',
+    },
+    {
+      id: 'condensed-tara',
+      title: 'Condensed Supplication to Tara',
+      mantra: 'Om Tare Tuttare Ture Svaha',
+      description:
+        'The root mantra of Tara, condensing her swift compassionate activity into six syllables. Recited to invoke protection from the eight fears, clear obstacles, and awaken the blessings of the mother of all buddhas.',
+    },
+    {
+      id: 'pacifying-turmoil-mamos',
+      title: 'Pacifying the Turmoil of the Mamos',
+      mantra: '',
+      description: '',
+    },
+    {
+      id: 'condensed-dispelling-obstacles',
+      title: 'Condensed Dispelling of Obstacles',
+      mantra: '',
+      description: '',
+    },
+  ],
 };
 
 export default kalapa;

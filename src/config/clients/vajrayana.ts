@@ -1,4 +1,5 @@
 import { ClientConfig } from '../types';
+import { PRACTICE_MANTRA_LIBRARY } from '../../constants/practice';
 
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
@@ -57,6 +58,8 @@ const vajrayana: ClientConfig = {
     accountTabLabel: 'Account',
     signInPrompt: 'Sign in with your email to see member-level events and features.',
   },
+
+  mantraLibrary: PRACTICE_MANTRA_LIBRARY,
 };
 
 export default vajrayana;
