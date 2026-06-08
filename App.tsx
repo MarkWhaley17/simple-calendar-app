@@ -9,7 +9,7 @@ import { EventView, AddEventView, EditEventView, EventsListView } from './src/sc
 import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
 import { PracticeView } from './src/screens/practice';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
-import { getRandomQuote } from './src/utils/quotes';
+import { getDailyQuote } from './src/utils/dailyQuote';
 import MarqueeText from './src/components/ui/MarqueeText';
 import { ENABLE_QUOTE_ABOVE_CALENDAR, ENABLE_QUOTE_SCROLLING } from './src/theme/flags';
 import { getEvents } from './src/utils/events';
@@ -55,7 +55,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [previousView, setPreviousView] = useState<ViewMode | null>(null);
-  const [currentQuote, setCurrentQuote] = useState<string>(getRandomQuote());
+  const [currentQuote, setCurrentQuote] = useState<string>('');
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
   const [editScope, setEditScope] = useState<'single' | 'all' | null>(null);
   const [editOccurrenceKey, setEditOccurrenceKey] = useState<string | null>(null);
@@ -167,27 +167,48 @@ export default function App() {
     })
   ).current;
 
-  // Change quote every 5 minutes with fade transition
+  // Load the daily quote on mount, then check once per minute if the date has
+  // rolled over so the new day's quote fades in without restarting the app.
   useEffect(() => {
-    const quoteInterval = setInterval(() => {
-      // Fade out
-      Animated.timing(quoteOpacity, {
-        toValue: 0,
-        duration: 400,
-        useNativeDriver: false,
-      }).start(() => {
-        // Change quote
-        setCurrentQuote(getRandomQuote());
-        // Fade in
+    let lastDateKey = '';
+
+    const loadQuote = async (fade: boolean) => {
+      const quote = await getDailyQuote();
+      if (fade) {
         Animated.timing(quoteOpacity, {
-          toValue: 1,
+          toValue: 0,
           duration: 400,
           useNativeDriver: false,
-        }).start();
-      });
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
+        }).start(() => {
+          setCurrentQuote(quote);
+          Animated.timing(quoteOpacity, {
+            toValue: 1,
+            duration: 400,
+            useNativeDriver: false,
+          }).start();
+        });
+      } else {
+        setCurrentQuote(quote);
+      }
+    };
 
-    return () => clearInterval(quoteInterval);
+    const todayKey = () => {
+      const d = new Date();
+      return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    };
+
+    lastDateKey = todayKey();
+    loadQuote(false);
+
+    const interval = setInterval(() => {
+      const key = todayKey();
+      if (key !== lastDateKey) {
+        lastDateKey = key;
+        loadQuote(true);
+      }
+    }, 60 * 1000); // check every minute
+
+    return () => clearInterval(interval);
   }, [quoteOpacity]);
 
   useEffect(() => {
