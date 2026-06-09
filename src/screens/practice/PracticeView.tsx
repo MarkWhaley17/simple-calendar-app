@@ -1418,7 +1418,7 @@ const PracticeView: React.FC<PracticeViewProps> = ({
         </ImageBackground>
       ) : (
         <View style={[styles.headerBackground, styles.headerBackgroundPlain]}>
-          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.headerOverlay, styles.headerOverlayPlain]}>
             <Text style={[styles.headerTitle, styles.headerTitlePlain]}>Practice</Text>
           </View>

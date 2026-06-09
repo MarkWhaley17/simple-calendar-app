@@ -82,7 +82,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({
     <View style={styles.plainHeader} testID="calendar-header-plain">
       <Image
         source={config.assets.headerPatternImage}
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }}
         resizeMode="cover"
       />
       {innerContent}

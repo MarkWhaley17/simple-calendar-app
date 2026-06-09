@@ -159,7 +159,7 @@ const DayView: React.FC<DayViewProps> = ({
         </View>
       ) : (
         <View style={[styles.headerOverlay, styles.headerOverlayPlain]} testID="day-view-header-plain">
-          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.2, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
+          <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
           <View style={[styles.dateInfo, styles.dateInfoPlain]}>
             <Text style={[styles.dayName, styles.dayNamePlain]}>{dayName}</Text>
             <Text style={[styles.fullDate, styles.fullDatePlain]}>
