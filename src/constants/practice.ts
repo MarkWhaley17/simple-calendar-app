@@ -21,8 +21,6 @@ export interface PracticeMantraLibraryItem {
   title: string;
   mantra: string;
   description: string;
-  /** When true, the mantra text is hidden in the library list view and only shown on the detail/setup screen */
-  hideMantraInList?: boolean;
 }
 
 export const PRACTICE_MANTRA_TARGET_OPTIONS = [21, 108, 1000, 10000, 108000];

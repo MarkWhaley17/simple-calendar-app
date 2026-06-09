@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert, Pressable, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Alert, Pressable, KeyboardAvoidingView, Image } from 'react-native';
+import config from '../../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CalendarEvent, RecurrenceRule } from '../../types';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -211,6 +212,7 @@ const EditEventView: React.FC<EditEventViewProps> = ({
     >
       {/* Header */}
       <View style={styles.header}>
+        <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
         <View style={styles.headerButtons}>
           <TouchableOpacity
             style={styles.cancelButton}
@@ -519,11 +521,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgSubtle,
   },
   header: {
-    backgroundColor: colors.brandPrimary,
-    paddingTop: spacing.lg + spacing.xs,
-    paddingBottom: spacing.lg + spacing.xs,
+    backgroundColor: colors.headerPlainBg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg + spacing.xs,
-    minHeight: 144,
+    overflow: 'hidden',
     shadowColor: colors.brandPrimaryDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -541,7 +543,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontSize: 17,
-    color: colors.textOnBrandMuted,
+    color: colors.danger,
     fontWeight: '600',
     letterSpacing: 0.2,
   },
@@ -557,7 +559,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontSize: 17,
-    color: colors.accentStrong,
+    color: colors.brandPrimary,
     fontWeight: '700',
     letterSpacing: 0.3,
   },

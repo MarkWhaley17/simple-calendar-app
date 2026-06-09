@@ -772,9 +772,6 @@ const PracticeView: React.FC<PracticeViewProps> = ({
                   <View style={styles.mantraCardHeader}>
                     <View style={styles.mantraCardHeaderText}>
                       <Text style={styles.mantraCardTitle}>{mantra.title}</Text>
-                      {!mantra.hideMantraInList && (
-                        <Text style={styles.mantraCardMantra}>{mantra.mantra}</Text>
-                      )}
                     </View>
                     <Text style={styles.mantraCardChevron}>{isExpanded ? '⌃' : '⌄'}</Text>
                   </View>

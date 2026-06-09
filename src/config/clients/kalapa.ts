@@ -76,7 +76,6 @@ const kalapa: ClientConfig = {
         'GURU PADMA SIDDHI HUM',
       description:
         'The most revered invocation of Guru Padmasambhava, composed at the request of King Trisong Detsen. Reciting it clears obstacles, invokes blessings, and connects the practitioner with the enlightened activity of Padmakara.',
-      hideMantraInList: true,
     },
     {
       id: 'medicine-buddha',
