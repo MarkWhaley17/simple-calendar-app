@@ -1,14 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthUser } from '../types';
+import config from '../config';
 
 const TOKEN_KEY = '@auth_token';
 const USER_KEY = '@auth_user';
 
-const API_BASE = 'https://kalapamedia.com/wp-json/api/v1';
-const WP_BASE  = 'https://kalapamedia.com/wp-json/wp/v2';
-
 export async function login(username: string, password: string): Promise<AuthUser> {
-  const tokenRes = await fetch(`${API_BASE}/token`, {
+  const base = config.wpBaseUrl;
+  const tokenRes = await fetch(`${base}/api/v1/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
@@ -22,8 +21,7 @@ export async function login(username: string, password: string): Promise<AuthUse
 
   const token: string = tokenData.jwt_token;
 
-  // Fetch display name from WP REST API
-  const meRes = await fetch(`${WP_BASE}/users/me`, {
+  const meRes = await fetch(`${base}/wp/v2/users/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   const meData = meRes.ok ? await meRes.json() : {};
@@ -59,7 +57,7 @@ export async function isAuthenticated(): Promise<boolean> {
   if (!token) return false;
 
   try {
-    const res = await fetch(`${API_BASE}/token-validate`, {
+    const res = await fetch(`${config.wpBaseUrl}/api/v1/token-validate`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
@@ -70,10 +68,10 @@ export async function isAuthenticated(): Promise<boolean> {
   }
 }
 
-/** Fetch a protected WP REST endpoint using the stored JWT. */
+/** Authenticated fetch against any path under this client's wpBaseUrl. */
 export async function wpFetch(path: string, options: RequestInit = {}): Promise<Response> {
   const token = await getToken();
-  return fetch(`https://kalapamedia.com/wp-json${path}`, {
+  return fetch(`${config.wpBaseUrl}${path}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',

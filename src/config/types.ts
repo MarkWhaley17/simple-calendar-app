@@ -72,6 +72,12 @@ export interface ClientConfig {
   /** Short identifier used in env vars and EAS build profiles, e.g. "kalapa" */
   clientId: string;
   /**
+   * Root of the WordPress REST API for this client, e.g. "https://kalapamedia.com/wp-json".
+   * Used by the services layer to build all API and WP REST endpoint URLs.
+   * Set to an empty string for clients that have no backend integration.
+   */
+  wpBaseUrl: string;
+  /**
    * Pixels to extend the image layout below the container so cover-mode
    * crops toward the top of the image instead of the centre. 0 = default centred.
    */

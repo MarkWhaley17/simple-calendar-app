@@ -2,6 +2,7 @@ import { ClientConfig } from '../types';
 
 const kalapa: ClientConfig = {
   clientId: 'kalapa',
+  wpBaseUrl: 'https://kalapamedia.com/wp-json',
   excludedEventTitles: [],
   bannerImageOffset: 0,
   bannerImageOffsets: {},

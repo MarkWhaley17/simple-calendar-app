@@ -3,6 +3,7 @@ import { PRACTICE_MANTRA_LIBRARY } from '../../constants/practice';
 
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
+  wpBaseUrl: '',
   excludedEventTitles: ['Jambhala Day', 'King of Ling Lhasang'],
   bannerImageOffset: 300,
   bannerImageOffsets: {
