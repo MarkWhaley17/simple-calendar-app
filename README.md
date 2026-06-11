@@ -43,10 +43,11 @@ Copy `.env.example` to `.env` and fill in your values:
 
 ```
 EXPO_PUBLIC_APP_CLIENT=kalapa
-EXPO_PUBLIC_WP_BASE_URL=https://kalapamedia.com
 EXPO_PUBLIC_FEEDBACK_WEBHOOK_URL=...
 EXPO_PUBLIC_FEEDBACK_APP_TOKEN=...
 ```
+
+> The backend API base URL is set per-client in `src/config/clients/<clientId>.ts` (`wpBaseUrl`), not via an env var.
 
 ---
 
@@ -123,6 +124,7 @@ src/
 ├── components/           # Shared UI components
 ├── constants/            # App-wide constants (dates, mantras, etc.)
 ├── screens/              # Full-screen views
+├── services/             # Backend API clients (mantra sync, recordings, member events)
 ├── theme/                # Design tokens and feature flags
 │   ├── tokens.ts         # Colors, spacing, radius (merged with client config)
 │   └── flags.ts          # Feature flags (driven by client config)

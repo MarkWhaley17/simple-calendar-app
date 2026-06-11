@@ -58,6 +58,26 @@ A small **⚙ clientId** badge appears in the top-left corner of the app in dev 
 
 ---
 
+## Backend services layer
+
+API calls to the client's backend live in `src/services/`:
+
+```
+src/services/
+  api.ts            ← apiFetch() base client (auth headers, error handling)
+  mantra.ts         ← POST mantra session completions
+  recordings.ts     ← fetch member video library
+  memberEvents.ts   ← fetch member-only events
+```
+
+- All services call `apiFetch()` from `api.ts` — never call `fetch()` directly in a service
+- The base URL comes from `config.wpBaseUrl` (set per client in `src/config/clients/<clientId>.ts`)
+- Endpoint paths not yet confirmed are marked `// TODO: confirm endpoint path with API provider`
+- Auth token storage uses AsyncStorage via `src/utils/auth.ts` — `login()`, `logout()`, `getToken()`
+- When an endpoint is confirmed, remove the TODO comment and wire the service into the relevant screen
+
+---
+
 ## Auto-generated files
 
 `src/utils/events.ts` is **fully overwritten** every time `npm test` or `npm run sync:events` runs. Do not edit it directly — changes will be silently lost on the next sync.
