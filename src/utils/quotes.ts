@@ -118,8 +118,3 @@ export const QUOTES = [
   "\"Skilfulness is the ability to generate positive conditions.\" — Sakyong Mipham Rinpoche",
   "\"Enlightenment is an optimistic approach to life. That optimism begins by connecting to our own goodness. Connecting to our own goodness is connecting to the spirit of not giving up on ourselves, on others, and the world.\" — Sakyong Mipham Rinpoche",
 ];
-
-export const getRandomQuote = (): string => {
-  const randomIndex = Math.floor(Math.random() * QUOTES.length);
-  return QUOTES[randomIndex];
-};

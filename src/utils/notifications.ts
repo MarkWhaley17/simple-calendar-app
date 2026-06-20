@@ -2,10 +2,15 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { CalendarEvent, NotificationSettings } from '../types';
 import { isEventItem, isSessionItem } from './eventEditability';
-import { getRandomQuote } from './quotes';
+import { getUpcomingDailyQuotes } from './dailyQuote';
 
 const DAILY_QUOTE_HOUR = 8;
 const UPCOMING_WINDOW_DAYS = 90;
+// How many days of quote notifications to pre-schedule per app open. expo-notifications
+// has no per-occurrence content, so we schedule one dated notification per day and let
+// scheduleNotifications() refresh the window on every app open / settings change. Kept
+// modest to stay well under iOS's 64-pending-notification cap alongside event reminders.
+const DAILY_QUOTE_LOOKAHEAD_DAYS = 14;
 
 const hasAnyNotificationsEnabled = (settings: NotificationSettings): boolean => {
   return (
@@ -80,7 +85,7 @@ export const scheduleNotifications = async (
   }
 
   if (settings.dailyQuoteNotifications) {
-    await scheduleDailyQuoteReminder();
+    await scheduleDailyQuoteReminders();
   }
 };
 
@@ -121,20 +126,40 @@ const scheduleEventReminder = async (
   }
 };
 
-const scheduleDailyQuoteReminder = async (): Promise<void> => {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: 'Daily Quote',
-      body: getRandomQuote(),
-      sound: true,
-    },
-    trigger: {
-      hour: DAILY_QUOTE_HOUR,
-      minute: 0,
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      channelId: Platform.OS === 'android' ? 'default' : undefined,
-    },
-  });
+const scheduleDailyQuoteReminders = async (): Promise<void> => {
+  // One dated notification per day, each carrying that day's quote from the daily
+  // quote cycle. (A single repeating DAILY trigger would bake in one quote and
+  // replay it every day — the cause of the "same quote every day" report.)
+  const upcoming = await getUpcomingDailyQuotes(DAILY_QUOTE_LOOKAHEAD_DAYS);
+  const now = new Date();
+
+  await Promise.all(
+    upcoming.map(async ({ dayOffset, quote }) => {
+      const triggerDate = new Date();
+      triggerDate.setDate(triggerDate.getDate() + dayOffset);
+      triggerDate.setHours(DAILY_QUOTE_HOUR, 0, 0, 0);
+
+      // Skip today's slot if 8am has already passed.
+      if (triggerDate <= now) return;
+
+      try {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Daily Quote',
+            body: quote,
+            sound: true,
+          },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.DATE,
+            date: triggerDate,
+            channelId: Platform.OS === 'android' ? 'default' : undefined,
+          },
+        });
+      } catch (error) {
+        console.error('Failed to schedule daily quote reminder', { dayOffset, error });
+      }
+    })
+  );
 };
 
 export const getReminderTriggerDateForTest = (
