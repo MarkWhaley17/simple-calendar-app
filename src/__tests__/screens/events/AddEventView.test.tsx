@@ -48,4 +48,21 @@ describe('AddEventView', () => {
     expect(Alert.alert).not.toHaveBeenCalled();
     expect(onSave).toHaveBeenCalled();
   });
+
+  it('keeps the form scrollable above the keyboard so every field is reachable', () => {
+    const { getByTestId } = render(
+      <AddEventView
+        onBack={jest.fn()}
+        onSave={jest.fn()}
+        initialDate={new Date(2026, 1, 10)}
+        defaultEventReminderMinutes={15}
+        defaultAllDayReminderHours={12}
+      />
+    );
+
+    const scrollView = getByTestId('add-event-scrollview');
+    expect(scrollView.props.keyboardShouldPersistTaps).toBe('handled');
+    expect(scrollView.props.keyboardDismissMode).toBe('none');
+    expect(scrollView.props.automaticallyAdjustKeyboardInsets).toBe(true);
+  });
 });

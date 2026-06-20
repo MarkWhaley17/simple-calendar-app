@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Pressable, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Platform, Switch, Pressable, Alert, Image, KeyboardAvoidingView } from 'react-native';
 import config from '../../config';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MONTH_NAMES } from '../../constants/dates';
@@ -143,7 +143,11 @@ const AddEventView: React.FC<AddEventViewProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 24 : 0}
+    >
       {/* Header */}
       <View style={styles.header}>
         <Image source={config.assets.headerPatternImage} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }] }} resizeMode="cover" />
@@ -167,7 +171,14 @@ const AddEventView: React.FC<AddEventViewProps> = ({
       </View>
 
       {/* Form */}
-      <ScrollView style={styles.form}>
+      <ScrollView
+        style={styles.form}
+        contentContainerStyle={styles.formContent}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="none"
+        automaticallyAdjustKeyboardInsets
+        testID="add-event-scrollview"
+      >
         {/* Title */}
         <View style={styles.section}>
           <Text style={styles.label}>Title *</Text>
@@ -383,7 +394,7 @@ const AddEventView: React.FC<AddEventViewProps> = ({
         onClose={() => setShowRecurrencePicker(false)}
         onSave={setRecurrence}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -437,6 +448,9 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
+  },
+  formContent: {
+    paddingBottom: 24,
   },
   section: {
     backgroundColor: colors.surfaceSolid,
