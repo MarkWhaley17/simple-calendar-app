@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio, AVPlaybackStatus, InterruptionModeIOS } from 'expo-av';
 import { PodcastEpisode } from '../../services/podcasts';
-import { colors, elevation, spacing } from '../../theme/tokens';
+import { colors, spacing } from '../../theme/tokens';
+import config from '../../config';
 
 interface PodcastPlayerViewProps {
   episode: PodcastEpisode;
@@ -112,13 +113,16 @@ const PodcastPlayerView: React.FC<PodcastPlayerViewProps> = ({ episode, onBack }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="podcast-player-back">
-          <Text style={styles.headerButtonText}>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          {episode.title}
-        </Text>
-        <View style={styles.headerButton} />
+        <Image source={config.assets.headerPatternImage} style={styles.headerPattern} resizeMode="cover" />
+        <View style={styles.headerButtons}>
+          <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="podcast-player-back">
+            <Text style={styles.headerButtonText}>Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle} numberOfLines={1}>
+            {episode.title}
+          </Text>
+          <View style={styles.headerButton} />
+        </View>
       </View>
 
       <View style={styles.content}>
@@ -174,31 +178,49 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    alignItems: 'center',
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.headerPlainBg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    overflow: 'hidden',
+    shadowColor: colors.brandPrimaryDark,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  headerPattern: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.15,
+    transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }],
+  },
+  headerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    minHeight: 144,
-    ...elevation.card,
+    alignItems: 'center',
   },
   headerTitle: {
-    color: colors.textOnBrand,
+    color: colors.brandPrimaryDark,
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
+    letterSpacing: 0.3,
     marginHorizontal: spacing.sm,
     textAlign: 'center',
   },
   headerButton: {
     minWidth: 72,
-    paddingVertical: spacing.xs,
+    paddingVertical: 10,
   },
   headerButtonText: {
-    color: colors.textOnBrand,
-    fontSize: 16,
+    color: colors.brandPrimaryDark,
+    fontSize: 17,
     fontWeight: '600',
+    letterSpacing: 0.2,
   },
   content: {
     flex: 1,

@@ -10,8 +10,8 @@
     {
       "name": "simple-calendar-app-web-vajrayana",
       "runtimeExecutable": "/bin/sh",
-      "runtimeArgs": ["-c", "EXPO_PUBLIC_APP_CLIENT=vajrayana npm run web"],
-      "port": 8081
+      "runtimeArgs": ["-c", "npm run sync:events && EXPO_PUBLIC_APP_CLIENT=vajrayana npx expo start --web --port 8091"],
+      "port": 8091
     }
   ]
 }

@@ -5,6 +5,7 @@ import { WebView } from 'react-native-webview';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { ENABLE_GLASS_UI } from '../../theme/flags';
 import { colors, elevation, spacing } from '../../theme/tokens';
+import config from '../../config';
 
 const RECORDINGS_URL = 'https://kalapamedia.com/my-recordings/';
 const LOGIN_URL = `https://kalapamedia.com/wp-login.php?redirect_to=${encodeURIComponent(RECORDINGS_URL)}`;
@@ -169,13 +170,16 @@ const RecordingsWebView: React.FC<RecordingsWebViewProps> = ({ onBack }) => {
           },
         ]}
       >
-        <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="recordings-header-back">
-          <Text style={styles.headerButtonText}>Back</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Recordings</Text>
-        <TouchableOpacity onPress={handleOpenInBrowser} style={styles.headerButton} testID="recordings-header-browser">
-          <Text style={styles.headerButtonText}>Browser</Text>
-        </TouchableOpacity>
+        <Image source={config.assets.headerPatternImage} style={styles.headerPattern} resizeMode="cover" />
+        <View style={styles.headerButtons}>
+          <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="recordings-header-back">
+            <Text style={styles.headerButtonText}>Back</Text>
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>My Recordings</Text>
+          <TouchableOpacity onPress={handleOpenInBrowser} style={styles.headerButton} testID="recordings-header-browser">
+            <Text style={styles.headerButtonText}>Browser</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
 
       <Animated.View style={[styles.content, shellAnimStyle]}>
@@ -239,28 +243,46 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
   },
   header: {
-    alignItems: 'center',
-    backgroundColor: colors.brandPrimary,
+    backgroundColor: colors.headerPlainBg,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.md,
+    paddingHorizontal: spacing.lg + spacing.xs,
+    overflow: 'hidden',
+    shadowColor: colors.brandPrimaryDark,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  headerPattern: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.15,
+    transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }],
+  },
+  headerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    minHeight: 144,
-    ...elevation.card,
+    alignItems: 'center',
   },
   headerTitle: {
-    color: colors.textOnBrand,
-    fontSize: 18,
+    color: colors.brandPrimaryDark,
+    fontSize: 22,
     fontWeight: '700',
+    letterSpacing: 0.3,
   },
   headerButton: {
     minWidth: 72,
-    paddingVertical: spacing.xs,
+    paddingVertical: 10,
   },
   headerButtonText: {
-    color: colors.textOnBrand,
-    fontSize: 16,
+    color: colors.brandPrimaryDark,
+    fontSize: 17,
     fontWeight: '600',
+    letterSpacing: 0.2,
   },
   content: {
     flex: 1,
