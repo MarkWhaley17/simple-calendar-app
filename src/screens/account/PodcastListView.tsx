@@ -50,16 +50,10 @@ const PodcastListView: React.FC<PodcastListViewProps> = ({ onBack, onSelectEpiso
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image source={config.assets.headerPatternImage} style={styles.headerPattern} resizeMode="cover" />
-        <View style={styles.headerButtons}>
-          <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="podcasts-header-back">
-            <Text style={styles.headerButtonText}>Back</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Podcasts</Text>
-          <View style={styles.headerButton} />
-        </View>
-      </View>
+      <Image source={config.assets.headerPatternImage} style={styles.backgroundPattern} resizeMode="cover" />
+      <TouchableOpacity onPress={onBack} style={styles.backButton} testID="podcasts-header-back">
+        <Text style={styles.backButtonText}>‹ Back</Text>
+      </TouchableOpacity>
 
       <View style={styles.content}>
         {isLoading ? (
@@ -116,51 +110,32 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.bgSubtle,
     flex: 1,
-  },
-  header: {
-    backgroundColor: colors.headerPlainBg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.md,
-    paddingHorizontal: spacing.lg + spacing.xs,
     overflow: 'hidden',
-    shadowColor: colors.brandPrimaryDark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
   },
-  headerPattern: {
+  backgroundPattern: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
+  },
+  backButton: {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    opacity: 0.15,
-    transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }],
+    zIndex: 4,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
+    backgroundColor: 'transparent',
   },
-  headerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    color: colors.brandPrimaryDark,
-    fontSize: 22,
-    fontWeight: '700',
-    letterSpacing: 0.3,
-  },
-  headerButton: {
-    minWidth: 72,
-    paddingVertical: 10,
-  },
-  headerButtonText: {
-    color: colors.brandPrimaryDark,
-    fontSize: 17,
+  backButtonText: {
+    fontSize: 18,
+    color: colors.accentStrong,
     fontWeight: '600',
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
   content: {
     flex: 1,
+    paddingTop: spacing.xl + spacing.sm,
   },
   list: {
     padding: spacing.md,

@@ -112,18 +112,10 @@ const PodcastPlayerView: React.FC<PodcastPlayerViewProps> = ({ episode, onBack }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Image source={config.assets.headerPatternImage} style={styles.headerPattern} resizeMode="cover" />
-        <View style={styles.headerButtons}>
-          <TouchableOpacity onPress={onBack} style={styles.headerButton} testID="podcast-player-back">
-            <Text style={styles.headerButtonText}>Back</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle} numberOfLines={1}>
-            {episode.title}
-          </Text>
-          <View style={styles.headerButton} />
-        </View>
-      </View>
+      <Image source={config.assets.headerPatternImage} style={styles.backgroundPattern} resizeMode="cover" />
+      <TouchableOpacity onPress={onBack} style={styles.backButton} testID="podcast-player-back">
+        <Text style={styles.backButtonText}>‹ Back</Text>
+      </TouchableOpacity>
 
       <View style={styles.content}>
         {isLoading ? (
@@ -152,9 +144,9 @@ const PodcastPlayerView: React.FC<PodcastPlayerViewProps> = ({ episode, onBack }
                 isSeekingRef.current = true;
               }}
               onSlidingComplete={handleSlidingComplete}
-              minimumTrackTintColor={colors.brandPrimary}
+              minimumTrackTintColor={colors.accentStrong}
               maximumTrackTintColor={colors.borderSubtle}
-              thumbTintColor={colors.brandPrimary}
+              thumbTintColor={colors.accentStrong}
               testID="podcast-player-slider"
             />
             <View style={styles.timeRow}>
@@ -162,8 +154,20 @@ const PodcastPlayerView: React.FC<PodcastPlayerViewProps> = ({ episode, onBack }
               <Text style={styles.timeText}>-{formatMillis(Math.max(durationMillis - positionMillis, 0))}</Text>
             </View>
 
-            <TouchableOpacity onPress={togglePlay} style={styles.playButton} testID="podcast-player-play-pause">
-              <Text style={styles.playButtonText}>{isPlaying ? 'Pause' : 'Play'}</Text>
+            <TouchableOpacity
+              onPress={togglePlay}
+              style={styles.playPauseButton}
+              testID="podcast-player-play-pause"
+              accessibilityLabel={isPlaying ? 'Pause' : 'Play'}
+            >
+              {isPlaying ? (
+                <View style={styles.pauseIcon}>
+                  <View style={styles.pauseBar} />
+                  <View style={styles.pauseBar} />
+                </View>
+              ) : (
+                <View style={styles.playIcon} />
+              )}
             </TouchableOpacity>
           </View>
         )}
@@ -176,54 +180,32 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.bgSubtle,
     flex: 1,
-  },
-  header: {
-    backgroundColor: colors.headerPlainBg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.md,
-    paddingHorizontal: spacing.lg + spacing.xs,
     overflow: 'hidden',
-    shadowColor: colors.brandPrimaryDark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
   },
-  headerPattern: {
+  backgroundPattern: {
+    ...StyleSheet.absoluteFillObject,
+    opacity: 0.25,
+    transform: [{ translateX: -120 }, { translateY: -180 }, { scale: 1 }],
+  },
+  backButton: {
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
-    opacity: 0.15,
-    transform: [{ translateX: -90 }, { translateY: -20 }, { scale: 0.8 }],
+    zIndex: 4,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
+    backgroundColor: 'transparent',
   },
-  headerButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    color: colors.brandPrimaryDark,
-    flex: 1,
+  backButtonText: {
     fontSize: 18,
-    fontWeight: '700',
-    letterSpacing: 0.3,
-    marginHorizontal: spacing.sm,
-    textAlign: 'center',
-  },
-  headerButton: {
-    minWidth: 72,
-    paddingVertical: 10,
-  },
-  headerButtonText: {
-    color: colors.brandPrimaryDark,
-    fontSize: 17,
+    color: colors.accentStrong,
     fontWeight: '600',
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
   content: {
     flex: 1,
+    paddingTop: spacing.xl + spacing.sm,
   },
   centered: {
     alignItems: 'center',
@@ -282,17 +264,37 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
-  playButton: {
+  playPauseButton: {
+    width: 84,
+    height: 84,
+    borderRadius: 42,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: colors.borderInput,
+    backgroundColor: colors.surfaceStrong,
     alignItems: 'center',
-    backgroundColor: colors.brandPrimary,
-    borderRadius: 999,
-    paddingHorizontal: spacing.xxl,
-    paddingVertical: spacing.md,
+    justifyContent: 'center',
   },
-  playButtonText: {
-    color: colors.textOnBrand,
-    fontSize: 16,
-    fontWeight: '700',
+  playIcon: {
+    width: 0,
+    height: 0,
+    borderTopWidth: 12,
+    borderBottomWidth: 12,
+    borderLeftWidth: 18,
+    borderTopColor: 'transparent',
+    borderBottomColor: 'transparent',
+    borderLeftColor: colors.brandPrimaryDark,
+    marginLeft: 3,
+  },
+  pauseIcon: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  pauseBar: {
+    width: 3,
+    height: 24,
+    borderRadius: 2,
+    backgroundColor: colors.brandPrimaryDark,
   },
 });
 

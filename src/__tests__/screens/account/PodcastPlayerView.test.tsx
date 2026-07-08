@@ -69,7 +69,7 @@ describe('PodcastPlayerView', () => {
       });
     });
 
-    expect(getByText('Pause')).toBeTruthy();
+    expect(getByTestId('podcast-player-play-pause').props.accessibilityLabel).toBe('Pause');
     expect(getByText('1:05')).toBeTruthy();
   });
 
