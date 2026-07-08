@@ -22,6 +22,15 @@ const setup = (entries: RikpaEntry[] = [], onLog = jest.fn()) =>
 describe('RikpaView', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Pin "now" to a fixed mid-week, mid-day moment so entries built as relative
+    // offsets from Date.now() (e.g. "1 hour ago") can't drift onto a different
+    // calendar day/week depending on when the suite actually runs.
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2026-01-15T12:00:00'));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   // --- Today summary ---
