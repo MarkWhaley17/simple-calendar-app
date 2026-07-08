@@ -2,12 +2,12 @@ import kalapa from '../../config/clients/kalapa';
 import vajrayana from '../../config/clients/vajrayana';
 
 describe('podcast feature config', () => {
-  it('kalapa fetches episodes from its WordPress API endpoint', () => {
+  it('kalapa fetches episodes from an RSS feed (stopgap while WP hosting is unavailable)', () => {
     expect(kalapa.features.podcasts).toBe(true);
-    expect(kalapa.podcastSource).toEqual({
-      type: 'api',
-      endpoint: '/api/v1/podcasts',
-    });
+    expect(kalapa.podcastSource.type).toBe('rss');
+    if (kalapa.podcastSource.type === 'rss') {
+      expect(kalapa.podcastSource.feedUrl).toMatch(/^https:\/\//);
+    }
   });
 
   it('vajrayana fetches episodes from an RSS feed since it has no backend', () => {

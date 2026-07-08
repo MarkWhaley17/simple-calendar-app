@@ -48,9 +48,11 @@ const kalapa: ClientConfig = {
   },
 
   podcastSource: {
-    type: 'api',
-    // TODO: confirm endpoint path with API provider
-    endpoint: '/api/v1/podcasts',
+    type: 'rss',
+    // STOPGAP: manually-maintained feed in a secret GitHub gist while WP media
+    // uploads are restricted and real file-level privacy isn't set up yet.
+    // TODO: replace with a real WP endpoint or protected feed once available.
+    feedUrl: 'https://gist.githubusercontent.com/MarkWhaley17/64951a7c04d29607e9f159d1c9ffeea4/raw/kalapa-podcasts.xml',
   },
 
   copy: {
