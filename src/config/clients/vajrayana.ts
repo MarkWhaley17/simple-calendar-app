@@ -49,6 +49,13 @@ const vajrayana: ClientConfig = {
     calendarHeaderBanner: true,
     quoteAboveCalendar: false,
     quoteScrolling: true,
+    podcasts: true,
+  },
+
+  podcastSource: {
+    type: 'rss',
+    // TODO: confirm Vajrayana podcast feed URL
+    feedUrl: '',
   },
 
   copy: {

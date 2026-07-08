@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, TextInput, ActivityIndicator, Platform, Image, ImageBackground } from 'react-native';
 import { NotificationSettings, AuthUser } from '../../types';
 import { login, logout } from '../../utils/auth';
-import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER, ENABLE_USER_AUTH } from '../../theme/flags';
+import { ENABLE_GLASS_UI, ENABLE_CALENDAR_HEADER_BANNER, ENABLE_USER_AUTH, ENABLE_PODCASTS } from '../../theme/flags';
 import config from '../../config';
 import { GlassSurface } from '../../components/ui/GlassSurface';
 import { colors, elevation, spacing } from '../../theme/tokens';
@@ -14,6 +14,7 @@ interface AccountViewProps {
   user: AuthUser | null;
   onUserChange: (user: AuthUser | null) => void;
   onOpenRecordings: () => void;
+  onOpenPodcasts: () => void;
   onOpenPrivacyPolicy: () => void;
   onOpenTermsOfService: () => void;
   onOpenFeedback: () => void;
@@ -26,6 +27,7 @@ const AccountView: React.FC<AccountViewProps> = ({
   user,
   onUserChange,
   onOpenRecordings,
+  onOpenPodcasts,
   onOpenPrivacyPolicy,
   onOpenTermsOfService,
   onOpenFeedback,
@@ -213,6 +215,28 @@ const AccountView: React.FC<AccountViewProps> = ({
               testID="open-recordings-button"
             >
               <Text style={styles.primaryButtonText}>Open My Recordings</Text>
+            </TouchableOpacity>
+            </>
+          )}
+        </View>
+        )}
+
+        {/* Podcasts Section */}
+        {ENABLE_PODCASTS && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Podcasts</Text>
+          {renderCard(
+            <>
+            <Text style={styles.cardText}>Podcasts</Text>
+            <Text style={styles.settingDescription}>
+              Listen to full-length talks and teachings.
+            </Text>
+            <TouchableOpacity
+              style={[styles.primaryButton, styles.recordingsButton]}
+              onPress={onOpenPodcasts}
+              testID="open-podcasts-button"
+            >
+              <Text style={styles.primaryButtonText}>Open Podcasts</Text>
             </TouchableOpacity>
             </>
           )}

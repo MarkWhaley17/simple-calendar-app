@@ -56,6 +56,8 @@ export type ViewMode =
   | 'practice'
   | 'eventsList'
   | 'recordingsWeb'
+  | 'podcasts'
+  | 'podcastPlayer'
   | 'privacyPolicy'
   | 'termsOfService'
   | 'feedback';

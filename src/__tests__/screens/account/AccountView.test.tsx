@@ -11,6 +11,7 @@ describe('AccountView', () => {
   const mockOnUpdateNotificationSettings = jest.fn();
   const mockOnUserChange = jest.fn();
   const mockOnOpenRecordings = jest.fn();
+  const mockOnOpenPodcasts = jest.fn();
   const mockOnOpenPrivacyPolicy = jest.fn();
   const mockOnOpenTermsOfService = jest.fn();
   const mockOnOpenFeedback = jest.fn();
@@ -30,6 +31,7 @@ describe('AccountView', () => {
     user: null,
     onUserChange: mockOnUserChange,
     onOpenRecordings: mockOnOpenRecordings,
+    onOpenPodcasts: mockOnOpenPodcasts,
     onOpenPrivacyPolicy: mockOnOpenPrivacyPolicy,
     onOpenTermsOfService: mockOnOpenTermsOfService,
     onOpenFeedback: mockOnOpenFeedback,
@@ -203,6 +205,31 @@ describe('AccountView', () => {
       const { getByTestId } = render(<AccountView {...defaultProps} user={signedInUser} />);
       fireEvent.press(getByTestId('open-feedback'));
       expect(mockOnOpenFeedback).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Podcasts section', () => {
+    it('shows Open Podcasts button when podcasts is enabled', () => {
+      const { getByText } = render(<AccountView {...defaultProps} />);
+      expect(getByText('Open Podcasts')).toBeTruthy();
+    });
+
+    it('calls onOpenPodcasts when the Podcasts button is pressed', () => {
+      const { getByTestId } = render(<AccountView {...defaultProps} />);
+      fireEvent.press(getByTestId('open-podcasts-button'));
+      expect(mockOnOpenPodcasts).toHaveBeenCalledTimes(1);
+    });
+
+    it('is available even when userAuthentication is disabled', () => {
+      jest.replaceProperty(flags, 'ENABLE_USER_AUTH', false);
+      const { getByText } = render(<AccountView {...defaultProps} />);
+      expect(getByText('Open Podcasts')).toBeTruthy();
+    });
+
+    it('hides the Podcasts section when the podcasts flag is disabled', () => {
+      jest.replaceProperty(flags, 'ENABLE_PODCASTS', false);
+      const { queryByText } = render(<AccountView {...defaultProps} />);
+      expect(queryByText('Open Podcasts')).toBeNull();
     });
   });
 });

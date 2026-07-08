@@ -44,6 +44,13 @@ const kalapa: ClientConfig = {
     calendarHeaderBanner: false,
     quoteAboveCalendar: true,
     quoteScrolling: false,
+    podcasts: true,
+  },
+
+  podcastSource: {
+    type: 'api',
+    // TODO: confirm endpoint path with API provider
+    endpoint: '/api/v1/podcasts',
   },
 
   copy: {

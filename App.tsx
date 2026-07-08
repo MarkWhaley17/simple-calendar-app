@@ -6,8 +6,9 @@ import { CalendarHeader, CalendarGrid, MonthYearPicker } from './src/components/
 import { BottomNav } from './src/components/navigation';
 import { DayView } from './src/screens/calendar';
 import { EventView, AddEventView, EditEventView, EventsListView } from './src/screens/events';
-import { AccountView, RecordingsWebView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
+import { AccountView, RecordingsWebView, PodcastListView, PodcastPlayerView, FeedbackView, PrivacyPolicyView, TermsOfServiceView } from './src/screens/account';
 import { PracticeView } from './src/screens/practice';
+import { PodcastEpisode } from './src/services/podcasts';
 import { CalendarEvent, ViewMode, NavView, NotificationSettings, AuthUser } from './src/types';
 import { getDailyQuote } from './src/utils/dailyQuote';
 import MarqueeText from './src/components/ui/MarqueeText';
@@ -54,6 +55,7 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [selectedPodcastEpisode, setSelectedPodcastEpisode] = useState<PodcastEpisode | null>(null);
   const [previousView, setPreviousView] = useState<ViewMode | null>(null);
   const [currentQuote, setCurrentQuote] = useState<string>('');
   const [showMonthYearPicker, setShowMonthYearPicker] = useState(false);
@@ -867,6 +869,15 @@ export default function App() {
     setViewMode('recordingsWeb');
   };
 
+  const handleOpenPodcasts = () => {
+    setViewMode('podcasts');
+  };
+
+  const handleSelectPodcastEpisode = (episode: PodcastEpisode) => {
+    setSelectedPodcastEpisode(episode);
+    setViewMode('podcastPlayer');
+  };
+
   const handleOpenPrivacyPolicy = () => {
     setViewMode('privacyPolicy');
   };
@@ -1045,6 +1056,10 @@ export default function App() {
         />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />
+      ) : viewMode === 'podcasts' ? (
+        <PodcastListView onBack={() => setViewMode('account')} onSelectEpisode={handleSelectPodcastEpisode} />
+      ) : viewMode === 'podcastPlayer' && selectedPodcastEpisode ? (
+        <PodcastPlayerView episode={selectedPodcastEpisode} onBack={() => setViewMode('podcasts')} />
       ) : viewMode === 'privacyPolicy' ? (
         <PrivacyPolicyView onBack={() => setViewMode('account')} />
       ) : viewMode === 'termsOfService' ? (
@@ -1068,6 +1083,7 @@ export default function App() {
               user={user}
               onUserChange={setUser}
               onOpenRecordings={handleOpenRecordings}
+              onOpenPodcasts={handleOpenPodcasts}
               onOpenPrivacyPolicy={handleOpenPrivacyPolicy}
               onOpenTermsOfService={handleOpenTermsOfService}
               onOpenFeedback={handleOpenFeedback}

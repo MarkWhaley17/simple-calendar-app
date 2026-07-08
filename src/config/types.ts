@@ -57,7 +57,18 @@ export interface FeatureFlags {
   quoteAboveCalendar: boolean;
   /** Scroll long quotes as a marquee; false = static wrapping text */
   quoteScrolling: boolean;
+  /** Podcast episode library + player in the Account tab */
+  podcasts: boolean;
 }
+
+/**
+ * Where a client's podcast episode list is fetched from.
+ * 'api' calls a WordPress REST endpoint via apiFetch (requires wpBaseUrl).
+ * 'rss' parses a standard podcast RSS feed and needs no backend.
+ */
+export type PodcastSourceConfig =
+  | { type: 'api'; endpoint: string }
+  | { type: 'rss'; feedUrl: string };
 
 export interface CopyOverrides {
   appName: string;
@@ -110,4 +121,6 @@ export interface ClientConfig {
    * Overrides the default shared PRACTICE_MANTRA_LIBRARY for this client.
    */
   mantraLibrary: PracticeMantraLibraryItem[];
+  /** Where this client's podcast episode list comes from. */
+  podcastSource: PodcastSourceConfig;
 }

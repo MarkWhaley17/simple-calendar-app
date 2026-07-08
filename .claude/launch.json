@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "simple-calendar-app-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "web"],
+      "port": 8081
+    },
+    {
+      "name": "simple-calendar-app-web-vajrayana",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "EXPO_PUBLIC_APP_CLIENT=vajrayana npm run web"],
+      "port": 8081
+    }
+  ]
+}

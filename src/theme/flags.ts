@@ -11,3 +11,4 @@ export const ENABLE_CALENDAR_HEADER_BANNER = config.features.calendarHeaderBanne
 export const ENABLE_QUOTE_ABOVE_CALENDAR = config.features.quoteAboveCalendar;
 export const ENABLE_QUOTE_SCROLLING = config.features.quoteScrolling;
 export const ENABLE_USER_AUTH = config.features.userAuthentication;
+export const ENABLE_PODCASTS = config.features.podcasts;
