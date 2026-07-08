@@ -1005,7 +1005,7 @@ export default function App() {
 
   // Determine which nav item is active
   const getCurrentNavView = (): NavView => {
-    if (viewMode === 'account') return 'account';
+    if (viewMode === 'account' || viewMode === 'podcasts' || viewMode === 'podcastPlayer') return 'account';
     if (viewMode === 'practice') return 'practice';
     if (viewMode === 'eventsList') return 'events';
     if (viewMode === 'day' || viewMode === 'event' || viewMode === 'addEvent' || viewMode === 'editEvent') return 'day';
@@ -1019,7 +1019,9 @@ export default function App() {
     viewMode === 'event' ||
     viewMode === 'account' ||
     viewMode === 'practice' ||
-    viewMode === 'eventsList';
+    viewMode === 'eventsList' ||
+    viewMode === 'podcasts' ||
+    viewMode === 'podcastPlayer';
 
   // Get the master event for editing if the selected event is a recurring instance
   const getEditableEvent = () => {
@@ -1056,10 +1058,6 @@ export default function App() {
         />
       ) : viewMode === 'recordingsWeb' ? (
         <RecordingsWebView onBack={() => setViewMode('account')} />
-      ) : viewMode === 'podcasts' ? (
-        <PodcastListView onBack={() => setViewMode('account')} onSelectEpisode={handleSelectPodcastEpisode} />
-      ) : viewMode === 'podcastPlayer' && selectedPodcastEpisode ? (
-        <PodcastPlayerView episode={selectedPodcastEpisode} onBack={() => setViewMode('podcasts')} />
       ) : viewMode === 'privacyPolicy' ? (
         <PrivacyPolicyView onBack={() => setViewMode('account')} />
       ) : viewMode === 'termsOfService' ? (
@@ -1088,6 +1086,10 @@ export default function App() {
               onOpenTermsOfService={handleOpenTermsOfService}
               onOpenFeedback={handleOpenFeedback}
             />
+          ) : viewMode === 'podcasts' ? (
+            <PodcastListView onBack={() => setViewMode('account')} onSelectEpisode={handleSelectPodcastEpisode} />
+          ) : viewMode === 'podcastPlayer' && selectedPodcastEpisode ? (
+            <PodcastPlayerView episode={selectedPodcastEpisode} onBack={() => setViewMode('podcasts')} />
           ) : viewMode === 'eventsList' ? (
             <EventsListView
               events={visibleEvents}
