@@ -49,15 +49,15 @@ describe('PracticeView', () => {
     expect(() => getByText('Session History')).toThrow();
   });
 
-  it('mantra card pronunciation uses danger red at 0.7 opacity', () => {
-    const { getByTestId, getByText } = setup();
+  it('mantra text is hidden in library list but shown on setup screen', () => {
+    const { getByTestId, queryByText, getByText } = setup();
     fireEvent.press(getByTestId('practice-card-mantra'));
-    const mantraText = getByText(/Om Tare Tuttare/);
-    const style = Array.isArray(mantraText.props.style)
-      ? Object.assign({}, ...mantraText.props.style.filter(Boolean))
-      : mantraText.props.style ?? {};
-    expect(style.color).toBe('#991B1B');
-    expect(style.opacity).toBe(0.7);
+    // Mantra text should NOT appear in the library list
+    expect(queryByText(/Om Tare Tuttare/)).toBeNull();
+    // Selecting the mantra should show its text on the setup screen
+    fireEvent.press(getByTestId('practice-mantra-card-condensed-tara'));
+    fireEvent.press(getByTestId('practice-mantra-add-condensed-tara'));
+    expect(getByText(/Om Tare Tuttare/)).toBeTruthy();
   });
 
   it('practice card subtitles use danger red at 0.7 opacity', () => {
