@@ -4,8 +4,8 @@
  * Rules:
  *  - One quote per calendar day (same quote all day).
  *  - Quotes are served in a random shuffled order.
- *  - The full set of 115 quotes is exhausted before any quote repeats.
- *  - When a 115-quote block is exhausted, a fresh shuffle is appended and the
+ *  - The active client's full quote set is exhausted before any quote repeats.
+ *  - When a block is exhausted, a fresh shuffle is appended and the
  *    sequence continues — the in-app quote and the pre-scheduled quote
  *    notifications read from the same sequence, so they always agree.
  *
@@ -17,7 +17,9 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { QUOTES } from './quotes';
+import config from '../config';
+
+const QUOTES = config.quotes;
 
 const STORAGE_KEY = '@kalapa_daily_quote_state';
 

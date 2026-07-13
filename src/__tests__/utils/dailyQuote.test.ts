@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDailyQuote, getUpcomingDailyQuotes } from '../../utils/dailyQuote';
-import { QUOTES } from '../../utils/quotes';
+import config from '../../config';
+
+const QUOTES = config.quotes;
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),

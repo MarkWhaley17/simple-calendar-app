@@ -1,5 +1,6 @@
 import { ClientConfig } from '../types';
 import { PRACTICE_MANTRA_LIBRARY } from '../../constants/practice';
+import { QUOTES } from '../../utils/quotes';
 
 const vajrayana: ClientConfig = {
   clientId: 'vajrayana',
@@ -68,6 +69,8 @@ const vajrayana: ClientConfig = {
   },
 
   mantraLibrary: PRACTICE_MANTRA_LIBRARY,
+
+  quotes: QUOTES,
 };
 
 export default vajrayana;

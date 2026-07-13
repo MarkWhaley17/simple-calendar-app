@@ -123,4 +123,6 @@ export interface ClientConfig {
   mantraLibrary: PracticeMantraLibraryItem[];
   /** Where this client's podcast episode list comes from. */
   podcastSource: PodcastSourceConfig;
+  /** Daily contemplation quotes shown above/below the calendar. */
+  quotes: string[];
 }

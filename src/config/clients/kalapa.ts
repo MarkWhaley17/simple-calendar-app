@@ -1,4 +1,5 @@
 import { ClientConfig } from '../types';
+import { KALAPA_QUOTES } from './kalapaQuotes';
 
 const kalapa: ClientConfig = {
   clientId: 'kalapa',
@@ -114,6 +115,8 @@ const kalapa: ClientConfig = {
       description: '',
     },
   ],
+
+  quotes: KALAPA_QUOTES,
 };
 
 export default kalapa;
